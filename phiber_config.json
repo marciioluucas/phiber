@@ -1,0 +1,11 @@
+{
+  "phiber": {
+    "link": {
+      "url": "localhost",
+      "usuario": "root",
+      "senha": "123",
+      "database": ""
+    },
+    "log":false
+  }
+}
