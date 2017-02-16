@@ -1,5 +1,8 @@
 <?php
 require_once '../conf/Link.php';
+require_once '../util/FuncoesString.php';
+require_once '../util/FuncoesReflections.php';
+
 /**
  * Created by PhpStorm
  * User: marci
@@ -23,14 +26,8 @@ abstract class Phiber
             $camposV = FuncoesReflections::pegaValoresAtributoDoObjeto($obj);
             $camposNome = [];
             $camposValores = [];
-            $camposNomeMaes = [];
-            if (FuncoesReflections::verificaSeEClasseFilha($obj)) {
-                $camposNomeMaes = FuncoesReflections::retornaNomeAtributosClassesMaes($obj);
-                for($i = 0; $i < count($camposNomeMaes); $i++){
-                    $camposNome[$i] =  $camposNomeMaes[$i];
-                }
-            }
-            for ($i = count($camposNomeMaes)+1; $i < count($campos)+count($camposNomeMaes); $i++) {
+
+            for ($i = 0; $i < count($campos); $i++) {
                 if ($camposV[$i] != null) {
                     $camposNome[$i] = $campos[$i];
                 }
@@ -44,7 +41,6 @@ abstract class Phiber
             $camposNome = array_values($camposNome);
             $camposValores = array_values($camposValores);
             $sqlInsert = "INSERT INTO $tabela (";
-
             for ($i = 0; $i < count($camposNome); $i++) {
                 if ($i != count($camposNome) - 1) {
                     $sqlInsert .= $camposNome[$i] . ", ";
@@ -60,14 +56,15 @@ abstract class Phiber
                     $sqlInsert .= ":" . $camposNome[$j] . ")";
                 }
             }
-            $pdo = Link::getConnection()->prepare($sqlInsert);
-            for ($i = 0; $i < count($camposNome); $i++) {
-                $pdo->bindValue($camposNome[$i], $camposValores[$i]);
-            }
-
-            if ($pdo->execute()) {
-                return true;
-            };
+            echo $sqlInsert;
+//            $pdo = Link::getConnection()->prepare($sqlInsert);
+//            for ($i = 0; $i < count($camposNome); $i++) {
+//                $pdo->bindValue($camposNome[$i], $camposValores[$i]);
+//            }
+//
+//            if ($pdo->execute()) {
+//                return true;
+//            };
 
         } catch (Exception $e) {
             throw new Exception("Erro ao processar query", 0, $e);
