@@ -20,7 +20,7 @@ class Phiber extends PhiberFactory
      * @throws Exception
      * Faz a criação de um registro no banco com os dados de um objeto.
      */
-    public function create($obj)
+    public static function create($obj)
     {
         try {
             $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
@@ -88,7 +88,7 @@ class Phiber extends PhiberFactory
      * @return mixed
      * @throws Exception
      */
-    public function porId($obj)
+    public static function porId($obj)
     {
         try {
             $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
@@ -107,7 +107,7 @@ class Phiber extends PhiberFactory
      * @return mixed
      * @throws Exception
      */
-    public function update($obj, $id)
+    public static function update($obj, $id)
     {
         try {
             $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
@@ -164,7 +164,7 @@ class Phiber extends PhiberFactory
      * @return mixed
      * @throws Exception
      */
-    public function delete($obj, $id)
+    public static function delete($obj, $id)
     {
         try {
             $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
@@ -182,7 +182,7 @@ class Phiber extends PhiberFactory
      * @param $condicoes
      * @return string
      */
-    public function quantidadeRegistros($obj, $condicoes = [])
+    public static function quantidadeRegistros($obj, $condicoes = [])
     {
         $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
         $nomeCampos = [];
@@ -211,7 +211,7 @@ class Phiber extends PhiberFactory
         return $pdo->rowCount();
     }
 
-    public function buscaPorCondicoes($obj, $condicoes, $retornaPrimeiroValor = false)
+    public static function buscaPorCondicoes($obj, $condicoes, $retornaPrimeiroValor = false)
     {
         $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
 
@@ -278,7 +278,7 @@ class Phiber extends PhiberFactory
         }
     }
 
-    public function innerJoin($obj1, $obj2, $condicoes = null, $retornaSoPrimeiro = false, $campos = null)
+    public static function innerJoin($obj1, $obj2, $condicoes = null, $retornaSoPrimeiro = false, $campos = null)
     {
         $tabela1 = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj1));
         $tabela2 = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj2));

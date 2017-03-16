@@ -8,11 +8,11 @@
  */
 abstract class PhiberFactory
 {
-    public abstract function create($obj);
-    public abstract function porId($obj);
-    public abstract function update($obj, $id);
-    public abstract function delete($obj, $id);
-    public abstract function quantidadeRegistros($obj, $condicoes = []);
-    public abstract function buscaPorCondicoes($obj, $condicoes, $retornaPrimeiroValor = false);
-    public abstract function innerJoin($obj1, $obj2, $condicoes = null, $retornaSoPrimeiro = false, $campos = null);
+    public abstract static function create($obj);
+    public abstract static function porId($obj);
+    public abstract static function update($obj, $id);
+    public abstract static function delete($obj, $id);
+    public abstract static function quantidadeRegistros($obj, $condicoes = []);
+    public abstract static function buscaPorCondicoes($obj, $condicoes, $retornaPrimeiroValor = false);
+    public abstract static function innerJoin($obj1, $obj2, $condicoes = null, $retornaSoPrimeiro = false, $campos = null);
 }
