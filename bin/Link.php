@@ -14,13 +14,6 @@ class Link
      */
     public static $instancia;
 
-    /**
-     * Construtor da classe Banco .
-     */
-    function __construct()
-    {
-    }
-
     public static function getConnection()
     {
         try {

@@ -7,6 +7,7 @@
       "database": ""
     },
     "log":false,
-    "execute_querys":false
+    "execute_querys":false,
+    "criar_tabelas":false
   }
 }

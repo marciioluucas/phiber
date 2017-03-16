@@ -19,5 +19,5 @@ abstract class PhiberFactory
     public abstract static function delete($obj, $id);
     public abstract static function quantidadeRegistros($obj, $condicoes = []);
     public abstract static function buscaPorCondicoes($obj, $condicoes, $retornaPrimeiroValor = false);
-    public abstract static function innerJoin($obj1, $obj2, $condicoes = null, $retornaSoPrimeiro = false, $campos = null);
+//    public abstract static function innerJoin($obj1, $obj2, $condicoes = null, $retornaSoPrimeiro = false, $campos = null);
 }
