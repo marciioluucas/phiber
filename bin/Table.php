@@ -6,7 +6,7 @@
  * Date: 16/03/17
  * Time: 18:46
  */
-class Table implements ITable
+class Table extends TableFactory
 {
     public function createTable(){
 
