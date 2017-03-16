@@ -1,13 +1,14 @@
 <?php
 require_once '../bin/Phiber.php';
+
 /**
- * Created by PhpStorm.
- * User: marci
- * Date: 14/02/2017
- * Time: 22:09
+ * @name=pamonha
+ * @type=varchar
+ * @tamanho=55
  */
 class Usuario extends Phiber
 {
+
 
     private $nome;
     private $email;

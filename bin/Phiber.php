@@ -14,5 +14,9 @@ class Phiber
         return new PhiberPersistence();
     }
 
+    public static function initializeTablesAdmin()
+    {
+        return new Table();
+    }
 
 }

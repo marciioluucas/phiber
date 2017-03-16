@@ -202,6 +202,11 @@ class FuncoesReflections
 //        print_r($nomeAtributos);
         return $valores;
     }
+
+    public static function retornaComentariosDocumento($obj) {
+        $reflectionClass = new ReflectionClass($obj);
+        return $reflectionClass->getDocComment();
+    }
 }
 //
 //require_once '../model/Usuario.php';
