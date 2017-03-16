@@ -14,7 +14,4 @@ class JsonReader
             return $lendo;
         }
 }
-//$json = new JsonReader("../phiber_config.json");
-//echo $json->read()->phiber->link . " ";
-//echo $json->read()->phiber->usuario . " ";
-//echo $json->read()->phiber->senha . " ";
+//print_r(JsonReader::read("../phiber_config.json")->phiber);

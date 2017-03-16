@@ -84,4 +84,5 @@ $usuario->setNome("Lucas");
 $usuario->setEmail("123@123.com");
 $usuario->setCpf("123");
 $usuario->setSenha("123123123");
-Phiber::create($usuario);
+$pPersist = Phiber::openPersist();
+print_r($pPersist::create($usuario));

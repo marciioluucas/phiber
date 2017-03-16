@@ -7,7 +7,7 @@ require_once 'Link.php';
  * Date: 16/03/17
  * Time: 16:31
  */
-abstract class PhiberFactory
+abstract class PhiberPersistenceFactory
 {
     public function getConnection(){
         return Link::getConnection();

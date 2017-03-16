@@ -6,8 +6,8 @@
       "senha": "123",
       "database": ""
     },
-    "log":false,
-    "execute_querys":false,
-    "criar_tabelas":false
+    "log": 0,
+    "execute_querys": 0,
+    "criar_tabelas": 0
   }
 }
