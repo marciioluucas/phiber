@@ -3,7 +3,7 @@ require_once 'Link.php';
 require_once '../util/FuncoesString.php';
 require_once '../util/FuncoesReflections.php';
 require_once '../util/JsonReader.php';
-require_once 'IPhiber.php';
+require_once 'PhiberFactory.php';
 
 /**
  * Created by PhpStorm
@@ -11,7 +11,7 @@ require_once 'IPhiber.php';
  * Date: 20/10/2016
  * Time: 22:14
  */
-class Phiber implements IPhiber
+class Phiber extends PhiberFactory
 {
 
     /**
