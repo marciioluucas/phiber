@@ -1,5 +1,6 @@
 <?php
 
+require_once 'Link.php';
 /**
  * Created by PhpStorm.
  * User: lukee
@@ -8,6 +9,10 @@
  */
 abstract class PhiberFactory
 {
+    public function getConnection(){
+        return Link::getConnection();
+    }
+
     public abstract static function create($obj);
     public abstract static function porId($obj);
     public abstract static function update($obj, $id);

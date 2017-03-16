@@ -1,5 +1,4 @@
 <?php
-require_once 'Link.php';
 require_once '../util/FuncoesString.php';
 require_once '../util/FuncoesReflections.php';
 require_once '../util/JsonReader.php';
@@ -58,9 +57,8 @@ class Phiber extends PhiberFactory
                     $sqlInsert .= ":" . $camposNome[$j] . ")";
                 }
             }
-            echo $sqlInsert;
             if (JsonReader::read("../phiber_config.json")->phiber->execute_querys) {
-                $pdo = Link::getConnection()->prepare($sqlInsert);
+                $pdo = self::getConnection()->prepare($sqlInsert);
                 for ($i = 0; $i < count($camposNome); $i++) {
                     $pdo->bindValue($camposNome[$i], $camposValores[$i]);
                 }
@@ -93,11 +91,17 @@ class Phiber extends PhiberFactory
         try {
             $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
             $sqlSelect = "SELECT * from $tabela WHERE pk_" . $tabela . " = " . FuncoesReflections::pegaValorAtributoEspecifico($obj, "pk_$tabela");
-            $pdo = Link::getConnection()->prepare($sqlSelect);
-            $pdo->execute();
-            return $pdo->fetch(PDO::FETCH_ASSOC);
+            if (JsonReader::read("../phiber_config.json")->phiber->execute_querys) {
+                $pdo = self::getConnection()->prepare($sqlSelect);
+                $pdo->execute();
+                return $pdo->fetch(PDO::FETCH_ASSOC);
+            }else{
+                return $sqlSelect;
+            }
         } catch (Exception $e) {
             throw new Exception("Erro ao processar query: ", 2, $e);
+        }finally {
+            return false;
         }
 
     }
@@ -139,7 +143,7 @@ class Phiber extends PhiberFactory
                     $sqlUpdate .= $camposNome[$i] . " = :" . $camposNome[$i] . " WHERE pk_" . $tabela . " = " . $id;
                 }
             }
-            $pdo = Link::getConnection()->prepare($sqlUpdate);
+            $pdo = self::getConnection()->prepare($sqlUpdate);
             for ($i = 0; $i < count($camposNome); $i++) {
                 $pdo->bindValue($camposNome[$i], $camposValores[$i]);
             }
@@ -169,7 +173,7 @@ class Phiber extends PhiberFactory
         try {
             $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
             $sqlUpdate = "DELETE FROM $tabela WHERE pk_" . $tabela . " = :pk_" . $tabela;
-            $pdo = Link::getConnection()->prepare($sqlUpdate);
+            $pdo = self::getConnection()->prepare($sqlUpdate);
             $pdo->bindValue("pk_" . $tabela, $id);
             return $pdo->execute();
         } catch (Exception $e) {
@@ -203,7 +207,7 @@ class Phiber extends PhiberFactory
                 $sql .= $nomeCampos[$x] . " = ?";
             }
         }
-        $pdo = Link::getConnection()->prepare($sql);
+        $pdo = self::getConnection()->prepare($sql);
         for ($i = 1; $i <= count($nomeCampos); $i++) {
             $pdo->bindValue($i, $valoresCampos[$i - 1]);
         }
@@ -253,7 +257,7 @@ class Phiber extends PhiberFactory
                 }
             }
             $nomeCamposNovo = array_values($nomeCamposNovo);
-            $pdo = Link::getConnection()->prepare($sql);
+            $pdo = self::getConnection()->prepare($sql);
             $valoresCampos = array_values($valoresCampos);
 
             for ($i = 1; $i <= count($nomeCamposNovo); $i++) {
@@ -268,7 +272,7 @@ class Phiber extends PhiberFactory
             }
         } else {
             $sql = "SELECT * FROM $tabela";
-            $pdo = Link::getConnection()->prepare($sql);
+            $pdo = self::getConnection()->prepare($sql);
             $pdo->execute();
             if ($retornaPrimeiroValor) {
                 return $pdo->fetch(PDO::FETCH_ASSOC);
@@ -328,7 +332,7 @@ class Phiber extends PhiberFactory
                 }
             }
             $nomeCamposNovo = array_values($nomeCamposNovo);
-            $pdo = Link::getConnection()->prepare($sql);
+            $pdo = self::getConnection()->prepare($sql);
             $valoresCampos = array_values($valoresCampos);
 
             for ($i = 1; $i <= count($nomeCamposNovo); $i++) {
@@ -355,7 +359,7 @@ class Phiber extends PhiberFactory
                 }
                 $sql = "SELECT $strCampos FROM $tabela1 INNER JOIN $tabela2 on `$tabela1`.`fk_$tabela2` = `$tabela2`.`pk_$tabela2` ";
             }
-            $pdo = Link::getConnection()->prepare($sql);
+            $pdo = self::getConnection()->prepare($sql);
             $pdo->execute();
             if ($retornaSoPrimeiro) {
                 return $pdo->fetch(PDO::FETCH_ASSOC);
