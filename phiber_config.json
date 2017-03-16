@@ -6,6 +6,7 @@
       "senha": "123",
       "database": ""
     },
-    "log":false
+    "log":false,
+    "execute_querys":false
   }
 }

@@ -8,19 +8,8 @@
  */
 class JsonReader
 {
-    private $arquivo;
-
-    /**
-     * JsonReader constructor.
-     * @param $arquivo
-     */
-    public function __construct($arquivo)
-    {
-        $this->arquivo = $arquivo;
-    }
-
-    public function read(){
-            $info = file_get_contents($this->arquivo);
+    public static function read($arquivo){
+            $info = file_get_contents($arquivo);
             $lendo = json_decode($info);
             return $lendo;
         }

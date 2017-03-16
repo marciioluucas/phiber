@@ -1,15 +1,17 @@
 <?php
-require_once '../conf/Link.php';
+require_once 'Link.php';
 require_once '../util/FuncoesString.php';
 require_once '../util/FuncoesReflections.php';
+require_once '../util/JsonReader.php';
+require_once 'IPhiber.php';
 
 /**
  * Created by PhpStorm
- * User: marci
+ * User: Lukee
  * Date: 20/10/2016
  * Time: 22:14
  */
-abstract class Phiber
+class Phiber implements IPhiber
 {
 
     /**
@@ -57,19 +59,26 @@ abstract class Phiber
                 }
             }
             echo $sqlInsert;
-//            $pdo = Link::getConnection()->prepare($sqlInsert);
-//            for ($i = 0; $i < count($camposNome); $i++) {
-//                $pdo->bindValue($camposNome[$i], $camposValores[$i]);
-//            }
-//
-//            if ($pdo->execute()) {
-//                return true;
-//            };
+            if (JsonReader::read("../phiber_config.json")->phiber->execute_querys) {
+                $pdo = Link::getConnection()->prepare($sqlInsert);
+                for ($i = 0; $i < count($camposNome); $i++) {
+                    $pdo->bindValue($camposNome[$i], $camposValores[$i]);
+                }
+
+                if ($pdo->execute()) {
+                    return true;
+                };
+            } else {
+                return $sqlInsert;
+            }
 
         } catch (Exception $e) {
             throw new Exception("Erro ao processar query", 0, $e);
         }
-        return $sqlInsert;
+        finally {
+            return false;
+        }
+
     }
 
 
@@ -173,7 +182,7 @@ abstract class Phiber
      * @param $condicoes
      * @return string
      */
-    public function quantidadeRegistros($obj, $condicoes)
+    public function quantidadeRegistros($obj, $condicoes = [])
     {
         $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
         $nomeCampos = [];
