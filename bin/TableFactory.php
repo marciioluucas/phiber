@@ -13,7 +13,7 @@ abstract class TableFactory
     }
 
     abstract function getTable();
-    abstract function createTable();
+    abstract static function createTable($obj);
     abstract function alterTable();
     abstract function dropTable();
 

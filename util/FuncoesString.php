@@ -52,4 +52,8 @@ class FuncoesString
         return stripos($string, $strBusca) + $tamanhoStrBusca + 1;
     }
 
+    public static final function substituiOcorrenciasDeUmaString($string, $strBusca,$substituicao) {
+        return str_replace($strBusca,$substituicao,$string);
+    }
+
 }

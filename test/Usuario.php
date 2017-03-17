@@ -3,40 +3,62 @@ require_once '../bin/Phiber.php';
 
 /**
  * Class Usuario
- * @_table=tbl_usuario
+ *
  */
 class Usuario extends Phiber
 {
 
     /**
-     * @_coluna
-     * @_name=cl_nome
+     * @_name=id
      * @_type=varchar
-     * @_tamanho=55
-     * @_primaryKey
+     * @_size=55
+     * @_primaryKey=true
+     */
+    private $id;
+
+    /**
+     * @_name=nome
+     * @_type=varchar
+     * @_size=56
+     * @_primaryKey=false
      */
     private $nome;
     /**
-     * @_coluna
-     * @_name=cl_email
+     * @_name=email
      * @_type=varchar
-     * @_tamanho=55
+     * @_size=55
+     * @_primaryKey=false
      */
     private $email;
     /**
-     * @_coluna
-     * @_name=cl_cpf
      * @_type=varchar
-     * @_tamanho=55
+     * @_size=55
+     * @_primaryKey=false
      */
     private $cpf;
     /**
-     * @_coluna
-     * @_name=cl_senha
      * @_type=varchar
-     * @_tamanho=55
+     * @_size=55
+     * @_primaryKey=false
      */
     private $senha;
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
 
     /**
      * @return mixed

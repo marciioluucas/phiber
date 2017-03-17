@@ -16,5 +16,3 @@ class Internationalization
     }
 
 }
-
-echo Internationalization::translate(0);

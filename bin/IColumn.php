@@ -6,8 +6,9 @@
  * Date: 17/03/17
  * Time: 13:36
  */
-abstract class ColumnFactory
+interface IColumn
 {
 
-    abstract function getColumns($obj);
+    function get($prop);
+    function set($prop,$value);
 }
