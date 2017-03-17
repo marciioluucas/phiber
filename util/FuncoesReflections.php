@@ -203,9 +203,18 @@ class FuncoesReflections
         return $valores;
     }
 
-    public static function retornaComentariosDocumento($obj) {
+    public static function retornaComentariosDocumento($obj)
+    {
         $reflectionClass = new ReflectionClass($obj);
-        return $reflectionClass->getDocComment();
+        $arrAttributesNames = self::pegaAtributosDoObjeto($obj);
+        $arrComments = array();
+        for($i= 0; $i < count($arrAttributesNames); $i++){
+
+            $reflectionAttribute = new ReflectionProperty($obj, $arrAttributesNames[$i]);
+            array_push($arrComments,$reflectionAttribute->getDocComment());
+        }
+    //TODO: FAZER O FOR PARA PEGAR TODOS ATRIBUTOS, PASSAR NO SEGUNDO PARAMETRO;
+        print_r($arrComments);
     }
 }
 //

@@ -1,18 +1,33 @@
 <?php
 require_once '../bin/Phiber.php';
 
-/**
- * @name=pamonha
- * @type=varchar
- * @tamanho=55
- */
-class Usuario extends Phiber
+class Usuario extends
+    Phiber
 {
 
-
+    /**
+     * @name=pamonha
+     * @type=varchar
+     * @tamanho=55
+     */
     private $nome;
+    /**
+     * @name=pamonha2
+     * @type=varchar
+     * @tamanho=55
+     */
     private $email;
+    /**
+     * @name=pamonha3
+     * @type=varchar
+     * @tamanho=55
+     */
     private $cpf;
+    /**
+     * @name=pamonha4
+     * @type=varchar
+     * @tamanho=55
+     */
     private $senha;
 
     /**
@@ -86,4 +101,4 @@ $usuario->setEmail("123@123.com");
 $usuario->setCpf("123");
 $usuario->setSenha("123123123");
 $pPersist = Phiber::openPersist();
-print_r($pPersist::create($usuario));
+//print_r($pPersist::create($usuario));
