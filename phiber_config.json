@@ -2,12 +2,12 @@
   "phiber": {
     "link": {
       "url": "localhost",
-      "usuario": "root",
-      "senha": "123",
+      "user": "root",
+      "password": "123",
       "database": ""
     },
     "log": 0,
     "execute_querys": 0,
-    "criar_tabelas": 0
+    "create_tables": 0
   }
 }

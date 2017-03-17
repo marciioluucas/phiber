@@ -1,32 +1,40 @@
 <?php
 require_once '../bin/Phiber.php';
 
-class Usuario extends
-    Phiber
+/**
+ * Class Usuario
+ * @_table=tbl_usuario
+ */
+class Usuario extends Phiber
 {
 
     /**
-     * @name=pamonha
-     * @type=varchar
-     * @tamanho=55
+     * @_coluna
+     * @_name=cl_nome
+     * @_type=varchar
+     * @_tamanho=55
+     * @_primaryKey
      */
     private $nome;
     /**
-     * @name=pamonha2
-     * @type=varchar
-     * @tamanho=55
+     * @_coluna
+     * @_name=cl_email
+     * @_type=varchar
+     * @_tamanho=55
      */
     private $email;
     /**
-     * @name=pamonha3
-     * @type=varchar
-     * @tamanho=55
+     * @_coluna
+     * @_name=cl_cpf
+     * @_type=varchar
+     * @_tamanho=55
      */
     private $cpf;
     /**
-     * @name=pamonha4
-     * @type=varchar
-     * @tamanho=55
+     * @_coluna
+     * @_name=cl_senha
+     * @_type=varchar
+     * @_tamanho=55
      */
     private $senha;
 
@@ -95,10 +103,10 @@ class Usuario extends
     }
 }
 
-$usuario = new Usuario();
-$usuario->setNome("Lucas");
-$usuario->setEmail("123@123.com");
-$usuario->setCpf("123");
-$usuario->setSenha("123123123");
-$pPersist = Phiber::openPersist();
+//$usuario = new Usuario();
+//$usuario->setNome("Lucas");
+//$usuario->setEmail("123@123.com");
+//$usuario->setCpf("123");
+//$usuario->setSenha("123123123");
+//$pPersist = Phiber::openPersist();
 //print_r($pPersist::create($usuario));

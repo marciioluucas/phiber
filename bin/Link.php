@@ -21,8 +21,8 @@ class Link
                 $json = JsonReader::read("../phiber_config.json");
                 self::$instancia = new PDO(
                     $json->phiber->link->url,
-                    $json->phiber->link->usuario,
-                    $json->phiber->link->senha,
+                    $json->phiber->link->user,
+                    $json->phiber->link->password,
                     array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
             }
             return self::$instancia;

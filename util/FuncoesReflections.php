@@ -207,14 +207,20 @@ class FuncoesReflections
     {
         $reflectionClass = new ReflectionClass($obj);
         $arrAttributesNames = self::pegaAtributosDoObjeto($obj);
-        $arrComments = array();
+        $arrMethodNames = self::pegaNomesMetodosClasse($obj);
+        $arrComments = array($reflectionClass->getDocComment() . "<br>");
         for($i= 0; $i < count($arrAttributesNames); $i++){
 
             $reflectionAttribute = new ReflectionProperty($obj, $arrAttributesNames[$i]);
-            array_push($arrComments,$reflectionAttribute->getDocComment());
+            array_push($arrComments,$reflectionAttribute->getDocComment() . "<br>");
+        }
+
+        for($i = 0; $i < count($arrMethodNames); $i++){
+            array_push($arrComments, $reflectionClass->getMethod($arrMethodNames[$i])->getDocComment() . "<br>");
         }
     //TODO: FAZER O FOR PARA PEGAR TODOS ATRIBUTOS, PASSAR NO SEGUNDO PARAMETRO;
-        print_r($arrComments);
+//        print_r($arrComments);
+        return $arrComments;
     }
 }
 //

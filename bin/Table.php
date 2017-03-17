@@ -19,4 +19,9 @@ class Table extends TableFactory
     public function dropTable() {
 
     }
+
+    function getTable()
+    {
+        // TODO: Implement getTable() method.
+    }
 }

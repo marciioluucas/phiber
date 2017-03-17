@@ -12,7 +12,9 @@ abstract class TableFactory
         return Link::getConnection();
     }
 
+    abstract function getTable();
     abstract function createTable();
     abstract function alterTable();
     abstract function dropTable();
+
 }
