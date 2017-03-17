@@ -2,6 +2,8 @@
 require_once '../util/FuncoesString.php';
 require_once '../util/FuncoesReflections.php';
 require_once '../util/JsonReader.php';
+require_once '../util/Internationalization.php';
+require_once '../bin/PhiberException.php';
 require_once 'PhiberPersistenceFactory.php';
 
 /**
@@ -72,8 +74,8 @@ class PhiberPersistence extends PhiberPersistenceFactory
                 return $sqlInsert;
             }
 
-        } catch (Exception $e) {
-            throw new Exception("Erro ao processar query", 0, $e);
+        } catch (PhiberException $e) {
+            throw new PhiberException(Internationalization::translate("query_processor_error"));
         }
 
     }
@@ -97,8 +99,8 @@ class PhiberPersistence extends PhiberPersistenceFactory
             }else{
                 return $sqlSelect;
             }
-        } catch (Exception $e) {
-            throw new Exception("Erro ao processar query: ", 2, $e);
+        } catch (PhiberException $e) {
+            throw new PhiberException(Internationalization::translate("query_processor_error"));
         }
 
     }

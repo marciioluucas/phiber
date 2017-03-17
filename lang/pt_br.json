@@ -1,2 +1,10 @@
 {
+  "phiber_lang": {
+    "query_processor_error": "Erro do processador de queries.",
+    "database_connection_error": "Erro ao conectar no banco",
+    "line": "linha",
+    "message": "mensagem",
+    "phiber_exception": "Exceção do PHIBER"
+
+  }
 }
