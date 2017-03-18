@@ -65,9 +65,19 @@ class Table extends TableFactory
 
             //NOT NULL AQUI
 
+            if(array_key_exists('notNull',$arrFormatado)){
+                if ($arrFormatado['notNull'] === "true") {
+                    $stringSql .= " NOT NULL ";
+                } else {
+                    $stringSql .= "";
+                };
+            }else{
+                $stringSql .= "";
+            }
+
+
             if(array_key_exists('primaryKey',$arrFormatado)){
                 if ($arrFormatado['primaryKey'] === "true") {
-//                    echo $arrFormatado['primaryKey'];
                     $stringSql .= " PRIMARY KEY ";
                 } else {
                     $stringSql .= "";
@@ -76,7 +86,22 @@ class Table extends TableFactory
                 $stringSql .= "";
             }
 
-            $stringSql .= " , ";
+            if(array_key_exists('autoIncrement',$arrFormatado)){
+                if ($arrFormatado['autoIncrement'] === "true") {
+                    $stringSql .= " AUTO_INCREMENT ";
+                } else {
+                    $stringSql .= "";
+                };
+            }else{
+                $stringSql .= "";
+            }
+
+
+
+            if($i != count($atributosTabela)-1){
+
+                $stringSql .= " , ";
+            }
 
             //AUTO INCREMENT AQUI
 

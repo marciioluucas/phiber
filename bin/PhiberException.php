@@ -20,15 +20,8 @@ class PhiberException extends Exception
 
     public function __toString()
     {
-        $variableToReturn = "PHIBER TO-STRING -> " . __CLASS__ . ": [" . Internationalization::translate('line') . ":
-         {" . $this->getLine() . "}, " . Internationalization::translate('message') . ": " . $this->getMessage() . "]";
-        return $variableToReturn;
-    }
-
-    public function getPhiberException()
-    {
         return strtoupper(Internationalization::translate('phiber_exception')) .
-            ": " . Internationalization::translate('line') . ": " . $this->getLine() .
+            ": " . Internationalization::translate('line') . ": " . $this->getLine() . " " . 
             Internationalization::translate('message') . ": " . $this->getMessage();
     }
 

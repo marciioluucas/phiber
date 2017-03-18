@@ -5,41 +5,53 @@ require_once '../bin/Phiber.php';
  * Class Usuario
  *
  */
-class Usuario extends Phiber
+class Usuario
 {
 
     /**
-     * @_name=id
-     * @_type=varchar
-     * @_size=55
-     * @_primaryKey=true
+     * @_type=int
+     * @_size=11
+     * @_primaryKey=false
+     * @_notNull=true
+     * @_autoIncrement=true
      */
     private $id;
 
     /**
-     * @_name=nome
      * @_type=varchar
      * @_size=56
      * @_primaryKey=false
+     * @_notNull=true
+     * @_autoIncrement=false
      */
     private $nome;
+
+
     /**
-     * @_name=email
      * @_type=varchar
      * @_size=55
      * @_primaryKey=false
+     * @_notNull=true
+     * @_autoIncrement=false
      */
     private $email;
+
     /**
      * @_type=varchar
      * @_size=55
      * @_primaryKey=false
+     * @_notNull=true
+     * @_autoIncrement=false
      */
     private $cpf;
+
+
     /**
      * @_type=varchar
      * @_size=55
      * @_primaryKey=false
+     * @_notNull=false
+     * @_autoIncrement=false
      */
     private $senha;
 

@@ -1,2 +1,9 @@
 {
+  "phiber_lang": {
+    "query_processor_error": "Querry processing error.",
+    "database_connection_error": "Database connection error.",
+    "line": "Line",
+    "message": "Message",
+    "phiber_exception": "PHiber exception."
+  }
 }
