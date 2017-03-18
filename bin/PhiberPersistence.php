@@ -77,7 +77,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
         } catch (PhiberException $e) {
             throw new PhiberException(Internationalization::translate("query_processor_error"));
         }
-
+        return false;
     }
 
 
@@ -95,7 +95,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
                 $pdo = self::getConnection()->prepare($sqlSelect);
                 $pdo->execute();
                 return $pdo->fetch(PDO::FETCH_ASSOC);
-            }else{
+            } else {
                 return $sqlSelect;
             }
         } catch (PhiberException $e) {
@@ -105,7 +105,8 @@ class PhiberPersistence extends PhiberPersistenceFactory
     }
 
     /**
-     * @param $obj, $id
+     * @param $obj , $id
+     * @param $id
      * @return mixed
      * @throws PhiberException
      */
@@ -214,7 +215,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
             }
             $pdo->execute();
             return $pdo->rowCount();
-        }catch (PhiberException $e) {
+        } catch (PhiberException $e) {
             throw new PhiberException(Internationalization::translate("query_processor_error"));
         }
     }
@@ -294,7 +295,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
                     return $pdo->fetchAll(PDO::FETCH_ASSOC);
                 }
             }
-        }catch (PhiberException $e) {
+        } catch (PhiberException $e) {
             throw new PhiberException(Internationalization::translate("query_processor_error"));
         }
     }

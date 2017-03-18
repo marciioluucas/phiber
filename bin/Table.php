@@ -1,6 +1,5 @@
 <?php
 require_once 'TableFactory.php';
-require_once 'Column.php';
 require_once '../util/Annotations.php';
 
 /**
@@ -11,28 +10,23 @@ require_once '../util/Annotations.php';
  */
 class Table extends TableFactory
 {
-    private $column;
 
     /**
-     * Table constructor.
+     * @param $obj
+     * @return mixed|void
      */
-    public function __construct()
-    {
-        $this->column = new Column();
-    }
-
     public static function createTable($obj)
     {
         $nomeTabela = FuncoesReflections::pegaNomeClasseObjeto($obj);
         $atributosTabela = FuncoesReflections::pegaAtributosDoObjeto($obj);
         $annotationsTabela = Annotations::getAnnotation($obj);
         $arrFormatado = [];
-        $stringSql = "CREATE TABLE ".strtolower($nomeTabela)." IF NOT EXISTS (";
+        $stringSql = "C"."REATE TABLE IF NOT EXISTS `" . strtolower($nomeTabela) . "` (";
         for ($i = 0; $i < count($atributosTabela); $i++) {
 //            $stringSql .= $atributosTabela[$i] . " ";
             $stringSql .= $atributosTabela[$i] . " ";
             for ($j = 0; $j < count($annotationsTabela[$atributosTabela[$i]]); $j++) {
-                $column = new Column();
+
 
 // Esse aqui ta retornando as strings ja->   print_r($annotationsTabela[$atributosTabela[$i]][$j]);
 
@@ -44,61 +38,58 @@ class Table extends TableFactory
                 }
 
             }
-            if(array_key_exists('type',$arrFormatado)){
+            if (array_key_exists('type', $arrFormatado)) {
 //                    echo $arrFormatado['primaryKey'];
-                    $stringSql .= " ".$arrFormatado['type']."";
+                $stringSql .= " " . $arrFormatado['type'] . "";
 
-                }
-            else{
+            } else {
                 $stringSql .= "";
             }
 
 
-            if(array_key_exists('size',$arrFormatado)){
+            if (array_key_exists('size', $arrFormatado)) {
 //                    echo $arrFormatado['primaryKey'];
-                $stringSql .= "(".$arrFormatado['size'].") ";
+                $stringSql .= "(" . $arrFormatado['size'] . ") ";
 
-            }
-            else{
+            } else {
                 $stringSql .= "";
             }
 
             //NOT NULL AQUI
 
-            if(array_key_exists('notNull',$arrFormatado)){
+            if (array_key_exists('notNull', $arrFormatado)) {
                 if ($arrFormatado['notNull'] === "true") {
                     $stringSql .= " NOT NULL ";
                 } else {
                     $stringSql .= "";
                 };
-            }else{
+            } else {
                 $stringSql .= "";
             }
 
 
-            if(array_key_exists('primaryKey',$arrFormatado)){
+            if (array_key_exists('primaryKey', $arrFormatado)) {
                 if ($arrFormatado['primaryKey'] === "true") {
                     $stringSql .= " PRIMARY KEY ";
                 } else {
                     $stringSql .= "";
                 };
-            }else{
+            } else {
                 $stringSql .= "";
             }
 
-            if(array_key_exists('autoIncrement',$arrFormatado)){
+            if (array_key_exists('autoIncrement', $arrFormatado)) {
                 if ($arrFormatado['autoIncrement'] === "true") {
                     $stringSql .= " AUTO_INCREMENT ";
                 } else {
                     $stringSql .= "";
                 };
-            }else{
+            } else {
                 $stringSql .= "";
             }
 
 
-
-            if($i != count($atributosTabela)-1){
+            if ($i != count($atributosTabela) - 1) {
 
                 $stringSql .= " , ";
             }
@@ -115,8 +106,6 @@ class Table extends TableFactory
         echo $stringSql;
 
 
-        $example = "CREATE TABLE empregados (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-sobrenome VARCHAR(20), nome VARCHAR(20), telefone VARCHAR(20),  datanascimento DATE)";
     }
 
     public function alterTable()

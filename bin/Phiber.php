@@ -9,11 +9,17 @@ require_once 'PhiberPersistence.php';
 class Phiber
 {
 
+    /**
+     * @return PhiberPersistence
+     */
     public static function openPersist()
     {
         return new PhiberPersistence();
     }
 
+    /**
+     * @return Table
+     */
     public static function initializeTablesAdmin()
     {
         return new Table();

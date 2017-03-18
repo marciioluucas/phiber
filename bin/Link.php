@@ -16,6 +16,10 @@ class Link
      */
     public static $instancia;
 
+    /**
+     * @return mysqli|PDO
+     * @throws PhiberException
+     */
     public static function getConnection()
     {
         try {

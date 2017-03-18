@@ -18,6 +18,9 @@ class PhiberException extends Exception
         parent::__construct($message);
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return strtoupper(Internationalization::translate('phiber_exception')) .

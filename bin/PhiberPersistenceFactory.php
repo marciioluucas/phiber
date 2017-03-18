@@ -9,6 +9,9 @@ require_once 'Link.php';
  */
 abstract class PhiberPersistenceFactory
 {
+    /**
+     * @return mysqli|PDO
+     */
     public function getConnection(){
         return Link::getConnection();
     }
