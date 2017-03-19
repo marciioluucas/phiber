@@ -11,7 +11,7 @@ class Usuario
     /**
      * @_type=int
      * @_size=11
-     * @_primaryKey=false
+     * @_primaryKey=true
      * @_notNull=true
      * @_autoIncrement=true
      */
@@ -137,10 +137,10 @@ class Usuario
     }
 }
 
-$usuario = new Usuario();
-$usuario->setNome("Lucas");
-$usuario->setEmail("123@123.com");
-$usuario->setCpf("123");
-$usuario->setSenha("123123123");
-$pPersist = Phiber::openPersist();
-print_r($pPersist::delete($usuario, ['nome'=>'aa']));
+//$usuario = new Usuario();
+//$usuario->setNome("Lucas");
+//$usuario->setEmail("123@123.com");
+//$usuario->setCpf("123");
+//$usuario->setSenha("123123123");
+//$pPersist = Phiber::openPersist();
+//print_r($pPersist::delete($usuario, ['nome'=>'aa']));

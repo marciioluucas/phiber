@@ -14,4 +14,4 @@ class JsonReader
             return $lendo;
         }
 }
-print_r(JsonReader::read("../phiber_config.json")->phiber);
+//print_r(JsonReader::read("../phiber_config.json")->phiber);
