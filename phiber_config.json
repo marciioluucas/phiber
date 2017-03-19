@@ -2,10 +2,10 @@
   "phiber": {
     "language": "pt_br",
     "link": {
-      "url": "localhost",
+      "database_technology": "mysql",
+      "url": "mysql:host=localhost;dbname=test",
       "user": "root",
       "password": "123",
-      "database": "",
       "connection_cache": true
     },
     "log": false,

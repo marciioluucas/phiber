@@ -8,14 +8,14 @@ require_once '../util/Annotations.php';
  * Date: 16/03/17
  * Time: 18:46
  */
-class Table extends TableFactory
+class TableMySql extends TableFactory
 {
 
     /**
      * @param $obj
      * @return mixed|void
      */
-    public static function createTable($obj)
+    public static function create($obj)
     {
         $nomeTabela = FuncoesReflections::pegaNomeClasseObjeto($obj);
         $atributosTabela = FuncoesReflections::pegaAtributosDoObjeto($obj);
@@ -108,22 +108,24 @@ class Table extends TableFactory
 
     }
 
-    public function alterTable()
+    static function alter($obj)
     {
-
+        // TODO: Implement alter() method.
     }
 
-    public function dropTable()
+    static function drop($obj)
     {
-
+        // TODO: Implement drop() method.
     }
 
-    function getTable()
+    static function sync($obj)
     {
-        return self::class;
+        // TODO: Implement sync() method.
     }
+
+
 }
 
 require_once '../test/Usuario.php';
 $u = new Usuario();
-Table::createTable($u);
+TableMySQL::create($u);

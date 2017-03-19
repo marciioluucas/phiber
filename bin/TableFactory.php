@@ -11,29 +11,26 @@ abstract class TableFactory
     /**
      * @return mysqli|PDO
      */
-    public function getConnection(){
+    public function getConnection() {
         return Link::getConnection();
     }
-
-    /**
-     * @return mixed
-     */
-    abstract function getTable();
 
     /**
      * @param $obj
      * @return mixed
      */
-    abstract static function createTable($obj);
+    abstract static function create($obj);
 
     /**
      * @return mixed
      */
-    abstract function alterTable();
+    abstract static function alter($obj);
 
     /**
      * @return mixed
      */
-    abstract function dropTable();
+    abstract static function drop($obj);
 
+
+    abstract static function sync($obj);
 }

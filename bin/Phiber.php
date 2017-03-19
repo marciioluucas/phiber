@@ -19,11 +19,11 @@ class Phiber
     }
 
     /**
-     * @return Table
+     * @return TableMySQL
      */
     public static function initializeTablesAdmin()
     {
-        return new Table();
+        return new TableMySQL();
     }
 
 }
