@@ -5,10 +5,11 @@
       "url": "localhost",
       "user": "root",
       "password": "123",
-      "database": ""
+      "database": "",
+      "connection_cache": true
     },
-    "log": 0,
-    "execute_querys": 0,
-    "create_tables": 0
+    "log": false,
+    "execute_querys": false,
+    "create_tables": false
   }
 }

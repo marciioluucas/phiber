@@ -30,7 +30,7 @@ class Link
                         $json->phiber->link->url,
                         $json->phiber->link->user,
                         $json->phiber->link->password,
-                        array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
+                        array(PDO::ATTR_PERSISTENT => $json->phiber->link->connection_cache == 1 ? true : false));
                 }catch(PhiberException $e){
                     throw new PhiberException(Internationalization::translate("database_connection_error"));
                 }

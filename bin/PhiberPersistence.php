@@ -60,7 +60,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
                     $sqlInsert .= ":" . $camposNome[$j] . ")";
                 }
             }
-            if (JsonReader::read("../phiber_config.json")->phiber->execute_querys == 1) {
+            if (JsonReader::read("../phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
 
                 $pdo = self::getConnection()->prepare($sqlInsert);
                 for ($i = 0; $i < count($camposNome); $i++) {
@@ -91,7 +91,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
         try {
             $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
             $sqlSelect = "SELECT * from $tabela WHERE pk_" . $tabela . " = " . FuncoesReflections::pegaValorAtributoEspecifico($obj, "pk_$tabela");
-            if (JsonReader::read("../phiber_config.json")->phiber->execute_querys) {
+            if (JsonReader::read("../phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
                 $pdo = self::getConnection()->prepare($sqlSelect);
                 $pdo->execute();
                 return $pdo->fetch(PDO::FETCH_ASSOC);
@@ -142,54 +142,35 @@ class PhiberPersistence extends PhiberPersistenceFactory
                     $sqlUpdate .= $camposNome[$i] . " = :" . $camposNome[$i] . " WHERE pk_" . $tabela . " = " . $id;
                 }
             }
-            $pdo = self::getConnection()->prepare($sqlUpdate);
-            for ($i = 0; $i < count($camposNome); $i++) {
-                $pdo->bindValue($camposNome[$i], $camposValores[$i]);
-            }
-//            echo FuncoesMensagens::geraJSONMensagem($camposValores, "sucesso");
-//            print_r($sqlUpdate);
-            if ($pdo->execute()) {
+            if (JsonReader::read("../phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
+                $pdo = self::getConnection()->prepare($sqlUpdate);
+                for ($i = 0; $i < count($camposNome); $i++) {
+                    $pdo->bindValue($camposNome[$i], $camposValores[$i]);
+                }
 
-                return true;
+                if ($pdo->execute()) {
+                    return true;
+                }
             } else {
-                echo $sqlUpdate;
-                return false;
+                return $sqlUpdate;
             }
-//                $pdo->execute();
         } catch (PhiberException $e) {
             throw new PhiberException(Internationalization::translate("query_processor_error"));
         }
+        return false;
     }
 
-    /**
-     * @param $obj
-     * @param $id
-     * @return mixed
-     * @throws PhiberException
-     */
-    public static function delete($obj, $id)
-    {
-        try {
-            $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
-            $sqlUpdate = "DELETE FROM $tabela WHERE pk_" . $tabela . " = :pk_" . $tabela;
-            $pdo = self::getConnection()->prepare($sqlUpdate);
-            $pdo->bindValue("pk_" . $tabela, $id);
-            return $pdo->execute();
-        } catch (PhiberException $e) {
-            throw new PhiberException(Internationalization::translate("query_processor_error"));
-        }
-    }
 
     /**
      * @param $obj
      * @param array $condicoes
-     * @return string
+     * @param array $conjuncoes
+     * @return bool|string
      * @throws PhiberException
      */
-    public static function quantidadeRegistros($obj, $condicoes = [])
+    public static function delete($obj, $condicoes = [], $conjuncoes = [])
     {
         try {
-
             $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
             $nomeCampos = [];
             $condicoesComIndexInt = array_keys($condicoes);
@@ -200,24 +181,80 @@ class PhiberPersistence extends PhiberPersistenceFactory
             for ($j = 0; $j < count($condicoes); $j++) {
                 $valoresCampos[$j] = $condicoes[$nomeCampos[$j]];
             }
-            $sql = "SELECT * FROM $tabela WHERE ";
-
+            $sql = "DELETE FROM $tabela ";
+            if ($condicoes != []) {
+                $sql .= "WHERE ";
+            }
             for ($x = 0; $x < count($nomeCampos); $x++) {
                 if ($x != count($nomeCampos) - 1) {
-                    $sql .= $nomeCampos[$x] . " = ? and ";
+                    $sql .= $nomeCampos[$x] . " = ? $conjuncoes[$x] ";
                 } else {
                     $sql .= $nomeCampos[$x] . " = ?";
                 }
             }
-            $pdo = self::getConnection()->prepare($sql);
-            for ($i = 1; $i <= count($nomeCampos); $i++) {
-                $pdo->bindValue($i, $valoresCampos[$i - 1]);
+
+            if (JsonReader::read("../phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
+                $pdo = self::getConnection()->prepare($sql);
+                for ($i = 1; $i <= count($nomeCampos); $i++) {
+                    $pdo->bindValue($i, $valoresCampos[$i - 1]);
+                }
+                if ($pdo->execute()) {
+                    return true;
+                }
+            } else {
+                return $sql;
             }
-            $pdo->execute();
-            return $pdo->rowCount();
         } catch (PhiberException $e) {
             throw new PhiberException(Internationalization::translate("query_processor_error"));
         }
+        return false;
+    }
+
+    /**
+     * @param $obj
+     * @param array $condicoes
+     * @return string
+     * @throws PhiberException
+     */
+    public static function rowCount($obj, $condicoes = [], $conjuncoes = [])
+    {
+        try {
+            $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
+            $nomeCampos = [];
+            $condicoesComIndexInt = array_keys($condicoes);
+            for ($i = 0; $i < count($condicoes); $i++) {
+                $nomeCampos[$i] = $condicoesComIndexInt[$i];
+            }
+            $valoresCampos = [];
+            for ($j = 0; $j < count($condicoes); $j++) {
+                $valoresCampos[$j] = $condicoes[$nomeCampos[$j]];
+            }
+            $sql = "SELECT * FROM $tabela ";
+            if ($condicoes != []) {
+                $sql .= "WHERE ";
+            }
+            for ($x = 0; $x < count($nomeCampos); $x++) {
+                if ($x != count($nomeCampos) - 1) {
+                    $sql .= $nomeCampos[$x] . " = ? $conjuncoes[$x] ";
+                } else {
+                    $sql .= $nomeCampos[$x] . " = ?";
+                }
+            }
+            if (JsonReader::read("../phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
+                $pdo = self::getConnection()->prepare($sql);
+                for ($i = 1; $i <= count($nomeCampos); $i++) {
+                    $pdo->bindValue($i, $valoresCampos[$i - 1]);
+                }
+                if ($pdo->execute()) {
+                    return $pdo->rowCount();
+                }
+            } else {
+                return $sql;
+            }
+        } catch (PhiberException $e) {
+            throw new PhiberException(Internationalization::translate("query_processor_error"));
+        }
+        return false;
     }
 
 
@@ -228,7 +265,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
      * @return array|bool|mixed
      * @throws PhiberException
      */
-    public static function buscaPorCondicoes($obj, $condicoes, $retornaPrimeiroValor = false)
+    public static function searchWithConditions($obj, $condicoes, $retornaPrimeiroValor = false)
     {
         try {
 
@@ -298,6 +335,30 @@ class PhiberPersistence extends PhiberPersistenceFactory
         } catch (PhiberException $e) {
             throw new PhiberException(Internationalization::translate("query_processor_error"));
         }
+    }
+
+    /**
+     * @param $query
+     * @return bool
+     * @throws PhiberException
+     */
+    public static function createQuery($query)
+    {
+        try {
+
+
+            if (JsonReader::read("../phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
+                $pdo = self::getConnection()->prepare($query);
+                if ($pdo->execute()) {
+                    return true;
+                }
+            } else {
+                return $query;
+            }
+        }catch(PhiberException $e) {
+            throw new PhiberException(Internationalization::translate("query_processor_error"));
+        }
+        return false;
     }
 
 //TODO: Ver se realmente precisa dessa de innerJoin

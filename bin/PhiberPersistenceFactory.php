@@ -19,8 +19,9 @@ abstract class PhiberPersistenceFactory
     public abstract static function create($obj);
     public abstract static function porId($obj);
     public abstract static function update($obj, $id);
-    public abstract static function delete($obj, $id);
-    public abstract static function quantidadeRegistros($obj, $condicoes = []);
-    public abstract static function buscaPorCondicoes($obj, $condicoes, $retornaPrimeiroValor = false);
+    public abstract static function delete($obj, $condicoes = [], $conjuncoes = []);
+    public abstract static function rowCount($obj, $condicoes = [], $conjuncoes = []);
+    public abstract static function searchWithConditions($obj, $condicoes, $retornaPrimeiroValor = false);
+    public abstract static function createQuery($query);
 //    public abstract static function innerJoin($obj1, $obj2, $condicoes = null, $retornaSoPrimeiro = false, $campos = null);
 }
