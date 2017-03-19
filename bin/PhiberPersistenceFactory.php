@@ -17,7 +17,6 @@ abstract class PhiberPersistenceFactory
     }
 
     public abstract static function create($obj);
-    public abstract static function porId($obj);
     public abstract static function update($obj, $id);
     public abstract static function delete($obj, $condicoes = [], $conjuncoes = []);
     public abstract static function rowCount($obj, $condicoes = [], $conjuncoes = []);

@@ -16,18 +16,18 @@ class PhiberPersistence extends PhiberPersistenceFactory
 {
 
     /**
-     * @param $obj
+     * @param $object
      * @return mixed
      * @throws Exception
      * Faz a criação de um registro no banco com os dados de um objeto.
      * Make an insert of an object in the database
      */
-    public static function create($obj)
+    public static function create($object)
     {
         try {
-            $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
-            $campos = FuncoesReflections::pegaAtributosDoObjeto($obj);
-            $camposV = FuncoesReflections::pegaValoresAtributoDoObjeto($obj);
+            $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($object));
+            $campos = FuncoesReflections::pegaAtributosDoObjeto($object);
+            $camposV = FuncoesReflections::pegaValoresAtributoDoObjeto($object);
             $camposNome = [];
             $camposValores = [];
 
@@ -80,42 +80,18 @@ class PhiberPersistence extends PhiberPersistenceFactory
         return false;
     }
 
-
     /**
-     * @param $obj
-     * @return mixed
-     * @throws PhiberException
-     */
-    public static function porId($obj)
-    {
-        try {
-            $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
-            $sqlSelect = "SELECT * from $tabela WHERE pk_" . $tabela . " = " . FuncoesReflections::pegaValorAtributoEspecifico($obj, "pk_$tabela");
-            if (JsonReader::read("../phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
-                $pdo = self::getConnection()->prepare($sqlSelect);
-                $pdo->execute();
-                return $pdo->fetch(PDO::FETCH_ASSOC);
-            } else {
-                return $sqlSelect;
-            }
-        } catch (PhiberException $e) {
-            throw new PhiberException(Internationalization::translate("query_processor_error"));
-        }
-
-    }
-
-    /**
-     * @param $obj , $id
+     * @param $object , $id
      * @param $id
      * @return mixed
      * @throws PhiberException
      */
-    public static function update($obj, $id)
+    public static function update($object, $id)
     {
         try {
-            $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
-            $campos = FuncoesReflections::pegaAtributosDoObjeto($obj);
-            $camposV = FuncoesReflections::pegaValoresAtributoDoObjeto($obj);
+            $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($object));
+            $campos = FuncoesReflections::pegaAtributosDoObjeto($object);
+            $camposV = FuncoesReflections::pegaValoresAtributoDoObjeto($object);
 
             $camposNome = [];
             $camposValores = [];
@@ -162,27 +138,27 @@ class PhiberPersistence extends PhiberPersistenceFactory
 
 
     /**
-     * @param $obj
-     * @param array $condicoes
+     * @param $object
+     * @param array $conditions
      * @param array $conjuncoes
      * @return bool|string
      * @throws PhiberException
      */
-    public static function delete($obj, $condicoes = [], $conjuncoes = [])
+    public static function delete($object, $conditions = [], $conjuncoes = [])
     {
         try {
-            $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
+            $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($object));
             $nomeCampos = [];
-            $condicoesComIndexInt = array_keys($condicoes);
-            for ($i = 0; $i < count($condicoes); $i++) {
-                $nomeCampos[$i] = $condicoesComIndexInt[$i];
+            $conditionsComIndexInt = array_keys($conditions);
+            for ($i = 0; $i < count($conditions); $i++) {
+                $nomeCampos[$i] = $conditionsComIndexInt[$i];
             }
             $valoresCampos = [];
-            for ($j = 0; $j < count($condicoes); $j++) {
-                $valoresCampos[$j] = $condicoes[$nomeCampos[$j]];
+            for ($j = 0; $j < count($conditions); $j++) {
+                $valoresCampos[$j] = $conditions[$nomeCampos[$j]];
             }
             $sql = "DELETE FROM $tabela ";
-            if ($condicoes != []) {
+            if ($conditions != []) {
                 $sql .= "WHERE ";
             }
             for ($x = 0; $x < count($nomeCampos); $x++) {
@@ -211,26 +187,26 @@ class PhiberPersistence extends PhiberPersistenceFactory
     }
 
     /**
-     * @param $obj
-     * @param array $condicoes
+     * @param $object
+     * @param array $conditions
      * @return string
      * @throws PhiberException
      */
-    public static function rowCount($obj, $condicoes = [], $conjuncoes = [])
+    public static function rowCount($object, $conditions = [], $conjuncoes = [])
     {
         try {
-            $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
+            $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($object));
             $nomeCampos = [];
-            $condicoesComIndexInt = array_keys($condicoes);
-            for ($i = 0; $i < count($condicoes); $i++) {
-                $nomeCampos[$i] = $condicoesComIndexInt[$i];
+            $conditionsComIndexInt = array_keys($conditions);
+            for ($i = 0; $i < count($conditions); $i++) {
+                $nomeCampos[$i] = $conditionsComIndexInt[$i];
             }
             $valoresCampos = [];
-            for ($j = 0; $j < count($condicoes); $j++) {
-                $valoresCampos[$j] = $condicoes[$nomeCampos[$j]];
+            for ($j = 0; $j < count($conditions); $j++) {
+                $valoresCampos[$j] = $conditions[$nomeCampos[$j]];
             }
             $sql = "SELECT * FROM $tabela ";
-            if ($condicoes != []) {
+            if ($conditions != []) {
                 $sql .= "WHERE ";
             }
             for ($x = 0; $x < count($nomeCampos); $x++) {
@@ -259,33 +235,33 @@ class PhiberPersistence extends PhiberPersistenceFactory
 
 
     /**
-     * @param $obj
-     * @param $condicoes
-     * @param bool $retornaPrimeiroValor
+     * @param $object
+     * @param $conditions
+     * @param bool $onlyFirst
      * @return array|bool|mixed
      * @throws PhiberException
      */
-    public static function searchWithConditions($obj, $condicoes, $retornaPrimeiroValor = false)
+    public static function searchWithConditions($object, $conditions, $onlyFirst = false)
     {
         try {
 
-            $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
+            $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($object));
 
             $nomeCampos = [];
 
-            if ($condicoes != null) {
+            if ($conditions != null) {
 
-                $condicoesComIndexInt = array_keys($condicoes);
+                $conditionsComIndexInt = array_keys($conditions);
 
-                for ($i = 0; $i < count($condicoes); $i++) {
-                    $nomeCampos[$i] = $condicoesComIndexInt[$i];
+                for ($i = 0; $i < count($conditions); $i++) {
+                    $nomeCampos[$i] = $conditionsComIndexInt[$i];
                 }
 
                 $valoresCampos = [];
 
-                for ($j = 0; $j < count($condicoes); $j++) {
-                    if ($condicoes[$nomeCampos[$j]] != "") {
-                        $valoresCampos[$j] = $condicoes[$nomeCampos[$j]];
+                for ($j = 0; $j < count($conditions); $j++) {
+                    if ($conditions[$nomeCampos[$j]] != "") {
+                        $valoresCampos[$j] = $conditions[$nomeCampos[$j]];
                     }
                 }
 
@@ -293,7 +269,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
                 $nomeCamposNovo = [];
                 for ($x = 0; $x < count($nomeCampos); $x++) {
                     if ($x != count($nomeCampos) - 1) {
-                        if ($condicoes[$nomeCampos[$x]] != "") {
+                        if ($conditions[$nomeCampos[$x]] != "") {
                             if (count($valoresCampos) > 1) {
                                 $sql .= $nomeCampos[$x] . " = ? and ";
                             } else {
@@ -302,7 +278,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
                             $nomeCamposNovo[$x] = $nomeCampos[$x];
                         }
                     } else {
-                        if ($condicoes[$nomeCampos[$x]] != "") {
+                        if ($conditions[$nomeCampos[$x]] != "") {
                             $sql .= $nomeCampos[$x] . " = ?";
                             $nomeCamposNovo[$x] = $nomeCampos[$x];
                         }
@@ -317,7 +293,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
                 }
                 $pdo->execute();
 
-                if ($retornaPrimeiroValor) {
+                if ($onlyFirst) {
                     return $pdo->fetch(PDO::FETCH_ASSOC);
                 } else {
                     return $pdo->fetchAll(PDO::FETCH_ASSOC);
@@ -326,7 +302,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
                 $sql = "SELECT * FROM $tabela";
                 $pdo = self::getConnection()->prepare($sql);
                 $pdo->execute();
-                if ($retornaPrimeiroValor) {
+                if ($onlyFirst) {
                     return $pdo->fetch(PDO::FETCH_ASSOC);
                 } else {
                     return $pdo->fetchAll(PDO::FETCH_ASSOC);
@@ -362,22 +338,22 @@ class PhiberPersistence extends PhiberPersistenceFactory
     }
 
 //TODO: Ver se realmente precisa dessa de innerJoin
-//    public static function innerJoin($obj1, $obj2, $condicoes = null, $retornaSoPrimeiro = false, $campos = null)
+//    public static function innerJoin($object1, $object2, $conditions = null, $retornaSoPrimeiro = false, $campos = null)
 //    {
-//        $tabela1 = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj1));
-//        $tabela2 = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj2));
+//        $tabela1 = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($object1));
+//        $tabela2 = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($object2));
 //
 //        $nomeCampos = [];
 //
-//        if ($condicoes != null) {
-//            $condicoesComIndexInt = array_keys($condicoes);
-//            for ($i = 0; $i < count($condicoes); $i++) {
-//                $nomeCampos[$i] = $condicoesComIndexInt[$i];
+//        if ($conditions != null) {
+//            $conditionsComIndexInt = array_keys($conditions);
+//            for ($i = 0; $i < count($conditions); $i++) {
+//                $nomeCampos[$i] = $conditionsComIndexInt[$i];
 //            }
 //            $valoresCampos = [];
-//            for ($j = 0; $j < count($condicoes); $j++) {
-//                if ($condicoes[$nomeCampos[$j]] != "") {
-//                    $valoresCampos[$j] = $condicoes[$nomeCampos[$j]];
+//            for ($j = 0; $j < count($conditions); $j++) {
+//                if ($conditions[$nomeCampos[$j]] != "") {
+//                    $valoresCampos[$j] = $conditions[$nomeCampos[$j]];
 //                }
 //            }
 //            if ($campos == null) {
@@ -396,7 +372,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
 //            $nomeCamposNovo = [];
 //            for ($x = 0; $x < count($nomeCampos); $x++) {
 //                if ($x != count($nomeCampos) - 1) {
-//                    if ($condicoes[$nomeCampos[$x]] != "") {
+//                    if ($conditions[$nomeCampos[$x]] != "") {
 //                        if (count($valoresCampos) > 1) {
 //                            $sql .= $nomeCampos[$x] . " = ? and ";
 //                        } else {
@@ -405,7 +381,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
 //                        $nomeCamposNovo[$x] = $nomeCampos[$x];
 //                    }
 //                } else {
-//                    if ($condicoes[$nomeCampos[$x]] != "") {
+//                    if ($conditions[$nomeCampos[$x]] != "") {
 //                        $sql .= $nomeCampos[$x] . " = ?";
 //                        $nomeCamposNovo[$x] = $nomeCampos[$x];
 //                    }

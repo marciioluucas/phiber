@@ -143,4 +143,4 @@ $usuario->setEmail("123@123.com");
 $usuario->setCpf("123");
 $usuario->setSenha("123123123");
 $pPersist = Phiber::openPersist();
-print_r($pPersist::delete($usuario, ['nome'=>'aa', 'pamonha'=>'doce','peixe'=>'tilapia'], ['and','or']));
+print_r($pPersist::delete($usuario, ['nome'=>'aa']));
