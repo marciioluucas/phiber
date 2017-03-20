@@ -20,7 +20,7 @@ class Phiber
     }
 
     public static function crypt(){
-        return new Crypt();
+        return new PhiberCrypt();
     }
 
 }
