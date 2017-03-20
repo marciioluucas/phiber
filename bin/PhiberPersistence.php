@@ -235,7 +235,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
                 }
                 if ($pdo->execute()) {
                     PhiberLogger::create("execution_query_success", "info",$tabela, Execution::end());
-                    return true;
+                    return $pdo->rowCount();
                 } else {
                     PhiberLogger::create("execution_query_failure", "error", $tabela, Execution::end());
                 }

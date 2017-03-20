@@ -26,7 +26,7 @@ class PhiberLogger
                     if($execTime != null){
                         $msg .=  "em " . $execTime . ".";
                     }
-                    echo $msg;
+                    echo $msg . "\e[0m \n";
                     break;
 
                 case 'warning':
@@ -38,7 +38,7 @@ class PhiberLogger
                     if($execTime != null){
                         $msg .=  "em " . $execTime . ".";
                     }
-                    echo $msg;
+                    echo $msg . "\e[0m \n";
                     break;
 
                 case 'error':
@@ -50,7 +50,7 @@ class PhiberLogger
                     if($execTime != null){
                         $msg .=  "em " . $execTime . ".";
                     }
-                    echo $msg;
+                    echo $msg . "\e[0m \n";
                     break;
             }
         }

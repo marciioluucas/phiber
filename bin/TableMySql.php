@@ -1,6 +1,8 @@
 <?php
 require_once 'TableFactory.php';
 require_once '../util/Annotations.php';
+require_once '../util/FuncoesReflections.php';
+require_once '../util/JsonReader.php';
 
 /**
  * Created by PhpStorm.
@@ -111,6 +113,10 @@ class TableMySql extends TableFactory
 
     static function alter($obj)
     {
+        $tabela  = FuncoesReflections::pegaNomeClasseObjeto($obj);
+        $tableColumns = self::columns($tabela);
+        print_r($tableColumns);
+
         // TODO: Implement alter() method.
     }
 
@@ -121,7 +127,47 @@ class TableMySql extends TableFactory
 
     static function sync($obj)
     {
-        // TODO: Implement sync() method.
+        if (self::exists($obj)) {
+            self::alter($obj);
+        } else {
+            self::create($obj);
+        }
+    }
+
+    static function exists($obj)
+    {
+        $tabela = strtolower(FuncoesReflections::pegaNomeClasseObjeto($obj));
+        $schema = JsonReader::read('../phiber_config.json')->phiber->link->database_name;
+        $sql = "SELECT * FROM information_schema.tables WHERE table_schema = ? AND table_name = ?";
+        if (JsonReader::read("../phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
+            $pdo = self::getConnection()->prepare($sql);
+            $pdo->bindValue(1, $schema);
+            $pdo->bindValue(2, $tabela);
+            $pdo->execute();
+            if ($pdo->rowCount() > 0) {
+                return true;
+            } else {
+                return false;
+            }
+
+        } else {
+            return $sql;
+        }
+    }
+
+    static function columns($table){
+        $sql = "show columns from ".strtolower($table);
+
+        if (JsonReader::read("../phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
+            $pdo = self::getConnection()->prepare($sql);
+            if($pdo->execute()){
+                return $pdo->fetchAll(PDO::FETCH_ASSOC);
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
     }
 
 
@@ -129,5 +175,4 @@ class TableMySql extends TableFactory
 
 require_once '../test/Usuario.php';
 $u = new Usuario();
-include '../util/Execution.php';
-TableMySQL::create($u);
+TableMySQL::alter($u);

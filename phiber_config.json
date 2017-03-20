@@ -3,6 +3,7 @@
     "language": "pt_br",
     "link": {
       "database_technology": "mysql",
+      "database_name": "teste_phiber",
       "url": "mysql:host=localhost;dbname=teste_phiber",
       "user": "root",
       "password": "",

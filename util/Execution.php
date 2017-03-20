@@ -17,14 +17,11 @@ class Execution
         self::$time = self::getTime();
     }
 
-
     static function end()
     {
-
         $finalTime = self::getTime();
         $execTime = $finalTime - self::$time;
         return number_format($execTime, 6) . " " .Internationalization::translate("seconds");
     }
 }
 
-?>
