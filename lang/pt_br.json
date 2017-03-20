@@ -8,6 +8,10 @@
     "log_info": "INFO",
     "log_warning": "AVISO",
     "log_error": "ERRO",
-    "seconds": "segundos"
+    "seconds": "segundos",
+    "execution_query_success": "Query executada com sucesso",
+    "object": "Objeto",
+    "reference": "Referencia"
+
   }
 }

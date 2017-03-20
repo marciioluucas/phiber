@@ -3,8 +3,10 @@ require_once '../util/FuncoesString.php';
 require_once '../util/FuncoesReflections.php';
 require_once '../util/JsonReader.php';
 require_once '../util/Internationalization.php';
+require_once '../util/Execution.php';
 require_once '../bin/PhiberException.php';
 require_once 'PhiberPersistenceFactory.php';
+require_once 'PhiberLogger.php';
 
 /**
  * Created by PhpStorm
@@ -24,6 +26,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
      */
     public static function create($object)
     {
+        Execution::start();
         try {
             $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($object));
             $campos = FuncoesReflections::pegaAtributosDoObjeto($object);
@@ -68,8 +71,11 @@ class PhiberPersistence extends PhiberPersistenceFactory
                 }
 
                 if ($pdo->execute()) {
+                    PhiberLogger::create("execution_query_success", "info",$tabela, Execution::end());
                     return true;
-                };
+                } else {
+                    PhiberLogger::create("execution_query_failure", "error", $tabela, Execution::end());
+                }
             } else {
                 return $sqlInsert;
             }
@@ -125,7 +131,10 @@ class PhiberPersistence extends PhiberPersistenceFactory
                 }
 
                 if ($pdo->execute()) {
+                    PhiberLogger::create("execution_query_success", "info",$tabela, Execution::end());
                     return true;
+                } else {
+                    PhiberLogger::create("execution_query_failure", "error", $tabela, Execution::end());
                 }
             } else {
                 return $sqlUpdate;
@@ -175,7 +184,10 @@ class PhiberPersistence extends PhiberPersistenceFactory
                     $pdo->bindValue($i, $valoresCampos[$i - 1]);
                 }
                 if ($pdo->execute()) {
+                    PhiberLogger::create("execution_query_success", "info",$tabela, Execution::end());
                     return true;
+                } else {
+                    PhiberLogger::create("execution_query_failure", "error", $tabela, Execution::end());
                 }
             } else {
                 return $sql;
@@ -222,7 +234,10 @@ class PhiberPersistence extends PhiberPersistenceFactory
                     $pdo->bindValue($i, $valoresCampos[$i - 1]);
                 }
                 if ($pdo->execute()) {
-                    return $pdo->rowCount();
+                    PhiberLogger::create("execution_query_success", "info",$tabela, Execution::end());
+                    return true;
+                } else {
+                    PhiberLogger::create("execution_query_failure", "error", $tabela, Execution::end());
                 }
             } else {
                 return $sql;
@@ -301,7 +316,12 @@ class PhiberPersistence extends PhiberPersistenceFactory
             } else {
                 $sql = "SELECT * FROM $tabela";
                 $pdo = self::getConnection()->prepare($sql);
-                $pdo->execute();
+                if ($pdo->execute()) {
+                    PhiberLogger::create("execution_query_success", "info",$tabela, Execution::end());
+                    return true;
+                } else {
+                    PhiberLogger::create("execution_query_failure", "error", $tabela, Execution::end());
+                }
                 if ($onlyFirst) {
                     return $pdo->fetch(PDO::FETCH_ASSOC);
                 } else {
@@ -326,15 +346,19 @@ class PhiberPersistence extends PhiberPersistenceFactory
             if (JsonReader::read("../phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
                 $pdo = self::getConnection()->prepare($query);
                 if ($pdo->execute()) {
+                    PhiberLogger::create("execution_query_success", "info", Execution::end());
                     return true;
+                } else {
+                    PhiberLogger::create("execution_query_failure", "error", Execution::end());
+                    return false;
                 }
             } else {
                 return $query;
             }
-        }catch(PhiberException $e) {
+        } catch (PhiberException $e) {
             throw new PhiberException(Internationalization::translate("query_processor_error"));
         }
-        return false;
+
     }
 
 //TODO: Ver se realmente precisa dessa de innerJoin

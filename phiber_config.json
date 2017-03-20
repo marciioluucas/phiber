@@ -6,9 +6,9 @@
       "url": "mysql:host=localhost;dbname=teste_phiber",
       "user": "root",
       "password": "",
-      "connection_cache": false
+      "connection_cache": true
     },
-    "log": false,
+    "log": true,
     "execute_querys": true,
     "create_tables": true
   }

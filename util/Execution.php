@@ -4,7 +4,7 @@ require_once 'Internationalization.php';
 class Execution
 {
 
-    private $time;
+    private static $time;
 
     function getTime()
     {
@@ -12,18 +12,18 @@ class Execution
     }
 
     /* Calculate start time */
-    function startExec()
+    static function start()
     {
-        $this->time = $this->getTime();
+        self::$time = self::getTime();
     }
 
 
-    function endExec()
+    static function end()
     {
 
-        $finalTime = $this->getTime();
-        $execTime = $finalTime - $this->time;
-        return number_format($execTime, 6) . Internationalization::translate("seconds");
+        $finalTime = self::getTime();
+        $execTime = $finalTime - self::$time;
+        return number_format($execTime, 6) . " " .Internationalization::translate("seconds");
     }
 }
 

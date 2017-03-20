@@ -19,7 +19,7 @@ class Phiber
         return new PhiberPersistence();
     }
 
-    public static function crypt(){
+    public static function openCrypt(){
         return new PhiberCrypt();
     }
 

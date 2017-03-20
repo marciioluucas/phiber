@@ -137,10 +137,10 @@ class Usuario
     }
 }
 
-//$usuario = new Usuario();
-//$usuario->setNome("Lucas");
-//$usuario->setEmail("123@123.com");
-//$usuario->setCpf("123");
-//$usuario->setSenha("123123123");
-//$pPersist = Phiber::openPersist();
-//$pPersist::create($usuario);
+$usuario = new Usuario();
+$usuario->setNome("Lucas");
+$usuario->setEmail("123@123.com");
+$usuario->setCpf("123");
+$usuario->setSenha("123123123");
+$pPersist = Phiber::openPersist();
+$pPersist::create($usuario);
