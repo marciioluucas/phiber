@@ -99,7 +99,6 @@ class TableMySql extends TableFactory
 
         }
         $stringSql .= ")";
-
         if (JsonReader::read("../phiber_config.json")->phiber->create_tables == 1 ? true : false) {
             $pdo = self::getConnection()->prepare($stringSql);
             if ($pdo->execute()) {
@@ -113,9 +112,27 @@ class TableMySql extends TableFactory
 
     static function alter($obj)
     {
-        $tabela  = FuncoesReflections::pegaNomeClasseObjeto($obj);
-        $tableColumns = self::columns($tabela);
-        print_r($tableColumns);
+        $tabela = FuncoesReflections::pegaNomeClasseObjeto($obj);
+        $atributosTabela = FuncoesReflections::pegaAtributosDoObjeto($obj);
+        $annotationsTabela = Annotations::getAnnotation($obj);
+        $arrFormatado = [];
+        $arrFinal = [];
+        for ($i = 0; $i < count($atributosTabela); $i++) {
+            for ($j = 0; $j < count($annotationsTabela[$atributosTabela[$i]]); $j++) {
+                $arrAtual = explode("=", $annotationsTabela[$atributosTabela[$i]][$j]);
+                for ($k = 0; $k < count($arrAtual) - 1; $k++) {
+                    $arrFormatado[FuncoesString::substituiOcorrenciasDeUmaString($arrAtual[$k], "@_", "")] = $arrAtual[$k + 1];
+                }
+            }
+            $arrFinal[$i]=$arrFormatado;
+        }
+
+        $columnsTabela = self::columns($tabela);
+
+        for($i=0; $i < count($columnsTabela);$i++){
+
+        }
+        print_r($arrFinal);
 
         // TODO: Implement alter() method.
     }
@@ -155,17 +172,18 @@ class TableMySql extends TableFactory
         }
     }
 
-    static function columns($table){
-        $sql = "show columns from ".strtolower($table);
+    static function columns($table)
+    {
+        $sql = "show columns from " . strtolower($table);
 
         if (JsonReader::read("../phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
             $pdo = self::getConnection()->prepare($sql);
-            if($pdo->execute()){
+            if ($pdo->execute()) {
                 return $pdo->fetchAll(PDO::FETCH_ASSOC);
-            }else{
+            } else {
                 return false;
             }
-        }else{
+        } else {
             return false;
         }
     }
@@ -175,4 +193,4 @@ class TableMySql extends TableFactory
 
 require_once '../test/Usuario.php';
 $u = new Usuario();
-TableMySQL::alter($u);
+TableMySQL::create($u);
