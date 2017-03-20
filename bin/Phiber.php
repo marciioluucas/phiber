@@ -15,15 +15,12 @@ class Phiber
     public static function openPersist()
     {
         //TODO:: Aqui vai ficar a parada de criar tabela ou nao.
+
         return new PhiberPersistence();
     }
 
-    /**
-     * @return TableMySQL
-     */
-    public static function initializeTablesAdmin()
-    {
-        return new TableMySQL();
+    public static function crypt(){
+        return new Crypt();
     }
 
 }

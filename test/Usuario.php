@@ -143,4 +143,4 @@ class Usuario
 //$usuario->setCpf("123");
 //$usuario->setSenha("123123123");
 //$pPersist = Phiber::openPersist();
-//print_r($pPersist::delete($usuario, ['nome'=>'aa']));
+//$pPersist::create($usuario);

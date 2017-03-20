@@ -3,13 +3,13 @@
     "language": "pt_br",
     "link": {
       "database_technology": "mysql",
-      "url": "mysql:host=localhost;dbname=test",
+      "url": "mysql:host=localhost;dbname=teste_phiber",
       "user": "root",
-      "password": "123",
-      "connection_cache": true
+      "password": "",
+      "connection_cache": false
     },
     "log": false,
-    "execute_querys": false,
-    "create_tables": false
+    "execute_querys": true,
+    "create_tables": true
   }
 }

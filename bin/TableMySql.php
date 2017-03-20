@@ -11,9 +11,10 @@ require_once '../util/Annotations.php';
 class TableMySql extends TableFactory
 {
 
+
     /**
      * @param $obj
-     * @return mixed|void
+     * @return bool|string
      */
     public static function create($obj)
     {
@@ -21,7 +22,7 @@ class TableMySql extends TableFactory
         $atributosTabela = FuncoesReflections::pegaAtributosDoObjeto($obj);
         $annotationsTabela = Annotations::getAnnotation($obj);
         $arrFormatado = [];
-        $stringSql = "C"."REATE TABLE IF NOT EXISTS `" . strtolower($nomeTabela) . "` (";
+        $stringSql = "C" . "REATE TABLE IF NOT EXISTS `" . strtolower($nomeTabela) . "` (";
         for ($i = 0; $i < count($atributosTabela); $i++) {
 //            $stringSql .= $atributosTabela[$i] . " ";
             $stringSql .= $atributosTabela[$i] . " ";
@@ -94,18 +95,18 @@ class TableMySql extends TableFactory
                 $stringSql .= " , ";
             }
 
-            //AUTO INCREMENT AQUI
-
-
-//            print_r($arrFormatado);
-
-//            $stringSql .= $arrFormatado['autoIncrement'] == true ? " AUTO_INCREMENT " : "";
-
         }
         $stringSql .= ")";
-        echo $stringSql;
 
-
+        if (JsonReader::read("../phiber_config.json")->phiber->create_tables == 1 ? true : false) {
+            $pdo = self::getConnection()->prepare($stringSql);
+            if ($pdo->execute()) {
+                return true;
+            };
+        } else {
+            return $stringSql;
+        }
+        return false;
     }
 
     static function alter($obj)
@@ -128,4 +129,5 @@ class TableMySql extends TableFactory
 
 require_once '../test/Usuario.php';
 $u = new Usuario();
+include '../util/Execution.php';
 TableMySQL::create($u);
