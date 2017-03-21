@@ -14,8 +14,7 @@ class Phiber
      */
     public static function openPersist()
     {
-        //TODO:: Aqui vai ficar a parada de criar tabela ou nao.
-
+        //todo TableMysql::sync()
         return new PhiberPersistence();
     }
 

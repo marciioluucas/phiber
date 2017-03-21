@@ -112,11 +112,12 @@ class TableMySql extends TableFactory
 
     static function alter($obj)
     {
-        $tabela = FuncoesReflections::pegaNomeClasseObjeto($obj);
+        $tabela = strtolower(FuncoesReflections::pegaNomeClasseObjeto($obj));
         $atributosTabela = FuncoesReflections::pegaAtributosDoObjeto($obj);
         $annotationsTabela = Annotations::getAnnotation($obj);
         $arrFormatado = [];
         $arrFinal = [];
+        $stringAlterTable = "";
         for ($i = 0; $i < count($atributosTabela); $i++) {
             for ($j = 0; $j < count($annotationsTabela[$atributosTabela[$i]]); $j++) {
                 $arrAtual = explode("=", $annotationsTabela[$atributosTabela[$i]][$j]);
@@ -124,15 +125,79 @@ class TableMySql extends TableFactory
                     $arrFormatado[FuncoesString::substituiOcorrenciasDeUmaString($arrAtual[$k], "@_", "")] = $arrAtual[$k + 1];
                 }
             }
-            $arrFinal[$i]=$arrFormatado;
+            $arrFinal[$i] = $arrFormatado;
         }
 
         $columnsTabela = self::columns($tabela);
 
-        for($i=0; $i < count($columnsTabela);$i++){
+        $stringAlterTable .= "ALTER TABLE $tabela \n";
+        $primKey = false;
+        $columnPrimaryKey = "";
+        for ($i = 0; $i < count($arrFinal); $i++) {
 
+
+            if ($columnsTabela[$i]['Field'] != $atributosTabela[$i]) {
+                $stringAlterTable .= "CHANGE `" . $columnsTabela[$i]['Field'] . "` `$atributosTabela[$i]` ";
+                $stringAlterTable .= strtoupper($arrFinal[$i]['type']) . "(" . $arrFinal[$i]['size'] . ")\n";
+
+                if ($arrFinal[$i])
+
+                    if ($i != count($arrFinal) - 1) {
+                        $stringAlterTable .= ", \n";
+                    }
+            } else {
+                $stringAlterTable .= "CHANGE  `$atributosTabela[$i]` `$atributosTabela[$i]` ";
+                $strTamanhoTypeTabela = strstr($columnsTabela[$i]['Type'], '(', false);
+                $typeTabela = strstr($columnsTabela[$i]['Type'], '(', true);
+                $tamanhoTypeTabela = substr($strTamanhoTypeTabela, 1, stripos($strTamanhoTypeTabela, ')') - 1);
+
+
+//                if ($typeTabela != $arrFinal[$i]['type'] || $tamanhoTypeTabela != $arrFinal[$i]['size']) {
+//                    if ($typeTabela != $arrFinal[$i]['type'] && $tamanhoTypeTabela != $arrFinal[$i]['size']) {
+                $stringAlterTable .= strtoupper($arrFinal[$i]['type']) . "(" . $arrFinal[$i]['size'] . ")";
+//                    } else {
+//                        if ($tamanhoTypeTabela != $arrFinal[$i]['size']) {
+//                            $stringAlterTable .= strtoupper($arrFinal[$i]['type']) . "(" . $arrFinal[$i]['size'] . ")";
+//                        }
+//
+//                    }
+//                }
+                $respIfNotNull = $columnsTabela[$i]['Null'] == 'NO' ? 'false' : 'true';
+//                echo $arrFinal[$i]['notNull'];
+                if ($arrFinal[$i]['notNull'] == $respIfNotNull) {
+                    $stringAlterTable .= " NOT NULL ";
+                } else {
+                    $stringAlterTable .= " NULL ";
+                }
+
+//                $respIfDefault =  ? $arrFinal[$i]['default'] : 'default_not_exists';
+                if (array_key_exists('default', $arrFinal[$i]) && $arrFinal[$i]['default'] != "none") {
+                    $stringAlterTable .= "DEFAULT '" . $arrFinal[$i]['default'] . "'";
+                }
+
+
+                    $stringAlterTable .= ", \n";
+
+
+                if ($arrFinal[$i]['primaryKey'] == "true" and $primKey != true) {
+                    $primKey = true;
+                    $columnPrimaryKey = $atributosTabela[$i];
+                }
+                if ($i == count($arrFinal) - 1) {
+                    if ($primKey) {
+                        $stringAlterTable .= " DROP PRIMARY KEY, ADD PRIMARY KEY(`$columnPrimaryKey`);";
+                    } else {
+                        $stringAlterTable .= " DROP PRIMARY KEY";
+                    }
+                }
+            }
+            $columnsTabela[$i]['Null'];
+            $columnsTabela[$i]['Key'];
+            $columnsTabela[$i]['Default'];
+            $columnsTabela[$i]['Extra'];
         }
-        print_r($arrFinal);
+
+        print_r($stringAlterTable);
 
         // TODO: Implement alter() method.
     }
@@ -191,6 +256,7 @@ class TableMySql extends TableFactory
 
 }
 
+//
 require_once '../test/Usuario.php';
 $u = new Usuario();
-TableMySQL::create($u);
+TableMySQL::alter($u);

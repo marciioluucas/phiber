@@ -11,9 +11,10 @@ class Usuario
     /**
      * @_type=int
      * @_size=11
-     * @_primaryKey=true
+     * @_primaryKey=false
      * @_notNull=true
-     * @_autoIncrement=true
+     * @_default=none
+     * @_autoIncrement=false
      */
     private $id;
 
@@ -21,39 +22,36 @@ class Usuario
      * @_type=varchar
      * @_size=56
      * @_primaryKey=false
-     * @_notNull=true
+     * @_notNull=false
+     * @_default=none
      * @_autoIncrement=false
      */
     private $nome;
 
 
     /**
-     * @_type=varchar
-     * @_size=55
-     * @_primaryKey=false
+     * @_type=int
+     * @_size=15
+     * @_primaryKey=true
      * @_notNull=true
+     * @_default=5
      * @_autoIncrement=false
      */
     private $email;
 
     /**
-     * @_type=varchar
-     * @_size=55
+     * @_type=int
+     * @_size=57
      * @_primaryKey=false
      * @_notNull=true
+     * @_default=none
      * @_autoIncrement=false
      */
     private $cpf;
 
 
-    /**
-     * @_type=varchar
-     * @_size=55
-     * @_primaryKey=false
-     * @_notNull=false
-     * @_autoIncrement=false
-     */
-    private $senha;
+
+
 
     /**
      * @return mixed
@@ -141,5 +139,5 @@ class Usuario
 //$usuario->setEmail("123@123.com");
 //$usuario->setCpf("123");
 //$usuario->setSenha("123123123");
-//$pPersist = Phiber::openPersist();
+//$pPersist = Phiber::openPersist()->create;
 //$pPersist::create($usuario);

@@ -36,7 +36,7 @@ class Annotations {
     }
 }
 //require_once '../test/Usuario.php';
-
+//
 //$u = new Usuario();
-
+//
 //print_r(Annotations::getAnnotation($u));
