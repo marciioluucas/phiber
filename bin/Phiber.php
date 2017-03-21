@@ -14,7 +14,7 @@ class Phiber
      */
     public static function openPersist()
     {
-        //todo TableMysql::sync()
+
         return new PhiberPersistence();
     }
 

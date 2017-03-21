@@ -11,18 +11,18 @@ class Usuario
     /**
      * @_type=int
      * @_size=11
-     * @_primaryKey=false
+     * @_primaryKey=true
      * @_notNull=true
      * @_default=none
-     * @_autoIncrement=false
+     * @_autoIncrement=true
      */
     private $id;
 
     /**
      * @_type=varchar
-     * @_size=56
+     * @_size=158
      * @_primaryKey=false
-     * @_notNull=false
+     * @_notNull=true
      * @_default=none
      * @_autoIncrement=false
      */
@@ -30,27 +30,24 @@ class Usuario
 
 
     /**
-     * @_type=int
-     * @_size=15
-     * @_primaryKey=true
+     * @_type=varchar
+     * @_size=170
+     * @_primaryKey=false
      * @_notNull=true
-     * @_default=5
+     * @_default=olamundo
      * @_autoIncrement=false
      */
     private $email;
 
     /**
-     * @_type=int
-     * @_size=57
+     * @_type=varchar
+     * @_size=15
      * @_primaryKey=false
      * @_notNull=true
      * @_default=none
      * @_autoIncrement=false
      */
     private $cpf;
-
-
-
 
 
     /**
@@ -134,10 +131,9 @@ class Usuario
     }
 }
 
-//$usuario = new Usuario();
-//$usuario->setNome("Lucas");
-//$usuario->setEmail("123@123.com");
-//$usuario->setCpf("123");
-//$usuario->setSenha("123123123");
-//$pPersist = Phiber::openPersist()->create;
-//$pPersist::create($usuario);
+$usuario = new Usuario();
+$usuario->setNome("Lucas");
+$usuario->setEmail("123@123.com");
+$usuario->setCpf("123");
+$pPersist = Phiber::openPersist();
+$pPersist::create($usuario);

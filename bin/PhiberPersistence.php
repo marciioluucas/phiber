@@ -7,6 +7,7 @@ require_once '../util/Execution.php';
 require_once '../bin/PhiberException.php';
 require_once 'PhiberPersistenceFactory.php';
 require_once 'PhiberLogger.php';
+require_once 'TableMySql.php';
 
 /**
  * Created by PhpStorm
@@ -27,6 +28,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
     public static function create($object)
     {
         Execution::start();
+        TableMysql::sync($object);
         try {
             $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($object));
             $campos = FuncoesReflections::pegaAtributosDoObjeto($object);
@@ -94,6 +96,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
      */
     public static function update($object, $id)
     {
+        TableMysql::sync($object);
         try {
             $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($object));
             $campos = FuncoesReflections::pegaAtributosDoObjeto($object);
@@ -155,6 +158,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
      */
     public static function delete($object, $conditions = [], $conjuncoes = [])
     {
+        TableMysql::sync($object);
         try {
             $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($object));
             $nomeCampos = [];
@@ -201,11 +205,13 @@ class PhiberPersistence extends PhiberPersistenceFactory
     /**
      * @param $object
      * @param array $conditions
+     * @param array $conjuncoes
      * @return string
      * @throws PhiberException
      */
     public static function rowCount($object, $conditions = [], $conjuncoes = [])
     {
+        TableMysql::sync($object);
         try {
             $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($object));
             $nomeCampos = [];
@@ -258,6 +264,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
      */
     public static function searchWithConditions($object, $conditions, $onlyFirst = false)
     {
+        TableMysql::sync($object);
         try {
 
             $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($object));
@@ -340,6 +347,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
      */
     public static function createQuery($query)
     {
+
         try {
 
 

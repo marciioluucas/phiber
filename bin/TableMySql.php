@@ -99,7 +99,7 @@ class TableMySql extends TableFactory
 
         }
         $stringSql .= ")";
-        if (JsonReader::read("../phiber_config.json")->phiber->create_tables == 1 ? true : false) {
+        if (JsonReader::read("../phiber_config.json")->phiber->code_sync == 1 ? true : false) {
             $pdo = self::getConnection()->prepare($stringSql);
             if ($pdo->execute()) {
                 return true;
@@ -196,20 +196,49 @@ class TableMySql extends TableFactory
             $columnsTabela[$i]['Default'];
             $columnsTabela[$i]['Extra'];
         }
-
-        print_r($stringAlterTable);
-
-        // TODO: Implement alter() method.
+        if (JsonReader::read("../phiber_config.json")->phiber->code_sync == 1 ? true : false) {
+            $pdo = self::getConnection()->prepare($stringAlterTable);
+            if ($pdo->execute()) {
+                return true;
+            };
+        } else {
+            return $stringAlterTable;
+        }
+        return false;
     }
 
     static function drop($obj)
     {
-        // TODO: Implement drop() method.
+        $tabela = strtolower(FuncoesReflections::pegaNomeClasseObjeto($obj));
+        $columnsTabela = self::columns($tabela);
+        $arrayDiff = [];
+        for($i=0; $i < count($columnsTabela); $i++){
+
+                array_push($arrayDiff,$columnsTabela[$i]['Field']);
+
+        }
+       $sqlDrop = "ALTER TABLE $tabela\n";
+        for($j = 0; $j< count($arrayDiff); $j++){
+         if($j != count($arrayDiff)-1){
+             $sqlDrop .= "DROP ".$arrayDiff[$i] . ", ";
+         }else{
+             $sqlDrop .= "DROP ".$arrayDiff[$i] . ";";
+         }
+        }
+
     }
 
     static function sync($obj)
     {
         if (self::exists($obj)) {
+            $tabela = strtolower(FuncoesReflections::pegaNomeClasseObjeto($obj));
+            $atributosTabela = FuncoesReflections::pegaAtributosDoObjeto($obj);
+            $columnsTabela = self::columns($tabela);
+            for($i=0; $i < count($columnsTabela); $i++) {
+                if ($columnsTabela[$i]['Field'] != $atributosTabela[$i]) {
+                    self::drop($obj);
+                }
+            }
             self::alter($obj);
         } else {
             self::create($obj);
@@ -259,4 +288,4 @@ class TableMySql extends TableFactory
 //
 require_once '../test/Usuario.php';
 $u = new Usuario();
-TableMySQL::alter($u);
+TableMySQL::drop($u);

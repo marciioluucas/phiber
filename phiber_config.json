@@ -11,6 +11,6 @@
     },
     "log": true,
     "execute_querys": true,
-    "create_tables": true
+    "code_sync": true
   }
 }
