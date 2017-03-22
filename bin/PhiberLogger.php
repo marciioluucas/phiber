@@ -1,6 +1,6 @@
 <?php
-require_once '../util/Internationalization.php';
-require_once '../util/JsonReader.php';
+require_once BASE_DIR .'/util/Internationalization.php';
+require_once BASE_DIR .'/util/JsonReader.php';
 
 /**
  * Created by PhpStorm.
@@ -13,7 +13,7 @@ class PhiberLogger
 
     public static function create($languageReference, $level = 'info', $objectName = '', $execTime = null)
     {
-        if (JsonReader::read('../phiber_config.json')->phiber->log == 1 ? true : false) {
+        if (JsonReader::read(BASE_DIR.'/phiber_config.json')->phiber->log == 1 ? true : false) {
             $date = date('Y-m-d H:i:s');
             $color = '';
             switch ($level) {

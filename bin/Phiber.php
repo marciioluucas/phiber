@@ -1,5 +1,7 @@
 <?php
-require_once 'PhiberPersistence.php';
+
+define( 'BASE_DIR', dirname( dirname( __FILE__ ) ) );
+require_once BASE_DIR.'/bin/PhiberPersistence.php';
 /**
  * Created by PhpStorm.
  * User: lukee
@@ -14,7 +16,6 @@ class Phiber
      */
     public static function openPersist()
     {
-
         return new PhiberPersistence();
     }
 

@@ -10,6 +10,7 @@
     "log_error": "ERRO",
     "seconds": "segundos",
     "execution_query_success": "Query executada com sucesso",
+    "execution_query_failure": "Erro ao executar a query",
     "object": "Objeto",
     "reference": "Referencia"
 

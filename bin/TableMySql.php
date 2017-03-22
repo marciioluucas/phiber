@@ -1,8 +1,8 @@
 <?php
-require_once 'TableFactory.php';
-require_once '../util/Annotations.php';
-require_once '../util/FuncoesReflections.php';
-require_once '../util/JsonReader.php';
+require_once BASE_DIR .'/bin/TableFactory.php';
+require_once BASE_DIR .'/util/Annotations.php';
+require_once BASE_DIR .'/util/FuncoesReflections.php';
+require_once BASE_DIR .'/util/JsonReader.php';
 
 /**
  * Created by PhpStorm.
@@ -99,7 +99,7 @@ class TableMySql extends TableFactory
 
         }
         $stringSql .= ")";
-        if (JsonReader::read("../phiber_config.json")->phiber->code_sync == 1 ? true : false) {
+        if (JsonReader::read(BASE_DIR."/phiber_config.json")->phiber->code_sync == 1 ? true : false) {
             $pdo = self::getConnection()->prepare($stringSql);
             if ($pdo->execute()) {
                 return true;
@@ -128,14 +128,86 @@ class TableMySql extends TableFactory
             $arrFinal[$i] = $arrFormatado;
         }
 
-        $columnsTabela = self::columns($tabela);
 
         $stringAlterTable .= "ALTER TABLE $tabela \n";
         $primKey = false;
         $columnPrimaryKey = "";
+
+        $columnsTabela = self::columns($tabela);
+
+        $arrayCamposTabela = [];
+        for ($i = 0; $i < count($columnsTabela); $i++) {
+            array_push($arrayCamposTabela, $columnsTabela[$i]['Field']);
+        }
+        $arrayDiff = array_diff($atributosTabela, $arrayCamposTabela);
+        $arrayDiff = array_values($arrayDiff);
+
+        $stringSql = $stringAlterTable;
+        for ($j = 0; $j < count($arrayDiff); $j++) {
+            if ($j != count($arrayDiff) - 1) {
+                $stringSql .= "ADD " . $arrayDiff[$j];
+            } else {
+                $stringSql .= "ADD " . $arrayDiff[$j];
+            }
+            if (array_key_exists('type', $arrFormatado)) {
+//                    echo $arrFormatado['primaryKey'];
+                $stringSql .= " " . $arrFormatado['type'] . "";
+
+            } else {
+                $stringSql .= "";
+            }
+
+
+            if (array_key_exists('size', $arrFormatado)) {
+//                    echo $arrFormatado['primaryKey'];
+                $stringSql .= "(" . $arrFormatado['size'] . ") ";
+
+            } else {
+                $stringSql .= "";
+            }
+
+            //NOT NULL AQUI
+
+            if (array_key_exists('notNull', $arrFormatado)) {
+                if ($arrFormatado['notNull'] === "true") {
+                    $stringSql .= " NOT NULL ";
+                } else {
+                    $stringSql .= "";
+                };
+            } else {
+                $stringSql .= "";
+            }
+
+
+            if (array_key_exists('primaryKey', $arrFormatado)) {
+                if ($arrFormatado['primaryKey'] === "true") {
+                    $stringSql .= " PRIMARY KEY ";
+                } else {
+                    $stringSql .= "";
+                };
+            } else {
+                $stringSql .= "";
+            }
+
+            if (array_key_exists('autoIncrement', $arrFormatado)) {
+                if ($arrFormatado['autoIncrement'] === "true") {
+                    $stringSql .= " AUTO_INCREMENT ";
+                } else {
+                    $stringSql .= "";
+                };
+            } else {
+                $stringSql .= "";
+            }
+
+            if (JsonReader::read(BASE_DIR."/phiber_config.json")->phiber->code_sync == 1 ? true : false) {
+                $pdo = self::getConnection()->prepare($stringSql);
+                $pdo->execute();
+            }
+        }
+
+
+        $columnsTabela = self::columns($tabela);
         for ($i = 0; $i < count($arrFinal); $i++) {
-
-
             if ($columnsTabela[$i]['Field'] != $atributosTabela[$i]) {
                 $stringAlterTable .= "CHANGE `" . $columnsTabela[$i]['Field'] . "` `$atributosTabela[$i]` ";
                 $stringAlterTable .= strtoupper($arrFinal[$i]['type']) . "(" . $arrFinal[$i]['size'] . ")\n";
@@ -176,7 +248,7 @@ class TableMySql extends TableFactory
                 }
 
 
-                    $stringAlterTable .= ", \n";
+                $stringAlterTable .= ", \n";
 
 
                 if ($arrFinal[$i]['primaryKey'] == "true" and $primKey != true) {
@@ -191,12 +263,8 @@ class TableMySql extends TableFactory
                     }
                 }
             }
-            $columnsTabela[$i]['Null'];
-            $columnsTabela[$i]['Key'];
-            $columnsTabela[$i]['Default'];
-            $columnsTabela[$i]['Extra'];
         }
-        if (JsonReader::read("../phiber_config.json")->phiber->code_sync == 1 ? true : false) {
+        if (JsonReader::read(BASE_DIR."/phiber_config.json")->phiber->code_sync == 1 ? true : false) {
             $pdo = self::getConnection()->prepare($stringAlterTable);
             if ($pdo->execute()) {
                 return true;
@@ -210,35 +278,38 @@ class TableMySql extends TableFactory
     static function drop($obj)
     {
         $tabela = strtolower(FuncoesReflections::pegaNomeClasseObjeto($obj));
+        $atributosObjeto = FuncoesReflections::pegaAtributosDoObjeto($obj);
         $columnsTabela = self::columns($tabela);
-        $arrayDiff = [];
-        for($i=0; $i < count($columnsTabela); $i++){
-
-                array_push($arrayDiff,$columnsTabela[$i]['Field']);
-
+        $arrayCamposTabela = [];
+        for ($i = 0; $i < count($columnsTabela); $i++) {
+            array_push($arrayCamposTabela, $columnsTabela[$i]['Field']);
         }
-       $sqlDrop = "ALTER TABLE $tabela\n";
-        for($j = 0; $j< count($arrayDiff); $j++){
-         if($j != count($arrayDiff)-1){
-             $sqlDrop .= "DROP ".$arrayDiff[$i] . ", ";
-         }else{
-             $sqlDrop .= "DROP ".$arrayDiff[$i] . ";";
-         }
+        $arrayDiff = array_diff($arrayCamposTabela, $atributosObjeto);
+        $arrayDiff = array_values($arrayDiff);
+        $sqlDrop = "ALTER TABLE $tabela \n";
+        for ($j = 0; $j < count($arrayDiff); $j++) {
+            if ($j != count($arrayDiff) - 1) {
+                $sqlDrop .= "DROP " . $arrayDiff[$j] . ", ";
+            } else {
+                $sqlDrop .= "DROP " . $arrayDiff[$j] . ";";
+            }
         }
-
+        if (JsonReader::read(BASE_DIR."/phiber_config.json")->phiber->code_sync == 1 ? true : false) {
+            $pdo = self::getConnection()->prepare($sqlDrop);
+            if ($pdo->execute()) {
+                return true;
+            };
+        } else {
+            return $sqlDrop;
+        }
+        return false;
     }
 
     static function sync($obj)
     {
+
         if (self::exists($obj)) {
-            $tabela = strtolower(FuncoesReflections::pegaNomeClasseObjeto($obj));
-            $atributosTabela = FuncoesReflections::pegaAtributosDoObjeto($obj);
-            $columnsTabela = self::columns($tabela);
-            for($i=0; $i < count($columnsTabela); $i++) {
-                if ($columnsTabela[$i]['Field'] != $atributosTabela[$i]) {
-                    self::drop($obj);
-                }
-            }
+            self::drop($obj);
             self::alter($obj);
         } else {
             self::create($obj);
@@ -248,9 +319,9 @@ class TableMySql extends TableFactory
     static function exists($obj)
     {
         $tabela = strtolower(FuncoesReflections::pegaNomeClasseObjeto($obj));
-        $schema = JsonReader::read('../phiber_config.json')->phiber->link->database_name;
+        $schema = JsonReader::read(BASE_DIR.'/phiber_config.json')->phiber->link->database_name;
         $sql = "SELECT * FROM information_schema.tables WHERE table_schema = ? AND table_name = ?";
-        if (JsonReader::read("../phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
+        if (JsonReader::read(BASE_DIR."/phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
             $pdo = self::getConnection()->prepare($sql);
             $pdo->bindValue(1, $schema);
             $pdo->bindValue(2, $tabela);
@@ -270,7 +341,7 @@ class TableMySql extends TableFactory
     {
         $sql = "show columns from " . strtolower($table);
 
-        if (JsonReader::read("../phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
+        if (JsonReader::read(BASE_DIR."/phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
             $pdo = self::getConnection()->prepare($sql);
             if ($pdo->execute()) {
                 return $pdo->fetchAll(PDO::FETCH_ASSOC);
@@ -281,11 +352,9 @@ class TableMySql extends TableFactory
             return false;
         }
     }
-
-
 }
 
 //
-require_once '../test/Usuario.php';
-$u = new Usuario();
-TableMySQL::drop($u);
+//require_once '../test/Usuario.php';
+//$u = new Usuario();
+//TableMySQL::sync($u);

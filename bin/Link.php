@@ -1,7 +1,7 @@
 <?php
-require_once '../util/JsonReader.php';
-require_once '../util/Internationalization.php';
-require_once 'PhiberException.php';
+require_once BASE_DIR . '/util/JsonReader.php';
+require_once BASE_DIR . '/util/Internationalization.php';
+require_once BASE_DIR . '/bin/PhiberException.php';
 
 /**
  * Created by PhpStorm.
@@ -24,7 +24,7 @@ class Link
     {
         try {
             if (!isset(self::$instancia)) {
-                $json = JsonReader::read("../phiber_config.json");
+                $json = JsonReader::read(BASE_DIR."/phiber_config.json");
                 try{
                     self::$instancia = new PDO(
                         $json->phiber->link->url,

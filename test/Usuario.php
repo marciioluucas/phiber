@@ -51,6 +51,16 @@ class Usuario
 
 
     /**
+     * @_type=varchar
+     * @_size=15
+     * @_primaryKey=false
+     * @_notNull=true
+     * @_default=none
+     * @_autoIncrement=false
+     */
+    private $cnpj;
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -129,11 +139,21 @@ class Usuario
     {
         $this->email = $email;
     }
-}
 
-$usuario = new Usuario();
-$usuario->setNome("Lucas");
-$usuario->setEmail("123@123.com");
-$usuario->setCpf("123");
-$pPersist = Phiber::openPersist();
-$pPersist::create($usuario);
+    /**
+     * @return mixed
+     */
+    public function getCnpj()
+    {
+        return $this->cnpj;
+    }
+
+    /**
+     * @param mixed $cnpj
+     */
+    public function setCnpj($cnpj)
+    {
+        $this->cnpj = $cnpj;
+    }
+
+}

@@ -1,13 +1,14 @@
 <?php
-require_once '../util/FuncoesString.php';
-require_once '../util/FuncoesReflections.php';
-require_once '../util/JsonReader.php';
-require_once '../util/Internationalization.php';
-require_once '../util/Execution.php';
-require_once '../bin/PhiberException.php';
-require_once 'PhiberPersistenceFactory.php';
-require_once 'PhiberLogger.php';
-require_once 'TableMySql.php';
+
+require_once BASE_DIR . '/util/FuncoesString.php';
+require_once BASE_DIR . '/util/FuncoesReflections.php';
+require_once BASE_DIR . '/util/JsonReader.php';
+require_once BASE_DIR . '/util/Internationalization.php';
+require_once BASE_DIR . '/util/Execution.php';
+require_once BASE_DIR . '/bin/PhiberException.php';
+require_once BASE_DIR . '/bin/PhiberPersistenceFactory.php';
+require_once BASE_DIR . '/bin/PhiberLogger.php';
+require_once BASE_DIR . '/bin/TableMySql.php';
 
 /**
  * Created by PhpStorm
@@ -65,7 +66,8 @@ class PhiberPersistence extends PhiberPersistenceFactory
                     $sqlInsert .= ":" . $camposNome[$j] . ")";
                 }
             }
-            if (JsonReader::read("../phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
+
+            if (JsonReader::read(BASE_DIR . "/phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
 
                 $pdo = self::getConnection()->prepare($sqlInsert);
                 for ($i = 0; $i < count($camposNome); $i++) {
@@ -73,7 +75,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
                 }
 
                 if ($pdo->execute()) {
-                    PhiberLogger::create("execution_query_success", "info",$tabela, Execution::end());
+                    PhiberLogger::create("execution_query_success", "info", $tabela, Execution::end());
                     return true;
                 } else {
                     PhiberLogger::create("execution_query_failure", "error", $tabela, Execution::end());
@@ -127,14 +129,14 @@ class PhiberPersistence extends PhiberPersistenceFactory
                     $sqlUpdate .= $camposNome[$i] . " = :" . $camposNome[$i] . " WHERE pk_" . $tabela . " = " . $id;
                 }
             }
-            if (JsonReader::read("../phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
+            if (JsonReader::read(BASE_DIR . "/phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
                 $pdo = self::getConnection()->prepare($sqlUpdate);
                 for ($i = 0; $i < count($camposNome); $i++) {
                     $pdo->bindValue($camposNome[$i], $camposValores[$i]);
                 }
 
                 if ($pdo->execute()) {
-                    PhiberLogger::create("execution_query_success", "info",$tabela, Execution::end());
+                    PhiberLogger::create("execution_query_success", "info", $tabela, Execution::end());
                     return true;
                 } else {
                     PhiberLogger::create("execution_query_failure", "error", $tabela, Execution::end());
@@ -182,13 +184,13 @@ class PhiberPersistence extends PhiberPersistenceFactory
                 }
             }
 
-            if (JsonReader::read("../phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
+            if (JsonReader::read(BASE_DIR . "/phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
                 $pdo = self::getConnection()->prepare($sql);
                 for ($i = 1; $i <= count($nomeCampos); $i++) {
                     $pdo->bindValue($i, $valoresCampos[$i - 1]);
                 }
                 if ($pdo->execute()) {
-                    PhiberLogger::create("execution_query_success", "info",$tabela, Execution::end());
+                    PhiberLogger::create("execution_query_success", "info", $tabela, Execution::end());
                     return true;
                 } else {
                     PhiberLogger::create("execution_query_failure", "error", $tabela, Execution::end());
@@ -234,13 +236,13 @@ class PhiberPersistence extends PhiberPersistenceFactory
                     $sql .= $nomeCampos[$x] . " = ?";
                 }
             }
-            if (JsonReader::read("../phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
+            if (JsonReader::read(BASE_DIR . "/phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
                 $pdo = self::getConnection()->prepare($sql);
                 for ($i = 1; $i <= count($nomeCampos); $i++) {
                     $pdo->bindValue($i, $valoresCampos[$i - 1]);
                 }
                 if ($pdo->execute()) {
-                    PhiberLogger::create("execution_query_success", "info",$tabela, Execution::end());
+                    PhiberLogger::create("execution_query_success", "info", $tabela, Execution::end());
                     return $pdo->rowCount();
                 } else {
                     PhiberLogger::create("execution_query_failure", "error", $tabela, Execution::end());
@@ -324,7 +326,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
                 $sql = "SELECT * FROM $tabela";
                 $pdo = self::getConnection()->prepare($sql);
                 if ($pdo->execute()) {
-                    PhiberLogger::create("execution_query_success", "info",$tabela, Execution::end());
+                    PhiberLogger::create("execution_query_success", "info", $tabela, Execution::end());
                     return true;
                 } else {
                     PhiberLogger::create("execution_query_failure", "error", $tabela, Execution::end());
@@ -351,7 +353,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
         try {
 
 
-            if (JsonReader::read("../phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
+            if (JsonReader::read(BASE_DIR . "/phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
                 $pdo = self::getConnection()->prepare($query);
                 if ($pdo->execute()) {
                     PhiberLogger::create("execution_query_success", "info", Execution::end());

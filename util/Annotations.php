@@ -1,6 +1,6 @@
 <?php
-require_once '../util/FuncoesReflections.php';
-require_once '../util/FuncoesString.php';
+require_once BASE_DIR .'/util/FuncoesReflections.php';
+require_once BASE_DIR .'/util/FuncoesString.php';
 /**
  * Created by PhpStorm.
  * User: lukee

@@ -9,8 +9,8 @@
       "password": "",
       "connection_cache": true
     },
-    "log": true,
+    "log": false,
     "execute_querys": true,
-    "code_sync": true
+    "code_sync": false
   }
 }

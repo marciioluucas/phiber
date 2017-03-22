@@ -1,5 +1,5 @@
 <?php
-require_once 'JsonReader.php';
+require_once BASE_DIR .'/util/JsonReader.php';
 /**
  * Created by PhpStorm.
  * User: lukee
@@ -10,8 +10,8 @@ class Internationalization
 {
 
     public static function translate($reference) {
-        $languageSettedInConfig = JsonReader::read('../phiber_config.json')->phiber->language;
-        $lang = JsonReader::read("../lang/$languageSettedInConfig.json");
+        $languageSettedInConfig = JsonReader::read(BASE_DIR.'/phiber_config.json')->phiber->language;
+        $lang = JsonReader::read(BASE_DIR."/lang/$languageSettedInConfig.json");
         return $lang->phiber_lang->$reference;
     }
 
