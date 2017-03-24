@@ -20,6 +20,7 @@ class TableMySql extends TableFactory
      */
     public static function create($obj)
     {
+
         $nomeTabela = FuncoesReflections::pegaNomeClasseObjeto($obj);
         $atributosTabela = FuncoesReflections::pegaAtributosDoObjeto($obj);
         $annotationsTabela = Annotations::getAnnotation($obj);
@@ -51,8 +52,9 @@ class TableMySql extends TableFactory
 
 
             if (array_key_exists('size', $arrFormatado)) {
-//                    echo $arrFormatado['primaryKey'];
-                $stringSql .= "(" . $arrFormatado['size'] . ") ";
+                if($arrFormatado['size'] != 'none'){
+                    $stringSql .= "(" . $arrFormatado['size'] . ") ";
+                }
 
             } else {
                 $stringSql .= "";
@@ -98,7 +100,8 @@ class TableMySql extends TableFactory
             }
 
         }
-        $stringSql .= ")";
+        $stringSql .= ") ENGINE = InnoDB;";
+        echo $stringSql;
         if (JsonReader::read(BASE_DIR."/phiber_config.json")->phiber->code_sync == 1 ? true : false) {
             $pdo = self::getConnection()->prepare($stringSql);
             if ($pdo->execute()) {
@@ -247,6 +250,9 @@ class TableMySql extends TableFactory
                     $stringAlterTable .= "DEFAULT '" . $arrFinal[$i]['default'] . "'";
                 }
 
+                if (array_key_exists('autoIncrement', $arrFinal[$i]) && $arrFinal[$i]['autoIncrement'] != "false") {
+                    $stringAlterTable .= " AUTO_INCREMENT ";
+                }
 
                 $stringAlterTable .= ", \n";
 
@@ -309,9 +315,11 @@ class TableMySql extends TableFactory
     {
 
         if (self::exists($obj)) {
+
             self::drop($obj);
             self::alter($obj);
         } else {
+
             self::create($obj);
         }
     }
@@ -353,8 +361,3 @@ class TableMySql extends TableFactory
         }
     }
 }
-
-//
-//require_once '../test/Usuario.php';
-//$u = new Usuario();
-//TableMySQL::sync($u);
