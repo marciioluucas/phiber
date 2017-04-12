@@ -1,7 +1,7 @@
 <?php
-namespace util;
+namespace phiber\util;
 
-use util\Internationalization;
+use \phiber\util\Internationalization;
 
 class Execution
 {

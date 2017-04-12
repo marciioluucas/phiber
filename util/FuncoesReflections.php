@@ -1,6 +1,6 @@
 <?php
-namespace util;
-require_once 'FuncoesString.php';
+namespace phiber\util;
+use phiber\util\FuncoesString;
 
 /**
  * Created by PhpStorm.

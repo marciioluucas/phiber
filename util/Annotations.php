@@ -1,8 +1,8 @@
 <?php
-namespace util;
+namespace phiber\util;
 
-use util\FuncoesReflections;
-use util\FuncoesString;
+use \phiber\util\FuncoesReflections;
+use \phiber\util\FuncoesString;
 /**
  * Created by PhpStorm.
  * User: lukee

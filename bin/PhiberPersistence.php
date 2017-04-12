@@ -1,6 +1,6 @@
 <?php
 namespace phiber\bin;
-
+include_once '../vendor/autoload.php';
 use \phiber\util\Execution;
 /**
  * Created by PhpStorm.

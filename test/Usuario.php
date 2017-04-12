@@ -158,4 +158,4 @@ class Usuario
 }
 include_once '../Phiber.php';
 $u = new Usuario();
-print_r(\Phiber::openPersist()->update($u,["nome"=>"marcio"]));
+print_r(\phiber\Phiber::openPersist()->update($u,["nome"=>"marcio"]));

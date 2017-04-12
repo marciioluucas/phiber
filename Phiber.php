@@ -5,8 +5,8 @@
  * Date: 16/03/17
  * Time: 19:07
  */
-require_once "vendor/autoload.php";
-use bin\PhiberPersistence;
+namespace phiber;
+use phiber\bin\PhiberPersistence;
 
 class Phiber
 {
