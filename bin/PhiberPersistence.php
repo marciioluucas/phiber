@@ -1,5 +1,7 @@
 <?php
 namespace bin;
+
+use \util\Execution;
 /**
  * Created by PhpStorm.
  * User: marci
@@ -8,7 +10,7 @@ namespace bin;
  */
 class PhiberPersistence extends PhiberPersistenceFactory
 {
-    public static function execute($sql)
+    public  function execute($sql)
     {
 
         $pdo = self::getConnection()->prepare($sql);
@@ -25,32 +27,38 @@ class PhiberPersistence extends PhiberPersistenceFactory
         return false;
     }
 
-    public static function create($obj)
+    public  function create($obj)
     {
         // TODO: Implement create() method.
     }
 
-    public static function update($obj, $id)
+    /**
+     * @param $obj
+     * @param array $conditions
+     * @param array $conjunctions
+     * @return mixed
+     */
+    public  function update($obj, $conditions = [], $conjunctions = [])
     {
-        // TODO: Implement update() method.
+        return \bin\PhiberQueryBuilder::update($obj, $conditions, $conjunctions);
     }
 
-    public static function delete($obj, $condicoes = [], $conjuncoes = [])
+    public  function delete($obj, $condicoes = [], $conjuncoes = [])
     {
         // TODO: Implement delete() method.
     }
 
-    public static function rowCount($obj, $condicoes = [], $conjuncoes = [])
+    public  function rowCount($obj, $condicoes = [], $conjuncoes = [])
     {
         // TODO: Implement rowCount() method.
     }
 
-    public static function search($obj, $condicoes = null, $retornaPrimeiroValor = false)
+    public  function search($obj, $condicoes = null, $retornaPrimeiroValor = false)
     {
         // TODO: Implement searchWithConditions() method.
     }
 
-    public static function createQuery($query)
+    public  function createQuery($query)
     {
         // TODO: Implement createQuery() method.
     }

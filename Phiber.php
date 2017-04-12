@@ -5,8 +5,6 @@
  * Date: 16/03/17
  * Time: 19:07
  */
-
-namespace phiber;
 use bin\PhiberPersistence;
 
 class Phiber

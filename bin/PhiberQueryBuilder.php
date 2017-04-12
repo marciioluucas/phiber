@@ -26,7 +26,7 @@ class PhiberQueryBuilder implements IPhiberQueryBuilder
     public static function create($object)
     {
         Execution::start();
-        \bin\TableMysql::sync($object);
+        TableMysql::sync($object);
         try {
             $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($object));
             $campos = FuncoesReflections::pegaAtributosDoObjeto($object);
@@ -65,18 +65,19 @@ class PhiberQueryBuilder implements IPhiberQueryBuilder
             }
 
             return $sqlInsert;
+
         } catch (PhiberException $e) {
             throw new PhiberException(Internationalization::translate("query_processor_error"));
         }
     }
 
     /**
-     * @param $object , $id
+     * @param $object
      * @param $id
      * @return mixed
      * @throws PhiberException
      */
-    public static function update($object, $id)
+    public static function update($object, $conditions = [], $conjuncoes = [])
     {
         TableMysql::sync($object);
         try {
@@ -97,6 +98,7 @@ class PhiberQueryBuilder implements IPhiberQueryBuilder
                     $camposValores[$i] = $camposV[$i];
                 }
             }
+            $nomeCampos = [];
             $camposNome = array_values($camposNome);
             $camposValores = array_values($camposValores);
 
@@ -106,7 +108,26 @@ class PhiberQueryBuilder implements IPhiberQueryBuilder
                 if ($i != count($camposNome) - 1) {
                     $sqlUpdate .= $camposNome[$i] . " = :" . $camposNome[$i] . ", ";
                 } else {
-                    $sqlUpdate .= $camposNome[$i] . " = :" . $camposNome[$i] . " WHERE pk_" . $tabela . " = " . $id;
+                    $sqlUpdate .= $camposNome[$i] . " = :" . $camposNome[$i];
+                    $conditionsComIndexInt = array_keys($conditions);
+                    for ($i = 0; $i < count($conditions); $i++) {
+                        $nomeCampos[$i] = $conditionsComIndexInt[$i];
+                    }
+                    $valoresCampos = [];
+                    for ($j = 0; $j < count($conditions); $j++) {
+                        $valoresCampos[$j] = $conditions[$nomeCampos[$j]];
+                    }
+                    $sql = "DELETE FROM $tabela ";
+                    if ($conditions != []) {
+                        $sql .= "WHERE ";
+                    }
+                    for ($x = 0; $x < count($nomeCampos); $x++) {
+                        if ($x != count($nomeCampos) - 1) {
+                            $sql .= $nomeCampos[$x] . " = ? $conjuncoes[$x] ";
+                        } else {
+                            $sql .= $nomeCampos[$x] . " = ?";
+                        }
+                    }
                 }
             }
             if (JsonReader::read(BASE_DIR . "/phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
@@ -331,8 +352,6 @@ class PhiberQueryBuilder implements IPhiberQueryBuilder
     {
 
         try {
-
-
             if (JsonReader::read(BASE_DIR . "/phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
                 $pdo = self::getConnection()->prepare($query);
                 if ($pdo->execute()) {
@@ -348,95 +367,5 @@ class PhiberQueryBuilder implements IPhiberQueryBuilder
         } catch (PhiberException $e) {
             throw new PhiberException(Internationalization::translate("query_processor_error"));
         }
-
     }
-
-//TODO: Ver se realmente precisa dessa de innerJoin
-//    public static function innerJoin($object1, $object2, $conditions = null, $retornaSoPrimeiro = false, $campos = null)
-//    {
-//        $tabela1 = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($object1));
-//        $tabela2 = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($object2));
-//
-//        $nomeCampos = [];
-//
-//        if ($conditions != null) {
-//            $conditionsComIndexInt = array_keys($conditions);
-//            for ($i = 0; $i < count($conditions); $i++) {
-//                $nomeCampos[$i] = $conditionsComIndexInt[$i];
-//            }
-//            $valoresCampos = [];
-//            for ($j = 0; $j < count($conditions); $j++) {
-//                if ($conditions[$nomeCampos[$j]] != "") {
-//                    $valoresCampos[$j] = $conditions[$nomeCampos[$j]];
-//                }
-//            }
-//            if ($campos == null) {
-//                $sql = "SELECT * FROM $tabela1 INNER JOIN $tabela2 on `$tabela1`.`fk_$tabela2` = `$tabela2`.`pk_$tabela2` where ";
-//            } else {
-//                $strCampos = "";
-//                for ($i = 0; $i < count($campos); $i++) {
-//                    if ($i != count($campos) - 1) {
-//                        $strCampos .= $campos[$i] . ", ";
-//                    } else {
-//                        $strCampos .= $campos[$i] . " ";
-//                    }
-//                }
-//                $sql = "SELECT $strCampos FROM $tabela1 INNER JOIN $tabela2 on `$tabela1`.`fk_$tabela2` = `$tabela2`.`pk_$tabela2` where ";
-//            }
-//            $nomeCamposNovo = [];
-//            for ($x = 0; $x < count($nomeCampos); $x++) {
-//                if ($x != count($nomeCampos) - 1) {
-//                    if ($conditions[$nomeCampos[$x]] != "") {
-//                        if (count($valoresCampos) > 1) {
-//                            $sql .= $nomeCampos[$x] . " = ? and ";
-//                        } else {
-//                            $sql .= $nomeCampos[$x] . " = ?";
-//                        }
-//                        $nomeCamposNovo[$x] = $nomeCampos[$x];
-//                    }
-//                } else {
-//                    if ($conditions[$nomeCampos[$x]] != "") {
-//                        $sql .= $nomeCampos[$x] . " = ?";
-//                        $nomeCamposNovo[$x] = $nomeCampos[$x];
-//                    }
-//                }
-//            }
-//            $nomeCamposNovo = array_values($nomeCamposNovo);
-//            $pdo = self::getConnection()->prepare($sql);
-//            $valoresCampos = array_values($valoresCampos);
-//
-//            for ($i = 1; $i <= count($nomeCamposNovo); $i++) {
-//                $pdo->bindValue($i, $valoresCampos[$i - 1]);
-//            }
-//            $pdo->execute();
-//            if ($retornaSoPrimeiro) {
-//                return $pdo->fetch(PDO::FETCH_ASSOC);
-//            } else {
-//                return $pdo->fetchAll(PDO::FETCH_ASSOC);
-//            }
-//        } else {
-//            if ($campos == null) {
-//
-//                $sql = "SELECT * FROM $tabela1 INNER JOIN $tabela2 on `$tabela1`.`fk_$tabela2` = `$tabela2`.`pk_$tabela2` ";
-//            } else {
-//                $strCampos = "";
-//                for ($i = 0; $i < count($campos); $i++) {
-//                    if ($i != count($campos) - 1) {
-//                        $strCampos .= $campos[$i] . ", ";
-//                    } else {
-//                        $strCampos .= $campos[$i] . " ";
-//                    }
-//                }
-//                $sql = "SELECT $strCampos FROM $tabela1 INNER JOIN $tabela2 on `$tabela1`.`fk_$tabela2` = `$tabela2`.`pk_$tabela2` ";
-//            }
-//            $pdo = self::getConnection()->prepare($sql);
-//            $pdo->execute();
-//            if ($retornaSoPrimeiro) {
-//                return $pdo->fetch(PDO::FETCH_ASSOC);
-//            } else {
-//                return $pdo->fetchAll(PDO::FETCH_ASSOC);
-//            }
-//        }
-//    }
-
 }
