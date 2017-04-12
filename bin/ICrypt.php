@@ -1,5 +1,5 @@
 <?php
-
+namespace bin;
 /**
  * Created by PhpStorm.
  * User: lukee

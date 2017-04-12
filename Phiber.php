@@ -1,13 +1,14 @@
 <?php
-
-define( 'BASE_DIR', dirname( dirname( __FILE__ ) ) );
-require_once BASE_DIR.'/bin/PhiberPersistence.php';
 /**
  * Created by PhpStorm.
  * User: lukee
  * Date: 16/03/17
  * Time: 19:07
  */
+
+namespace phiber;
+use bin\PhiberPersistence;
+
 class Phiber
 {
 
@@ -19,7 +20,8 @@ class Phiber
         return new PhiberPersistence();
     }
 
-    public static function openCrypt(){
+    public static function openCrypt()
+    {
         return new PhiberCrypt();
     }
 

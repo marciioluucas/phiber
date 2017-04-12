@@ -1,12 +1,12 @@
 <?php
-
+namespace bin;
 /**
  * Created by PhpStorm.
  * User: lukee
  * Date: 17/03/17
  * Time: 15:15
  */
-class PhiberException extends Exception
+class PhiberException extends \Exception
 {
 
     /**

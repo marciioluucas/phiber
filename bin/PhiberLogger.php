@@ -1,6 +1,7 @@
 <?php
-require_once BASE_DIR .'/util/Internationalization.php';
-require_once BASE_DIR .'/util/JsonReader.php';
+namespace bin;
+use util\Internationalization;
+use util\JsonReader;
 
 /**
  * Created by PhpStorm.

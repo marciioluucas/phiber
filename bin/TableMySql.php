@@ -1,8 +1,10 @@
 <?php
-require_once BASE_DIR .'/bin/TableFactory.php';
-require_once BASE_DIR .'/util/Annotations.php';
-require_once BASE_DIR .'/util/FuncoesReflections.php';
-require_once BASE_DIR .'/util/JsonReader.php';
+namespace bin;
+
+
+use \util\Annotations;
+use \util\FuncoesReflections;
+use \util\JsonReader;
 
 /**
  * Created by PhpStorm.
@@ -10,7 +12,7 @@ require_once BASE_DIR .'/util/JsonReader.php';
  * Date: 16/03/17
  * Time: 18:46
  */
-class TableMySql extends TableFactory
+class TableMySql extends \bin\TableFactory
 {
 
 

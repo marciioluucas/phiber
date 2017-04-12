@@ -1,5 +1,6 @@
 <?php
-require_once BASE_DIR .'/util/JsonReader.php';
+namespace util;
+use util\JsonReader;
 /**
  * Created by PhpStorm.
  * User: lukee

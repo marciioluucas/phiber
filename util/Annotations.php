@@ -1,6 +1,8 @@
 <?php
-require_once BASE_DIR .'/util/FuncoesReflections.php';
-require_once BASE_DIR .'/util/FuncoesString.php';
+namespace util;
+
+use util\FuncoesReflections;
+use util\FuncoesString;
 /**
  * Created by PhpStorm.
  * User: lukee
@@ -14,7 +16,7 @@ require_once BASE_DIR .'/util/FuncoesString.php';
 
 class Annotations {
 
-    public static function getAnnotation($obj){
+    public static final function getAnnotation($obj){
         $out = array();
         $pattern = '/@+_+[A-z]\w+=\w+/';
         $fullComments = FuncoesReflections::retornaComentariosAtributos($obj);

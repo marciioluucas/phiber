@@ -1,5 +1,7 @@
 <?php
-require_once 'Internationalization.php';
+namespace util;
+
+use util\Internationalization;
 
 class Execution
 {
