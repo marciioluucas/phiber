@@ -156,9 +156,6 @@ class Usuario
     }
 
 }
-
-spl_autoload_register(function ($class_name) {
-    include $class_name . '.php';
-});
+include_once '../Phiber.php';
 $u = new Usuario();
 print_r(\Phiber::openPersist()->update($u,["nome"=>"marcio"]));

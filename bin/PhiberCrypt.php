@@ -1,7 +1,7 @@
 <?php
-namespace bin;
+namespace phiber\bin;
 
-use bin\ICrypt;
+
 /**
  * Created by PhpStorm.
  * User: lukee

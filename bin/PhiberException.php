@@ -1,5 +1,6 @@
 <?php
-namespace bin;
+namespace phiber\bin;
+
 /**
  * Created by PhpStorm.
  * User: lukee

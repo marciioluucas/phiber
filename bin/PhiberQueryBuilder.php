@@ -1,11 +1,11 @@
 <?php
-namespace bin;
+namespace phiber\bin;
 
-use util\Execution;
-use util\FuncoesReflections;
-use util\FuncoesString;
-use util\Internationalization;
-use util\JsonReader;
+use \phiber\util\Execution;
+use \phiber\util\FuncoesReflections;
+use \phiber\util\FuncoesString;
+use \phiber\util\Internationalization;
+use \phiber\util\JsonReader;
 
 /**
  * Created by PhpStorm

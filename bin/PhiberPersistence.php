@@ -1,7 +1,7 @@
 <?php
-namespace bin;
+namespace phiber\bin;
 
-use \util\Execution;
+use \phiber\util\Execution;
 /**
  * Created by PhpStorm.
  * User: marci

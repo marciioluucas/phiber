@@ -1,10 +1,10 @@
 <?php
-namespace bin;
+namespace phiber\bin;
 
 
-use \util\Annotations;
-use \util\FuncoesReflections;
-use \util\JsonReader;
+use \phiber\util\Annotations;
+use \phiber\util\FuncoesReflections;
+use \phiber\util\JsonReader;
 
 /**
  * Created by PhpStorm.
@@ -12,7 +12,7 @@ use \util\JsonReader;
  * Date: 16/03/17
  * Time: 18:46
  */
-class TableMySql extends \bin\TableFactory
+class TableMySql extends TableFactory
 {
 
 

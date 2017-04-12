@@ -1,9 +1,9 @@
 <?php
-namespace bin;
+namespace phiber\bin;
 
-use PDO;
-use util\Internationalization;
-use util\JsonReader;
+use phiber\PDO;
+use phiber\util\Internationalization;
+use phiber\util\JsonReader;
 
 
 /**
