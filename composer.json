@@ -1,0 +1,17 @@
+{
+    "name": "marciioluucas/phiber",
+    "description": "Simples biblioteca ORM para PHP",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Márcio Lucas",
+            "email": "marciioluucas@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^5.3.3",
+        "mysql": "^5.5"
+    }
+}

@@ -1,7 +1,7 @@
 <?php
 namespace phiber\bin;
-include_once '../vendor/autoload.php';
-use \phiber\util\Execution;
+use phiber\util\Execution;
+
 /**
  * Created by PhpStorm.
  * User: marci
@@ -40,7 +40,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
      */
     public  function update($obj, $conditions = [], $conjunctions = [])
     {
-        return \bin\PhiberQueryBuilder::update($obj, $conditions, $conjunctions);
+        return PhiberQueryBuilder::update($obj, $conditions, $conjunctions);
     }
 
     public  function delete($obj, $condicoes = [], $conjuncoes = [])
