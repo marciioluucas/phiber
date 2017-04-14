@@ -1,6 +1,6 @@
 <?php
-namespace phiber\util;
-use \phiber\util\JsonReader;
+namespace util;
+use util\JsonReader;
 /**
  * Created by PhpStorm.
  * User: lukee

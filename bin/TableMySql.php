@@ -1,10 +1,11 @@
 <?php
-namespace phiber\bin;
+namespace bin;
 
 
-use \phiber\util\Annotations;
-use \phiber\util\FuncoesReflections;
-use \phiber\util\JsonReader;
+use util\Annotations;
+use util\FuncoesReflections;
+use util\JsonReader;
+use util\FuncoesString;
 
 /**
  * Created by PhpStorm.

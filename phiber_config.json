@@ -9,7 +9,7 @@
       "password": "",
       "connection_cache": true
     },
-    "log": false,
+    "log": true,
     "execute_querys": false,
     "code_sync": false
   }

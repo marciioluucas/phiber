@@ -6,16 +6,22 @@
  * Time: 19:07
  */
 namespace phiber;
-use phiber\bin\PhiberPersistence;
+use bin\PhiberPersistence;
+use \util\PhiberAutoload;
+define("BASE_DIR",str_replace('\\', '/', dirname(__FILE__)));
 
 class Phiber
 {
+
+
+
 
     /**
      * @return PhiberPersistence
      */
     public static function openPersist()
     {
+        new PhiberAutoload();
         return new PhiberPersistence();
     }
 

@@ -1,11 +1,11 @@
 <?php
-namespace phiber\bin;
+namespace bin;
 
-use \phiber\util\Execution;
-use \phiber\util\FuncoesReflections;
-use \phiber\util\FuncoesString;
-use \phiber\util\Internationalization;
-use \phiber\util\JsonReader;
+use util\Execution;
+use util\FuncoesReflections;
+use util\FuncoesString;
+use util\Internationalization;
+use util\JsonReader;
 
 /**
  * Created by PhpStorm
@@ -13,7 +13,7 @@ use \phiber\util\JsonReader;
  * Date: 20/10/2016
  * Time: 22:14
  */
-class PhiberQueryBuilder implements IPhiberQueryBuilder
+class PhiberQueryWriter implements IPhiberQueryBuilder
 {
 
     /**
@@ -23,17 +23,12 @@ class PhiberQueryBuilder implements IPhiberQueryBuilder
      * Faz a criação de um registro no banco com os dados de um objeto.
      * Make an insert of an object in the database
      */
-    public static function create($object)
+    public static function create($tabela, $campos, $camposV)
     {
-        Execution::start();
-        TableMysql::sync($object);
+
         try {
-            $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($object));
-            $campos = FuncoesReflections::pegaAtributosDoObjeto($object);
-            $camposV = FuncoesReflections::pegaValoresAtributoDoObjeto($object);
             $camposNome = [];
             $camposValores = [];
-
             for ($i = 0; $i < count($campos); $i++) {
                 if ($camposV[$i] != null) {
                     $camposNome[$i] = $campos[$i];
@@ -98,7 +93,7 @@ class PhiberQueryBuilder implements IPhiberQueryBuilder
                     $camposValores[$i] = $camposV[$i];
                 }
             }
-            $nomeCampos = [];
+            $camposNome = [];
             $camposNome = array_values($camposNome);
             $camposValores = array_values($camposValores);
 
@@ -111,44 +106,28 @@ class PhiberQueryBuilder implements IPhiberQueryBuilder
                     $sqlUpdate .= $camposNome[$i] . " = :" . $camposNome[$i];
                     $conditionsComIndexInt = array_keys($conditions);
                     for ($i = 0; $i < count($conditions); $i++) {
-                        $nomeCampos[$i] = $conditionsComIndexInt[$i];
+                        $camposNome[$i] = $conditionsComIndexInt[$i];
                     }
-                    $valoresCampos = [];
+                    $camposValores = [];
                     for ($j = 0; $j < count($conditions); $j++) {
-                        $valoresCampos[$j] = $conditions[$nomeCampos[$j]];
+                        $camposValores[$j] = $conditions[$camposNome[$j]];
                     }
-                    $sql = "DELETE FROM $tabela ";
                     if ($conditions != []) {
-                        $sql .= "WHERE ";
+                        $sqlUpdate .= " WHERE ";
                     }
-                    for ($x = 0; $x < count($nomeCampos); $x++) {
-                        if ($x != count($nomeCampos) - 1) {
-                            $sql .= $nomeCampos[$x] . " = ? $conjuncoes[$x] ";
+                    for ($x = 0; $x < count($camposNome); $x++) {
+                        if ($x != count($camposNome) - 1) {
+                            $sqlUpdate .= $camposNome[$x] . " = :" . $camposNome[$x] . " $conjuncoes[$x] ";
                         } else {
-                            $sql .= $nomeCampos[$x] . " = ?";
+                            $sqlUpdate .= $camposNome[$x] . " = :" . $camposNome[$x] . ";";
                         }
                     }
                 }
             }
-            if (JsonReader::read(BASE_DIR . "/phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
-                $pdo = self::getConnection()->prepare($sqlUpdate);
-                for ($i = 0; $i < count($camposNome); $i++) {
-                    $pdo->bindValue($camposNome[$i], $camposValores[$i]);
-                }
-
-                if ($pdo->execute()) {
-                    PhiberLogger::create("execution_query_success", "info", $tabela, Execution::end());
-                    return true;
-                } else {
-                    PhiberLogger::create("execution_query_failure", "error", $tabela, Execution::end());
-                }
-            } else {
-                return $sqlUpdate;
-            }
+            return $sqlUpdate;
         } catch (PhiberException $e) {
             throw new PhiberException(Internationalization::translate("query_processor_error"));
         }
-        return false;
     }
 
 
@@ -164,45 +143,31 @@ class PhiberQueryBuilder implements IPhiberQueryBuilder
         TableMysql::sync($object);
         try {
             $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($object));
-            $nomeCampos = [];
+            $camposNome = [];
+            $camposValores = [];
             $conditionsComIndexInt = array_keys($conditions);
             for ($i = 0; $i < count($conditions); $i++) {
-                $nomeCampos[$i] = $conditionsComIndexInt[$i];
+                $camposNome[$i] = $conditionsComIndexInt[$i];
             }
-            $valoresCampos = [];
+
             for ($j = 0; $j < count($conditions); $j++) {
-                $valoresCampos[$j] = $conditions[$nomeCampos[$j]];
+                $camposValores[$j] = $conditions[$camposNome[$j]];
             }
             $sql = "DELETE FROM $tabela ";
             if ($conditions != []) {
                 $sql .= "WHERE ";
             }
-            for ($x = 0; $x < count($nomeCampos); $x++) {
-                if ($x != count($nomeCampos) - 1) {
-                    $sql .= $nomeCampos[$x] . " = ? $conjuncoes[$x] ";
+            for ($x = 0; $x < count($camposNome); $x++) {
+                if ($x != count($camposNome) - 1) {
+                    $sql .= $camposNome[$x] . " = :$camposNome[$x] $conjuncoes[$x] ";
                 } else {
-                    $sql .= $nomeCampos[$x] . " = ?";
+                    $sql .= $camposNome[$x] . " = :$camposNome[$x]";
                 }
             }
-
-            if (JsonReader::read(BASE_DIR . "/phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
-                $pdo = self::getConnection()->prepare($sql);
-                for ($i = 1; $i <= count($nomeCampos); $i++) {
-                    $pdo->bindValue($i, $valoresCampos[$i - 1]);
-                }
-                if ($pdo->execute()) {
-                    PhiberLogger::create("execution_query_success", "info", $tabela, Execution::end());
-                    return true;
-                } else {
-                    PhiberLogger::create("execution_query_failure", "error", $tabela, Execution::end());
-                }
-            } else {
-                return $sql;
-            }
+            return $sql;
         } catch (PhiberException $e) {
             throw new PhiberException(Internationalization::translate("query_processor_error"));
         }
-        return false;
     }
 
     /**
@@ -217,30 +182,30 @@ class PhiberQueryBuilder implements IPhiberQueryBuilder
         TableMysql::sync($object);
         try {
             $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($object));
-            $nomeCampos = [];
+            $camposNome = [];
             $conditionsComIndexInt = array_keys($conditions);
             for ($i = 0; $i < count($conditions); $i++) {
-                $nomeCampos[$i] = $conditionsComIndexInt[$i];
+                $camposNome[$i] = $conditionsComIndexInt[$i];
             }
-            $valoresCampos = [];
+            $camposValores = [];
             for ($j = 0; $j < count($conditions); $j++) {
-                $valoresCampos[$j] = $conditions[$nomeCampos[$j]];
+                $camposValores[$j] = $conditions[$camposNome[$j]];
             }
             $sql = "SELECT * FROM $tabela ";
             if ($conditions != []) {
                 $sql .= "WHERE ";
             }
-            for ($x = 0; $x < count($nomeCampos); $x++) {
-                if ($x != count($nomeCampos) - 1) {
-                    $sql .= $nomeCampos[$x] . " = ? $conjuncoes[$x] ";
+            for ($x = 0; $x < count($camposNome); $x++) {
+                if ($x != count($camposNome) - 1) {
+                    $sql .= $camposNome[$x] . " = ? $conjuncoes[$x] ";
                 } else {
-                    $sql .= $nomeCampos[$x] . " = ?";
+                    $sql .= $camposNome[$x] . " = ?";
                 }
             }
             if (JsonReader::read(BASE_DIR . "/phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
                 $pdo = self::getConnection()->prepare($sql);
-                for ($i = 1; $i <= count($nomeCampos); $i++) {
-                    $pdo->bindValue($i, $valoresCampos[$i - 1]);
+                for ($i = 1; $i <= count($camposNome); $i++) {
+                    $pdo->bindValue($i, $camposValores[$i - 1]);
                 }
                 if ($pdo->execute()) {
                     PhiberLogger::create("execution_query_success", "info", $tabela, Execution::end());
@@ -271,50 +236,49 @@ class PhiberQueryBuilder implements IPhiberQueryBuilder
         try {
 
             $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($object));
-
-            $nomeCampos = [];
+            $camposNome = [];
+            $camposValores = [];
 
             if ($conditions != null) {
 
                 $conditionsComIndexInt = array_keys($conditions);
 
                 for ($i = 0; $i < count($conditions); $i++) {
-                    $nomeCampos[$i] = $conditionsComIndexInt[$i];
+                    $camposNome[$i] = $conditionsComIndexInt[$i];
                 }
 
-                $valoresCampos = [];
 
                 for ($j = 0; $j < count($conditions); $j++) {
-                    if ($conditions[$nomeCampos[$j]] != "") {
-                        $valoresCampos[$j] = $conditions[$nomeCampos[$j]];
+                    if ($conditions[$camposNome[$j]] != "") {
+                        $camposValores[$j] = $conditions[$camposNome[$j]];
                     }
                 }
 
                 $sql = "SELECT * FROM $tabela WHERE ";
-                $nomeCamposNovo = [];
-                for ($x = 0; $x < count($nomeCampos); $x++) {
-                    if ($x != count($nomeCampos) - 1) {
-                        if ($conditions[$nomeCampos[$x]] != "") {
-                            if (count($valoresCampos) > 1) {
-                                $sql .= $nomeCampos[$x] . " = ? and ";
+                $camposNomeNovo = [];
+                for ($x = 0; $x < count($camposNome); $x++) {
+                    if ($x != count($camposNome) - 1) {
+                        if ($conditions[$camposNome[$x]] != "") {
+                            if (count($camposValores) > 1) {
+                                $sql .= $camposNome[$x] . " = ? and ";
                             } else {
-                                $sql .= $nomeCampos[$x] . " = ?";
+                                $sql .= $camposNome[$x] . " = ?";
                             }
-                            $nomeCamposNovo[$x] = $nomeCampos[$x];
+                            $camposNomeNovo[$x] = $camposNome[$x];
                         }
                     } else {
-                        if ($conditions[$nomeCampos[$x]] != "") {
-                            $sql .= $nomeCampos[$x] . " = ?";
-                            $nomeCamposNovo[$x] = $nomeCampos[$x];
+                        if ($conditions[$camposNome[$x]] != "") {
+                            $sql .= $camposNome[$x] . " = ?";
+                            $camposNomeNovo[$x] = $camposNome[$x];
                         }
                     }
                 }
-                $nomeCamposNovo = array_values($nomeCamposNovo);
+                $camposNomeNovo = array_values($camposNomeNovo);
                 $pdo = self::getConnection()->prepare($sql);
-                $valoresCampos = array_values($valoresCampos);
+                $camposValores = array_values($camposValores);
 
-                for ($i = 1; $i <= count($nomeCamposNovo); $i++) {
-                    $pdo->bindValue($i, $valoresCampos[$i - 1]);
+                for ($i = 1; $i <= count($camposNomeNovo); $i++) {
+                    $pdo->bindValue($i, $camposValores[$i - 1]);
                 }
                 $pdo->execute();
 

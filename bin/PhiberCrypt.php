@@ -1,5 +1,5 @@
 <?php
-namespace phiber\bin;
+namespace bin;
 
 
 /**

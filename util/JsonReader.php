@@ -1,5 +1,5 @@
 <?php
-namespace phiber\util;
+namespace util;
 /**
  * Created by PhpStorm.
  * User: marci

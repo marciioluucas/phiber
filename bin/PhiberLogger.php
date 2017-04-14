@@ -1,7 +1,7 @@
 <?php
-namespace phiber\bin;
-use \phiber\util\Internationalization;
-use \phiber\util\JsonReader;
+namespace bin;
+use util\Internationalization;
+use util\JsonReader;
 
 /**
  * Created by PhpStorm.

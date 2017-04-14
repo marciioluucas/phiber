@@ -1,6 +1,8 @@
 <?php
-namespace phiber\util;
-use phiber\util\FuncoesString;
+namespace util;
+use \ReflectionClass;
+use \ReflectionProperty;
+use \Exception;
 
 /**
  * Created by PhpStorm.
@@ -27,8 +29,6 @@ class FuncoesReflections
      * @param $obj
      * @return string
      */
-
-
     public static function pegaNomeClasseObjeto($obj)
     {
         return get_class($obj);

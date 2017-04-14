@@ -1,6 +1,11 @@
 <?php
-namespace phiber\bin;
-use phiber\util\Execution;
+namespace bin;
+
+use util\Execution;
+use util\FuncoesReflections;
+use util\FuncoesString;
+use util\JsonReader;
+use util\Internationalization;
 
 /**
  * Created by PhpStorm.
@@ -8,28 +13,52 @@ use phiber\util\Execution;
  * Date: 12/04/2017
  * Time: 08:33
  */
-class PhiberPersistence extends PhiberPersistenceFactory
+class PhiberPersistence implements IPhiberPersistence
 {
-    public  function execute($sql)
+
+    private function prepare($sql)
+    {
+        Execution::start();
+        return Link::getConnection()->prepare($sql);
+    }
+
+    private function bind($sql, $camposNome, $camposValores)
+    {
+        for ($i = 0; $i < count($camposNome); $i++) {
+            $this->prepare($sql)->bindValue($camposNome[$i], $camposValores[$i]);
+        }
+    }
+
+//TODO: FAZER OS METODOS DE CREATE QUERY PEGAR COMO PARAMETRO AS REFLECTIONS;
+    private function execute($sql, $tabela)
     {
 
-        $pdo = self::getConnection()->prepare($sql);
-        for ($i = 0; $i < count($camposNome); $i++) {
-            $pdo->bindValue($camposNome[$i], $camposValores[$i]);
-        }
+        try {
+            if ($this->prepare($sql)->execute()) {
+                PhiberLogger::create("execution_query_success", "info", $tabela, Execution::end());
+                return true;
+            }
 
-        if ($pdo->execute()) {
-            PhiberLogger::create("execution_query_success", "info", $tabela, Execution::end());
-            return true;
-        } else {
+        } catch (PhiberException $pe) {
             PhiberLogger::create("execution_query_failure", "error", $tabela, Execution::end());
+            throw new PhiberException(Internationalization::translate("execution_query_failure"));
         }
         return false;
     }
 
-    public  function create($obj)
+    public function create($obj)
     {
-        // TODO: Implement create() method.
+        TableMysql::sync($obj);
+        $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
+        $campos = FuncoesReflections::pegaAtributosDoObjeto($obj);
+        $camposV = FuncoesReflections::pegaValoresAtributoDoObjeto($obj);
+        $sql = PhiberQueryWriter::create($tabela, $campos, $camposV);
+        if (JsonReader::read(BASE_DIR . "/phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
+            $this->bind($sql, $campos, $camposV);
+            return $this->execute($sql, $tabela);
+        }else{
+            return $sql;
+        }
     }
 
     /**
@@ -38,27 +67,27 @@ class PhiberPersistence extends PhiberPersistenceFactory
      * @param array $conjunctions
      * @return mixed
      */
-    public  function update($obj, $conditions = [], $conjunctions = [])
+    public function update($obj, $conditions = [], $conjunctions = [])
     {
-        return PhiberQueryBuilder::update($obj, $conditions, $conjunctions);
+        return PhiberQueryWriter::update($obj, $conditions, $conjunctions);
     }
 
-    public  function delete($obj, $condicoes = [], $conjuncoes = [])
+    public function delete($obj, $condicoes = [], $conjuncoes = [])
     {
-        // TODO: Implement delete() method.
+        return PhiberQueryWriter::delete($obj, $condicoes, $conjuncoes);
     }
 
-    public  function rowCount($obj, $condicoes = [], $conjuncoes = [])
+    public function rowCount($obj, $condicoes = [], $conjuncoes = [])
     {
         // TODO: Implement rowCount() method.
     }
 
-    public  function search($obj, $condicoes = null, $retornaPrimeiroValor = false)
+    public function search($obj, $condicoes = null, $retornaPrimeiroValor = false)
     {
         // TODO: Implement searchWithConditions() method.
     }
 
-    public  function createQuery($query)
+    public function createQuery($query)
     {
         // TODO: Implement createQuery() method.
     }

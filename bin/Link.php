@@ -1,9 +1,9 @@
 <?php
-namespace phiber\bin;
+namespace bin;
 
-use phiber\PDO;
-use phiber\util\Internationalization;
-use phiber\util\JsonReader;
+use PDO;
+use util\Internationalization;
+use util\JsonReader;
 
 
 /**
@@ -17,9 +17,8 @@ class Link
 
     public static function getConnection()
     {
-        $instancia = null;
         try {
-            if (!$instancia != null) {
+            if (!isset($instancia)) {
                 $json = JsonReader::read(BASE_DIR . "/phiber_config.json");
                 try {
                    $instancia = new PDO(
@@ -27,7 +26,8 @@ class Link
                         $json->phiber->link->user,
                         $json->phiber->link->password,
                         array(PDO::ATTR_PERSISTENT => $json->phiber->link->connection_cache == 1 ? true : false));
-                } catch (PhiberException $e) {
+                }
+                catch (PhiberException $e) {
                     throw new PhiberException(Internationalization::translate("database_connection_error"));
                 }
 
