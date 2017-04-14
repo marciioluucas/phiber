@@ -4,8 +4,8 @@ namespace bin;
 use util\Execution;
 use util\FuncoesReflections;
 use util\FuncoesString;
-use util\JsonReader;
 use util\Internationalization;
+use util\JsonReader;
 
 /**
  * Created by PhpStorm.
@@ -15,18 +15,18 @@ use util\Internationalization;
  */
 class PhiberPersistence implements IPhiberPersistence
 {
+    private $connection;
 
-    private function prepare($sql)
+    function __construct()
     {
-        Execution::start();
-        return Link::getConnection()->prepare($sql);
+        $this->connection = Link::getConnection();
     }
 
-    private function bind($sql, $camposNome, $camposValores)
+
+    private function bind($sql, $campoNome, $campoValor)
     {
-        for ($i = 0; $i < count($camposNome); $i++) {
-            $this->prepare($sql)->bindValue($camposNome[$i], $camposValores[$i]);
-        }
+        $this->connection->prepare($sql)->bindValue($campoNome, $campoValor);
+
     }
 
 //TODO: FAZER OS METODOS DE CREATE QUERY PEGAR COMO PARAMETRO AS REFLECTIONS;
@@ -34,7 +34,7 @@ class PhiberPersistence implements IPhiberPersistence
     {
 
         try {
-            if ($this->prepare($sql)->execute()) {
+            if ($this->connection->prepare($sql)->execute()) {
                 PhiberLogger::create("execution_query_success", "info", $tabela, Execution::end());
                 return true;
             }
@@ -52,13 +52,17 @@ class PhiberPersistence implements IPhiberPersistence
         $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
         $campos = FuncoesReflections::pegaAtributosDoObjeto($obj);
         $camposV = FuncoesReflections::pegaValoresAtributoDoObjeto($obj);
+
         $sql = PhiberQueryWriter::create($tabela, $campos, $camposV);
         if (JsonReader::read(BASE_DIR . "/phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
-            $this->bind($sql, $campos, $camposV);
-            return $this->execute($sql, $tabela);
-        }else{
-            return $sql;
+            for ($i = 0; $i < count($campos); $i++) {
+                $this->bind($sql, $campos[$i], $camposV[$i]);
+            }
+            $this->execute($sql, $tabela);
+            return true;
         }
+            return $sql;
+
     }
 
     /**
@@ -69,6 +73,10 @@ class PhiberPersistence implements IPhiberPersistence
      */
     public function update($obj, $conditions = [], $conjunctions = [])
     {
+        $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
+        $campos = FuncoesReflections::pegaAtributosDoObjeto($obj);
+        $camposV = FuncoesReflections::pegaValoresAtributoDoObjeto($obj);
+
         return PhiberQueryWriter::update($obj, $conditions, $conjunctions);
     }
 

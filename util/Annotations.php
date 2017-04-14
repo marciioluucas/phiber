@@ -1,8 +1,6 @@
 <?php
 namespace util;
 
-use util\FuncoesReflections;
-use util\FuncoesString;
 /**
  * Created by PhpStorm.
  * User: lukee

@@ -10,7 +10,7 @@ interface IPhiberQueryBuilder
 {
     public static function create($table, $fields, $fieldsValues);
 
-    public static function update($obj, $id);
+    public static function update($table, $fields, $fieldsValues, $conditions = [], $conjunctions = []);
 
     public static function delete($obj, $condicoes = [], $conjuncoes = []);
 

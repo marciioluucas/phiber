@@ -4,8 +4,8 @@ namespace bin;
 
 use util\Annotations;
 use util\FuncoesReflections;
-use util\JsonReader;
 use util\FuncoesString;
+use util\JsonReader;
 
 /**
  * Created by PhpStorm.
@@ -355,7 +355,7 @@ class TableMySql extends TableFactory
         if (JsonReader::read(BASE_DIR."/phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
             $pdo = self::getConnection()->prepare($sql);
             if ($pdo->execute()) {
-                return $pdo->fetchAll(PDO::FETCH_ASSOC);
+                return $pdo->fetchAll(\PDO::FETCH_ASSOC);
             } else {
                 return false;
             }

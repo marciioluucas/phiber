@@ -1,8 +1,8 @@
 <?php
 namespace util;
-use \ReflectionClass;
-use \ReflectionProperty;
-use \Exception;
+use Exception;
+use ReflectionClass;
+use ReflectionProperty;
 
 /**
  * Created by PhpStorm.

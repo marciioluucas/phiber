@@ -41,7 +41,6 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
                 }
             }
             $camposNome = array_values($camposNome);
-            $camposValores = array_values($camposValores);
             $sqlInsert = "INSERT INTO $tabela (";
             for ($i = 0; $i < count($camposNome); $i++) {
                 if ($i != count($camposNome) - 1) {
@@ -72,14 +71,9 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
      * @return mixed
      * @throws PhiberException
      */
-    public static function update($object, $conditions = [], $conjuncoes = [])
+    public static function update($tabela, $campos, $camposV, $conditions = [], $conjuncoes = [])
     {
-        TableMysql::sync($object);
         try {
-            $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($object));
-            $campos = FuncoesReflections::pegaAtributosDoObjeto($object);
-            $camposV = FuncoesReflections::pegaValoresAtributoDoObjeto($object);
-
             $camposNome = [];
             $camposValores = [];
             for ($i = 0; $i < count($campos); $i++) {

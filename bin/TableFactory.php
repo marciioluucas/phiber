@@ -9,7 +9,7 @@ namespace bin;
 abstract class TableFactory
 {
     /**
-     * @return mysqli|PDO
+     * @return \PDO
      */
     public function getConnection() {
         return Link::getConnection();
