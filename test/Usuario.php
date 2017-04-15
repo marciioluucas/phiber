@@ -159,6 +159,6 @@ class Usuario
 require '../Phiber.php';
 include_once '../PhiberAutoload.php';
 $u = new Usuario();
-$u->setNome('Marcio');
+$u->setNome('Marcio Lucas');
 $u->setEmail('marciioluucas@gmail.com');
-print_r(\phiber\Phiber::openPersist()->create($u));
+print_r(\phiber\Phiber::openPersist()->update($u, ["id" => 1,"nome"=>"Victor"],["and"]));

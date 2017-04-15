@@ -71,7 +71,7 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
      * @return mixed
      * @throws PhiberException
      */
-    public static function update($tabela, $campos, $camposV, $conditions = [], $conjuncoes = [])
+    public static function update($tabela, $campos, $camposV, $conditions = [], $conjuncoes = ["and"])
     {
         try {
             $camposNome = [];
@@ -81,18 +81,15 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
                     $camposNome[$i] = $campos[$i];
                 }
             }
-
             for ($i = 0; $i < count($camposV); $i++) {
                 if ($camposV[$i] != null || $camposV[$i] != "") {
                     $camposValores[$i] = $camposV[$i];
                 }
             }
-            $camposNome = [];
+            $nomeCampos = [];
             $camposNome = array_values($camposNome);
             $camposValores = array_values($camposValores);
-
             $sqlUpdate = "UPDATE $tabela SET ";
-
             for ($i = 0; $i < count($camposNome); $i++) {
                 if ($i != count($camposNome) - 1) {
                     $sqlUpdate .= $camposNome[$i] . " = :" . $camposNome[$i] . ", ";
@@ -100,28 +97,32 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
                     $sqlUpdate .= $camposNome[$i] . " = :" . $camposNome[$i];
                     $conditionsComIndexInt = array_keys($conditions);
                     for ($i = 0; $i < count($conditions); $i++) {
-                        $camposNome[$i] = $conditionsComIndexInt[$i];
+                        $nomeCampos[$i] = $conditionsComIndexInt[$i];
                     }
-                    $camposValores = [];
+                    $valoresCampos = [];
                     for ($j = 0; $j < count($conditions); $j++) {
-                        $camposValores[$j] = $conditions[$camposNome[$j]];
+                        $valoresCampos[$j] = $conditions[$nomeCampos[$j]];
                     }
                     if ($conditions != []) {
                         $sqlUpdate .= " WHERE ";
-                    }
-                    for ($x = 0; $x < count($camposNome); $x++) {
-                        if ($x != count($camposNome) - 1) {
-                            $sqlUpdate .= $camposNome[$x] . " = :" . $camposNome[$x] . " $conjuncoes[$x] ";
+
+                    for ($x = 0; $x < count($nomeCampos); $x++) {
+                        if ($x != count($nomeCampos) - 1) {
+                            $sqlUpdate .= $nomeCampos[$x] . " = :condition_$nomeCampos[$x] $conjuncoes[$x] ";
                         } else {
-                            $sqlUpdate .= $camposNome[$x] . " = :" . $camposNome[$x] . ";";
+                            $sqlUpdate .= $nomeCampos[$x] . " = :condition_$nomeCampos[$x]";
                         }
                     }
+                    }
                 }
+
+
             }
-            return $sqlUpdate;
+            $sqlUpdate .= ";";
         } catch (PhiberException $e) {
             throw new PhiberException(Internationalization::translate("query_processor_error"));
         }
+        return $sqlUpdate;
     }
 
 
@@ -132,7 +133,7 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
      * @return bool|string
      * @throws PhiberException
      */
-    public static function delete($object, $conditions = [], $conjuncoes = [])
+    public static function delete($object, $conditions = [], $conjuncoes = ["and"])
     {
         TableMysql::sync($object);
         try {
@@ -150,12 +151,13 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
             $sql = "DELETE FROM $tabela ";
             if ($conditions != []) {
                 $sql .= "WHERE ";
-            }
-            for ($x = 0; $x < count($camposNome); $x++) {
-                if ($x != count($camposNome) - 1) {
-                    $sql .= $camposNome[$x] . " = :$camposNome[$x] $conjuncoes[$x] ";
-                } else {
-                    $sql .= $camposNome[$x] . " = :$camposNome[$x]";
+
+                for ($x = 0; $x < count($camposNome); $x++) {
+                    if ($x != count($camposNome) - 1) {
+                        $sql .= $camposNome[$x] . " = :condition_$camposNome[$x] $conjuncoes[$x] ";
+                    } else {
+                        $sql .= $camposNome[$x] . " = :condition_$camposNome[$x]";
+                    }
                 }
             }
             return $sql;

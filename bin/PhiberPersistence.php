@@ -55,13 +55,17 @@ class PhiberPersistence implements IPhiberPersistence
 
         $sql = PhiberQueryWriter::create($tabela, $campos, $camposV);
         if (JsonReader::read(BASE_DIR . "/phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
-            for ($i = 0; $i < count($campos); $i++) {
-                $this->bind($sql, $campos[$i], $camposV[$i]);
+            $pdo = Link::getConnection()->prepare($sql);
+            for ($i = 1; $i < count($campos); $i++) {
+                if ($camposV[$i] != null) {
+                    $pdo->bindValue($campos[$i], $camposV[$i]);
+                }
             }
-            $this->execute($sql, $tabela);
-            return true;
+            if ($pdo->execute()) {
+                return true;
+            }
         }
-            return $sql;
+        return $sql;
 
     }
 
@@ -73,29 +77,53 @@ class PhiberPersistence implements IPhiberPersistence
      */
     public function update($obj, $conditions = [], $conjunctions = [])
     {
+        TableMysql::sync($obj);
         $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
         $campos = FuncoesReflections::pegaAtributosDoObjeto($obj);
         $camposV = FuncoesReflections::pegaValoresAtributoDoObjeto($obj);
 
-        return PhiberQueryWriter::update($obj, $conditions, $conjunctions);
+        $sql = PhiberQueryWriter::update($tabela, $campos, $camposV, $conditions, $conjunctions);
+        if (JsonReader::read(BASE_DIR . "/phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
+            $pdo = Link::getConnection()->prepare($sql);
+            for ($i = 1; $i < count($campos); $i++) {
+                if ($camposV[$i] != null) {
+                    $pdo->bindValue($campos[$i], $camposV[$i]);
+                }
+
+            }
+
+            while (current($conditions)) {
+                $pdo->bindValue("condition_" . key($conditions), $conditions[key($conditions)]);
+                next($conditions);
+            }
+
+            if ($pdo->execute()) {
+                return true;
+            }
+        }
+        return $sql;
     }
 
-    public function delete($obj, $condicoes = [], $conjuncoes = [])
+    public
+    function delete($obj, $condicoes = [], $conjuncoes = [])
     {
         return PhiberQueryWriter::delete($obj, $condicoes, $conjuncoes);
     }
 
-    public function rowCount($obj, $condicoes = [], $conjuncoes = [])
+    public
+    function rowCount($obj, $condicoes = [], $conjuncoes = [])
     {
         // TODO: Implement rowCount() method.
     }
 
-    public function search($obj, $condicoes = null, $retornaPrimeiroValor = false)
+    public
+    function search($obj, $condicoes = null, $retornaPrimeiroValor = false)
     {
         // TODO: Implement searchWithConditions() method.
     }
 
-    public function createQuery($query)
+    public
+    function createQuery($query)
     {
         // TODO: Implement createQuery() method.
     }
