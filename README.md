@@ -56,18 +56,18 @@ phiber/phiber_config.json
 ```json
 {
   "phiber": {
-    "language": "pt_br", /*preffer language*/
+    "language": "pt_br", 
     "link": {
-      "database_technology": "mysql", //database technology (not implemented)
-      "database_name": "phiber_test", //name of your database
-      "url": "mysql:host=localhost;dbname=teste_phiber", //Your driver connection
-      "user": "root", // user of your db
-      "password": "", // password
-      "connection_cache": true // connection cache (not tested)
+      "database_technology": "mysql", 
+      "database_name": "phiber_test", 
+      "url": "mysql:host=localhost;dbname=teste_phiber", 
+      "user": "root", 
+      "password": "", 
+      "connection_cache": true 
     },
-    "log": true, // if you want a log, (just work in command line)
-    "execute_queries": true, // if you want to execute the queries ex: select, create, update etc.
-    "code_sync": false // technology to sync the code with db in realtime (recommended just to development enviroments).
+    "log": true, 
+    "execute_queries": true, 
+    "code_sync": false 
   }
 }
 ```
