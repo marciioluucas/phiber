@@ -80,57 +80,33 @@ Making a create in DB
 model/User.php
 ```php
 class User {
-private $name;
-function getName(){
-//Implement
-}
-functino setName() {
-//Implement
-}
-
-public function create(){
-try {
-    require 'phiber/Phiber.php';
-    include_once 'phiber/PhiberAutoload.php';
-    if($this->name != null){
-    return \phiber\Phiber::openPersist()->create($this));
+    private $name;
+    
+    function getName(){
+        //Implement
     }
+    function setName() {
+        //Implement
+    }
+
+    public function create(){
+        try {
+            require 'phiber/Phiber.php';
+            include_once 'phiber/PhiberAutoload.php';
+            if($this->name != null){
+                return \phiber\Phiber::openPersist()->create($this));
+            }
     return "ERROR: Name null";
-}catch(Exception $e){
-throw new Exception($e->getMesage);
+    }catch (Exception $e) {
+        throw new Exception($e->getMesage);
+    }
 }
-}
 ```
 
+### TODOS://
 
-First Tab:
-```sh
-$ node app
-```
-
-Second Tab:
-```sh
-$ gulp watch
-```
-
-(optional) Third:
-```sh
-$ karma test
-```
-#### Building for source
-For production release:
-```sh
-$ gulp build --prod
-```
-Generating pre-built zip archives for distribution:
-```sh
-$ gulp build dist --prod
-```
-### Dock
-### Todos
-
- - Write MOAR Tests
- - Add Night Mode
+ - foo
+ - bar
 
 License
 ----
@@ -139,27 +115,3 @@ MIT
 
 
 **Free Software, Hell Yeah!**
-
-[//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
-
-
-   [dill]: <https://github.com/joemccann/dillinger>
-   [git-repo-url]: <https://github.com/joemccann/dillinger.git>
-   [john gruber]: <http://daringfireball.net>
-   [df1]: <http://daringfireball.net/projects/markdown/>
-   [markdown-it]: <https://github.com/markdown-it/markdown-it>
-   [Ace Editor]: <http://ace.ajax.org>
-   [node.js]: <http://nodejs.org>
-   [Twitter Bootstrap]: <http://twitter.github.com/bootstrap/>
-   [jQuery]: <http://jquery.com>
-   [@tjholowaychuk]: <http://twitter.com/tjholowaychuk>
-   [express]: <http://expressjs.com>
-   [AngularJS]: <http://angularjs.org>
-   [Gulp]: <http://gulpjs.com>
-
-   [PlDb]: <https://github.com/joemccann/dillinger/tree/master/plugins/dropbox/README.md>
-   [PlGh]: <https://github.com/joemccann/dillinger/tree/master/plugins/github/README.md>
-   [PlGd]: <https://github.com/joemccann/dillinger/tree/master/plugins/googledrive/README.md>
-   [PlOd]: <https://github.com/joemccann/dillinger/tree/master/plugins/onedrive/README.md>
-   [PlMe]: <https://github.com/joemccann/dillinger/tree/master/plugins/medium/README.md>
-   [PlGa]: <https://github.com/RahulHP/dillinger/blob/master/plugins/googleanalytics/README.md>
