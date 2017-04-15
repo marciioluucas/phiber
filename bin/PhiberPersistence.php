@@ -1,10 +1,8 @@
 <?php
 namespace bin;
 
-use util\Execution;
 use util\FuncoesReflections;
 use util\FuncoesString;
-use util\Internationalization;
 use util\JsonReader;
 
 /**
@@ -20,30 +18,6 @@ class PhiberPersistence implements IPhiberPersistence
     function __construct()
     {
         $this->connection = Link::getConnection();
-    }
-
-
-    private function bind($sql, $campoNome, $campoValor)
-    {
-        $this->connection->prepare($sql)->bindValue($campoNome, $campoValor);
-
-    }
-
-//TODO: FAZER OS METODOS DE CREATE QUERY PEGAR COMO PARAMETRO AS REFLECTIONS;
-    private function execute($sql, $tabela)
-    {
-
-        try {
-            if ($this->connection->prepare($sql)->execute()) {
-                PhiberLogger::create("execution_query_success", "info", $tabela, Execution::end());
-                return true;
-            }
-
-        } catch (PhiberException $pe) {
-            PhiberLogger::create("execution_query_failure", "error", $tabela, Execution::end());
-            throw new PhiberException(Internationalization::translate("execution_query_failure"));
-        }
-        return false;
     }
 
     public function create($obj)
@@ -68,6 +42,8 @@ class PhiberPersistence implements IPhiberPersistence
         return $sql;
 
     }
+
+//TODO: FAZER OS METODOS DE CREATE QUERY PEGAR COMO PARAMETRO AS REFLECTIONS;
 
     /**
      * @param $obj
@@ -127,5 +103,6 @@ class PhiberPersistence implements IPhiberPersistence
     {
         // TODO: Implement createQuery() method.
     }
+
 
 }

@@ -9,13 +9,6 @@ namespace bin;
 abstract class TableFactory
 {
     /**
-     * @return \PDO
-     */
-    public function getConnection() {
-        return Link::getConnection();
-    }
-
-    /**
      * @param $obj
      * @return mixed
      */
@@ -31,6 +24,13 @@ abstract class TableFactory
      */
     abstract static function drop($obj);
 
-
     abstract static function sync($obj);
+
+    /**
+     * @return \PDO
+     */
+    public function getConnection()
+    {
+        return Link::getConnection();
+    }
 }

@@ -11,67 +11,66 @@ Phiber is a simples ORM framework that helps you code your applications more fas
 # New Features!
 
   - Persistence
-  - Tables Creation
+  - Tables Creation (NON RELATIONABLES)
 
 
 You can also:
   - See generated SQL
   - Activate console logs.
   
-This libraly has made by a student of Technology in systems to Internet of Morrinhos - GO, Brazil.
+This library has been made by a student of Technology in systems to Internet of Morrinhos - GO, Brazil.
 https://www.ifgoiano.edu.br/morrinhos
 
 Criador [Márcio Lucas]
 
-> The overriding design goal for Markdown's
-> formatting syntax is to make it as readable
-> as possible. The idea is that a
-> Markdown-formatted document should be
-> publishable as-is, as plain text, without
-> looking like it's been marked up with tags
-> or formatting instructions.
+> I made this library to increase my knowledge and to help my friends programmers build apps in PHP more fast, cause I see an big difficulty to build SQLs and i think very boring. 
 
-This text you see here is *actually* written in Markdown! To get a feel for Markdown's syntax, type some text into the left window and watch the results in the right.
+This library are in alpha test, I don't recommend to production environments.
 
-### Tech
+### Technology
 
-Dillinger uses a number of open source projects to work properly:
+Phiber uses just pure PHP and until now only has been builded the part to MySQL 5.5+.
+*In the next versions we will implement in BDs like PostgreSQL and Oracle.
 
-* [AngularJS] - HTML enhanced for web apps!
-* [Ace Editor] - awesome web-based text editor
-* [markdown-it] - Markdown parser done right. Fast and easy to extend.
-* [Twitter Bootstrap] - great UI boilerplate for modern web apps
-* [node.js] - evented I/O for the backend
-* [Express] - fast node.js network app framework [@tjholowaychuk]
-* [Gulp] - the streaming build system
-* [Breakdance](http://breakdance.io) - HTML to Markdown converter
-* [jQuery] - duh
 
-And of course Dillinger itself is open source with a [public repository][dill]
- on GitHub.
 
 ### Installation
 
-Dillinger requires [Node.js](https://nodejs.org/) v4+ to run.
+Phiber requires  PHP 5.3.3+ to run and MySQL 5.5+.
 
-Install the dependencies and devDependencies and start the server.
+Installing Phiber in your project.
 
+You can install by two ways. First is making the Download from github repository and putting the folder of your project
+The second way is installing via composer with this command bellow:
 ```sh
 $ composer install marciioluucas/phiber
 ```
 
 ### Config
 
-TODO
+To config Phiber is very simple,
+inside the folder phiber or vendor/phiber gonna have an archive .json called phiber_config.
+You are therefore the credentials of the bank and other settings.
 
-| Plugin | README |
-| ------ | ------ |
-| Dropbox | [plugins/dropbox/README.md] [PlDb] |
-| Github | [plugins/github/README.md] [PlGh] |
-| Google Drive | [plugins/googledrive/README.md] [PlGd] |
-| OneDrive | [plugins/onedrive/README.md] [PlOd] |
-| Medium | [plugins/medium/README.md] [PlMe] |
-| Google Analytics | [plugins/googleanalytics/README.md] [PlGa] |
+phiber/phiber_config.json
+```json
+{
+  "phiber": {
+    "language": "pt_br", //preffer language
+    "link": {
+      "database_technology": "mysql", //database technology (not implemented)
+      "database_name": "phiber_test", //name of your database
+      "url": "mysql:host=localhost;dbname=teste_phiber", //Your driver connection
+      "user": "root", // user of your db
+      "password": "", // password
+      "connection_cache": true // connection cache (not tested)
+    },
+    "log": true, // if you want a log, (just work in command line)
+    "execute_queries": true, // if you want to execute the queries ex: select, create, update etc.
+    "code_sync": false // technology to sync the code with db in realtime (recommended just to development enviroments).
+  }
+}
+```
 
 
 ### Development

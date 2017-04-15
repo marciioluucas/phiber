@@ -1,6 +1,5 @@
 <?php
 
-require_once '../bin/Phiber.php';
 
 /**
  * Created by PhpStorm.

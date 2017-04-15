@@ -24,37 +24,6 @@ class FuncoesReflections
         $this->p = [];
     }
 
-    /**
-     * Passa o objeto e a função irá retornar o nome da classe do respectivo objeto.
-     * @param $obj
-     * @return string
-     */
-    public static function pegaNomeClasseObjeto($obj)
-    {
-        return get_class($obj);
-    }
-
-    /**
-     * Passa o objeto e a função vai retornar todos os atributos do objeto baseado
-     * nos métodos get.
-     * @param $obj
-     * @return array
-     */
-    public static function pegaAtributosDoObjeto($obj)
-    {
-        $reflectionClass = new ReflectionClass($obj);
-        $propriedades = $reflectionClass->getProperties(ReflectionProperty::IS_PUBLIC |
-            ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PRIVATE);
-
-        for ($i = 0; $i < count($propriedades); $i++) {
-            self::$p[$i] = $propriedades[$i]->name;
-        }
-//        if ($reflectionClass->getParentClass() != null) {
-//            self::pegaAtributoDoObjeto($reflectionClass->getParentClass());
-//        }
-        return self::$p;
-    }
-
     public static function pegaAtributoDoObjeto($obj)
     {
         $reflectionClass = new ReflectionClass($obj);
@@ -68,24 +37,6 @@ class FuncoesReflections
             self::pegaAtributoDoObjeto($reflectionClass->getParentClass());
         }
         return self::$p;
-    }
-
-    /**
-     * Passe só o objeto e a função retorna um array de todos os valores dos atributos de um objeto
-     * @param $obj
-     * @return array
-     */
-    public static function pegaValoresAtributoDoObjeto($obj)
-    {
-        $nomeAtributos = self::pegaAtributosDoObjeto($obj);
-        $valoresAtributosFinal = [];
-        $reflectionClass = new ReflectionClass($obj);
-        for ($i = 0; $i < count($nomeAtributos); $i++) {
-            $reflectionProperty = $reflectionClass->getProperty($nomeAtributos[$i]);
-            $reflectionProperty->setAccessible(true);
-            $valoresAtributosFinal[$i] = $reflectionProperty->getValue($obj);
-        }
-        return $valoresAtributosFinal;
     }
 
     /**
@@ -120,6 +71,27 @@ class FuncoesReflections
     }
 
     /**
+     * Passa o objeto e a função vai retornar todos os atributos do objeto baseado
+     * nos métodos get.
+     * @param $obj
+     * @return array
+     */
+    public static function pegaAtributosDoObjeto($obj)
+    {
+        $reflectionClass = new ReflectionClass($obj);
+        $propriedades = $reflectionClass->getProperties(ReflectionProperty::IS_PUBLIC |
+            ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PRIVATE);
+
+        for ($i = 0; $i < count($propriedades); $i++) {
+            self::$p[$i] = $propriedades[$i]->name;
+        }
+//        if ($reflectionClass->getParentClass() != null) {
+//            self::pegaAtributoDoObjeto($reflectionClass->getParentClass());
+//        }
+        return self::$p;
+    }
+
+    /**
      * Passa o objeto e tambem o nome do atributo que voce quer pegar o valor.
      * @param $obj
      * @param $nomeAtributo
@@ -133,6 +105,16 @@ class FuncoesReflections
         $reflectionProperty->setAccessible(true);
         $valoresAtributosFinal = $reflectionProperty->getValue($obj);
         return $valoresAtributosFinal;
+    }
+
+    /**
+     * Passa o objeto e a função irá retornar o nome da classe do respectivo objeto.
+     * @param $obj
+     * @return string
+     */
+    public static function pegaNomeClasseObjeto($obj)
+    {
+        return get_class($obj);
     }
 
     /**
@@ -163,6 +145,16 @@ class FuncoesReflections
         }
     }
 
+    public static function retornaValoresAtributosClassesMaes($obj)
+    {
+        $nomeClassesMae = self::retornaClassesMaes($obj);
+        $valores = [];
+        for ($i = 0; $i < count($nomeClassesMae); $i++) {
+            $valores[$i] = self::pegaValoresAtributoDoObjeto($nomeClassesMae[$i]);
+        }
+//        print_r($nomeAtributos);
+        return $valores;
+    }
 
     public static function retornaClassesMaes($obj)
     {
@@ -177,6 +169,25 @@ class FuncoesReflections
         return $parents;
     }
 
+    /**
+     * Passe só o objeto e a função retorna um array de todos os valores dos atributos de um objeto
+     * @param $obj
+     * @return array
+     */
+    public static function pegaValoresAtributoDoObjeto($obj)
+    {
+        $nomeAtributos = self::pegaAtributosDoObjeto($obj);
+        $valoresAtributosFinal = [];
+        $reflectionClass = new ReflectionClass($obj);
+        for ($i = 0; $i < count($nomeAtributos); $i++) {
+            $reflectionProperty = $reflectionClass->getProperty($nomeAtributos[$i]);
+            $reflectionProperty->setAccessible(true);
+            $valoresAtributosFinal[$i] = $reflectionProperty->getValue($obj);
+        }
+        return $valoresAtributosFinal;
+    }
+
+    //TODO: Fazer funcionar issaque
 
     public static function retornaNomeAtributosClassesMaes($obj)
     {
@@ -191,22 +202,8 @@ class FuncoesReflections
         return $atributos;
     }
 
-    //TODO: Fazer funcionar issaque
-    public static function retornaValoresAtributosClassesMaes($obj)
-    {
-        $nomeClassesMae = self::retornaClassesMaes($obj);
-        $nomeAtributos = self::retornaNomeAtributosClassesMaes($obj);
-        $valores = [];
-        for ($i = 0; $i < count($nomeClassesMae); $i++) {
-            $valores[$i] = self::pegaValoresAtributoDoObjeto($nomeClassesMae[$i]);
-        }
-//        print_r($nomeAtributos);
-        return $valores;
-    }
-
     public static function retornaComentariosAtributos($obj)
     {
-        $reflectionClass = new ReflectionClass($obj);
         $arrAttributesNames = self::pegaAtributosDoObjeto($obj);
         $arrAttributesComments = array();
         for($i= 0; $i < count($arrAttributesNames); $i++){
