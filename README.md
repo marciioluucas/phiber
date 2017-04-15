@@ -75,6 +75,33 @@ phiber/phiber_config.json
 
 ### Development
 Todo
+Making a create in DB
+
+model/User.php
+```php
+class User {
+private $name;
+function getName(){
+//Implement
+}
+functino setName() {
+//Implement
+}
+
+public function create(){
+try {
+    require 'phiber/Phiber.php';
+    include_once 'phiber/PhiberAutoload.php';
+    if($this->name != null){
+    return \phiber\Phiber::openPersist()->create($this));
+    }
+    return "ERROR: Name null";
+}catch(Exception $e){
+throw new Exception($e->getMesage);
+}
+}
+```
+
 
 First Tab:
 ```sh
