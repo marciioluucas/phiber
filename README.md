@@ -56,7 +56,7 @@ phiber/phiber_config.json
 ```json
 {
   "phiber": {
-    "language": "pt_br", //preffer language
+    "language": "pt_br", /*preffer language*/
     "link": {
       "database_technology": "mysql", //database technology (not implemented)
       "database_name": "phiber_test", //name of your database
