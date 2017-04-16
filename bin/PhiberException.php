@@ -1,6 +1,8 @@
 <?php
 namespace bin;
 
+use util\Internationalization;
+
 /**
  * Created by PhpStorm.
  * User: lukee
@@ -9,14 +11,14 @@ namespace bin;
  */
 class PhiberException extends \Exception
 {
+    private $messageTranslateReference;
 
     /**
      * PhiberException constructor.
      */
-    public function __construct($message)
+    public function __construct($messageTranslateReference)
     {
-        /** @var STRING $message */
-        parent::__construct($message);
+        $this->messageTranslateReference = $messageTranslateReference;
     }
 
     /**
@@ -25,8 +27,8 @@ class PhiberException extends \Exception
     public function __toString()
     {
         return strtoupper(Internationalization::translate('phiber_exception')) .
-            ": " . Internationalization::translate('line') . ": " . $this->getLine() . " " . 
-            Internationalization::translate('message') . ": " . $this->getMessage();
+            ": " . Internationalization::translate('line') . ": " . $this->getLine() . " " .
+            Internationalization::translate('message') . ": " . Internationalization::translate($this->messageTranslateReference);
     }
 
 

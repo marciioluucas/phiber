@@ -7,7 +7,7 @@
  */
 namespace phiber;
 use bin\PhiberPersistence;
-use \util\PhiberAutoload;
+
 define("BASE_DIR",str_replace('\\', '/', dirname(__FILE__)));
 
 class Phiber

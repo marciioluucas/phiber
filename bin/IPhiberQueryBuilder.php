@@ -14,9 +14,5 @@ interface IPhiberQueryBuilder
 
     public static function delete($obj, $condicoes = [], $conjuncoes = []);
 
-    public static function rowCount($obj, $condicoes = [], $conjuncoes = []);
-
-    public static function searchWithConditions($obj, $condicoes, $retornaPrimeiroValor = false);
-
-    public static function createQuery($query);
+    public static function select($infos);
 }

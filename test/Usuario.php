@@ -107,6 +107,7 @@ class Usuario
     {
         $this->senha = $senha;
     }
+
     /**
      * @return mixed
      */
@@ -156,9 +157,12 @@ class Usuario
     }
 
 }
+
 require '../Phiber.php';
 include_once '../PhiberAutoload.php';
 $u = new Usuario();
-$u->setNome('Marcio Lucas');
-$u->setEmail('marciioluucas@gmail.com');
-print_r(\phiber\Phiber::openPersist()->create($u));
+print_r(\phiber\Phiber::openPersist()->select($u, [
+    "fields" => ["nome", "email"],
+    "conditions" => ["nome" => "marcio Lucas", "email" => "marciioluucas@gmail.com"],
+    "conjunctions" => ["and"]
+]));

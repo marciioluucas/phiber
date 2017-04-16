@@ -13,12 +13,6 @@ use util\JsonReader;
  */
 class PhiberPersistence implements IPhiberPersistence
 {
-    private $connection;
-
-    function __construct()
-    {
-        $this->connection = Link::getConnection();
-    }
 
     public function create($obj)
     {
@@ -93,9 +87,21 @@ class PhiberPersistence implements IPhiberPersistence
     }
 
     public
-    function search($obj, $condicoes = null, $retornaPrimeiroValor = false)
+    function select($obj, $infos)
     {
-        // TODO: Implement searchWithConditions() method.
+        TableMysql::sync($obj);
+        $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
+        $campos = FuncoesReflections::pegaAtributosDoObjeto($obj);
+        $camposV = FuncoesReflections::pegaValoresAtributoDoObjeto($obj);
+
+        $sql = PhiberQueryWriter::select([
+            "table" => $tabela,
+            "fields" => $infos['fields'],
+            "conditions" => $infos['conditions'],
+            "conjunctions" => $infos['conjunctions']
+        ]);
+
+        return $sql;
     }
 
     public

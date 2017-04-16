@@ -19,7 +19,7 @@ interface IPhiberPersistence
 
     public function rowCount($obj, $condicoes = [], $conjuncoes = []);
 
-    public function search($obj, $condicoes = null, $retornaPrimeiroValor = false);
+    public function select($obj, $infos);
 
     public function createQuery($query);
 }

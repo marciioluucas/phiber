@@ -2,8 +2,6 @@
 namespace bin;
 
 use util\Execution;
-use util\FuncoesReflections;
-use util\FuncoesString;
 use util\Internationalization;
 use util\JsonReader;
 
@@ -71,7 +69,7 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
      * @return mixed
      * @throws PhiberException
      */
-    public static function update($tabela, $campos, $camposV, $conditions = [], $conjuncoes = ["and"])
+    public static function update($tabela, $campos, $camposV, $conditions = [], $conjunctions = [])
     {
         try {
             $camposNome = [];
@@ -106,13 +104,13 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
                     if ($conditions != []) {
                         $sqlUpdate .= " WHERE ";
 
-                    for ($x = 0; $x < count($nomeCampos); $x++) {
-                        if ($x != count($nomeCampos) - 1) {
-                            $sqlUpdate .= $nomeCampos[$x] . " = :condition_$nomeCampos[$x] $conjuncoes[$x] ";
-                        } else {
-                            $sqlUpdate .= $nomeCampos[$x] . " = :condition_$nomeCampos[$x]";
+                        for ($x = 0; $x < count($nomeCampos); $x++) {
+                            if ($x != count($nomeCampos) - 1) {
+                                $sqlUpdate .= $nomeCampos[$x] . " = :condition_$nomeCampos[$x] $conjunctions[$x] ";
+                            } else {
+                                $sqlUpdate .= $nomeCampos[$x] . " = :condition_$nomeCampos[$x]";
+                            }
                         }
-                    }
                     }
                 }
 
@@ -129,15 +127,14 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
     /**
      * @param $object
      * @param array $conditions
-     * @param array $conjuncoes
+     * @param array $conjunctions
      * @return bool|string
      * @throws PhiberException
      */
-    public static function delete($object, $conditions = [], $conjuncoes = ["and"])
+    public static function delete($tabela, $conditions = [], $conjunctions = [])
     {
-        TableMysql::sync($object);
+
         try {
-            $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($object));
             $camposNome = [];
             $camposValores = [];
             $conditionsComIndexInt = array_keys($conditions);
@@ -154,7 +151,7 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
 
                 for ($x = 0; $x < count($camposNome); $x++) {
                     if ($x != count($camposNome) - 1) {
-                        $sql .= $camposNome[$x] . " = :condition_$camposNome[$x] $conjuncoes[$x] ";
+                        $sql .= $camposNome[$x] . " = :condition_$camposNome[$x] $conjunctions[$x] ";
                     } else {
                         $sql .= $camposNome[$x] . " = :condition_$camposNome[$x]";
                     }
@@ -166,58 +163,6 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
         }
     }
 
-    /**
-     * @param $object
-     * @param array $conditions
-     * @param array $conjuncoes
-     * @return string
-     * @throws PhiberException
-     */
-    public static function rowCount($object, $conditions = [], $conjuncoes = [])
-    {
-        TableMysql::sync($object);
-        try {
-            $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($object));
-            $camposNome = [];
-            $conditionsComIndexInt = array_keys($conditions);
-            for ($i = 0; $i < count($conditions); $i++) {
-                $camposNome[$i] = $conditionsComIndexInt[$i];
-            }
-            $camposValores = [];
-            for ($j = 0; $j < count($conditions); $j++) {
-                $camposValores[$j] = $conditions[$camposNome[$j]];
-            }
-            $sql = "SELECT * FROM $tabela ";
-            if ($conditions != []) {
-                $sql .= "WHERE ";
-            }
-            for ($x = 0; $x < count($camposNome); $x++) {
-                if ($x != count($camposNome) - 1) {
-                    $sql .= $camposNome[$x] . " = ? $conjuncoes[$x] ";
-                } else {
-                    $sql .= $camposNome[$x] . " = ?";
-                }
-            }
-            if (JsonReader::read(BASE_DIR . "/phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
-                $pdo = self::getConnection()->prepare($sql);
-                for ($i = 1; $i <= count($camposNome); $i++) {
-                    $pdo->bindValue($i, $camposValores[$i - 1]);
-                }
-                if ($pdo->execute()) {
-                    PhiberLogger::create("execution_query_success", "info", $tabela, Execution::end());
-                    return $pdo->rowCount();
-                } else {
-                    PhiberLogger::create("execution_query_failure", "error", $tabela, Execution::end());
-                }
-            } else {
-                return $sql;
-            }
-        } catch (PhiberException $e) {
-            throw new PhiberException(Internationalization::translate("query_processor_error"));
-        }
-        return false;
-    }
-
 
     /**
      * @param $object
@@ -226,81 +171,50 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
      * @return array|bool|mixed
      * @throws PhiberException
      */
-    public static function searchWithConditions($object, $conditions, $onlyFirst = false)
+    public static function select($infos)
     {
-        TableMysql::sync($object);
-        try {
-
-            $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($object));
-            $camposNome = [];
-            $camposValores = [];
-
-            if ($conditions != null) {
-
-                $conditionsComIndexInt = array_keys($conditions);
-
-                for ($i = 0; $i < count($conditions); $i++) {
-                    $camposNome[$i] = $conditionsComIndexInt[$i];
-                }
+        $tabela = $infos['table'];
+        $campos = isset($infos['fields']) ? $infos['fields'] : ["*"];
+        $conditions = $infos['conditions'];
+        $conjunctions = $infos['conjunctions'];
+        $camposNome = [];
+        $camposValores = [];
 
 
-                for ($j = 0; $j < count($conditions); $j++) {
-                    if ($conditions[$camposNome[$j]] != "") {
-                        $camposValores[$j] = $conditions[$camposNome[$j]];
-                    }
-                }
+        $conditionsComIndexInt = array_keys($conditions);
 
-                $sql = "SELECT * FROM $tabela WHERE ";
-                $camposNomeNovo = [];
-                for ($x = 0; $x < count($camposNome); $x++) {
+        for ($i = 0; $i < count($conditions); $i++) {
+            $camposNome[$i] = $conditionsComIndexInt[$i];
+        }
+
+
+        for ($j = 0; $j < count($conditions); $j++) {
+            if ($conditions[$camposNome[$j]] != "") {
+                $camposValores[$j] = $conditions[$camposNome[$j]];
+            }
+        }
+
+        $sql = "SELECT " . implode(", ", $campos) . " FROM $tabela ";
+
+
+        if ($conditions != []) {
+            $sql .= "WHERE ";
+            for ($x = 0; $x < count($conditions); $x++) {
+
                     if ($x != count($camposNome) - 1) {
-                        if ($conditions[$camposNome[$x]] != "") {
-                            if (count($camposValores) > 1) {
-                                $sql .= $camposNome[$x] . " = ? and ";
-                            } else {
-                                $sql .= $camposNome[$x] . " = ?";
-                            }
-                            $camposNomeNovo[$x] = $camposNome[$x];
+                        $sql .= $camposNome[$x] . " = :condition_$camposNome[$x]";
+                        if ($conjunctions != null) {
+                            $sql .= " " . $conjunctions[$x] . " ";
+                        } else {
+                            $sql .= " and ";
                         }
                     } else {
-                        if ($conditions[$camposNome[$x]] != "") {
-                            $sql .= $camposNome[$x] . " = ?";
-                            $camposNomeNovo[$x] = $camposNome[$x];
-                        }
+                        $sql .= $camposNome[$x] . " = :condition_$camposNome[$x]";
                     }
-                }
-                $camposNomeNovo = array_values($camposNomeNovo);
-                $pdo = self::getConnection()->prepare($sql);
-                $camposValores = array_values($camposValores);
-
-                for ($i = 1; $i <= count($camposNomeNovo); $i++) {
-                    $pdo->bindValue($i, $camposValores[$i - 1]);
-                }
-                $pdo->execute();
-
-                if ($onlyFirst) {
-                    return $pdo->fetch(PDO::FETCH_ASSOC);
-                } else {
-                    return $pdo->fetchAll(PDO::FETCH_ASSOC);
-                }
-            } else {
-                $sql = "SELECT * FROM $tabela";
-                $pdo = self::getConnection()->prepare($sql);
-                if ($pdo->execute()) {
-                    PhiberLogger::create("execution_query_success", "info", $tabela, Execution::end());
-                    return true;
-                } else {
-                    PhiberLogger::create("execution_query_failure", "error", $tabela, Execution::end());
-                }
-                if ($onlyFirst) {
-                    return $pdo->fetch(PDO::FETCH_ASSOC);
-                } else {
-                    return $pdo->fetchAll(PDO::FETCH_ASSOC);
-                }
             }
-        } catch (PhiberException $e) {
-            throw new PhiberException(Internationalization::translate("query_processor_error"));
         }
+        return $sql;
+
     }
 
     /**
@@ -329,3 +243,15 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
         }
     }
 }
+
+//ATUALMENTE
+//PhiberQueryWriter::select("usuario",[],["nome"=>"Marcio","id"=>1],["and"]);
+
+
+//IDEIA
+//echo PhiberQueryWriter::select([
+//    "table"=>"usuario",
+//    "fields" => ["nome","id"],
+//    "conditions"=>["nome"=>"Marcio", "id" => 1],
+//    "conjunctions"=>"and"
+//]);
