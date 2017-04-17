@@ -161,23 +161,43 @@ class Usuario
 require '../Phiber.php';
 include_once '../PhiberAutoload.php';
 $u = new Usuario();
-print_r(\phiber\Phiber::openPersist()->select($u, [
-    "fields" => ["nome", "email"],
-    "conditions" => [
-        [
-            "nome",
-            "LIKE",
-            "%Marcio Lucas%"
-        ],
-        [
-            "email",
-            "=",
-            "marciioluucas@gmail.com"
-        ]
-    ],
-    "conjunctions" =>
-        [
-            "and"
-        ],
-    "one_result" => false
-]));
+use bin\Restrictions;
+use phiber\Phiber;
+
+//print_r(\phiber\Phiber::openPersist()->select($u, [
+//    "fields" => ["nome", "email"],
+//    "conditions" => [
+//        [
+//            "nome",
+//            "LIKE",
+//            "%Marcio Lucas%"
+//        ],
+//        [
+//            "email",
+//            "=",
+//            "marciioluucas@gmail.com"
+//        ]
+//    ],
+//    "conjunctions" =>
+//        [
+//            "and"
+//        ],
+//    "one_result" => false
+//]));
+$criteria = Phiber::openPersist();
+$rNome = Restrictions::biggerThen("id", 10);
+$rEmail = Restrictions::eq("email", "marciioluucas@gmail.com");
+$nomeAndEmail = Restrictions:: and ($rNome, $rEmail);
+$rUsuario = Restrictions::eq("usuario", "marciioluucas");
+$rSenha = Restrictions::eq("senha", "s123");
+
+$usuarioAndSenha = Restrictions:: or ($rUsuario, $rSenha);
+
+$whereClauses = Restrictions:: and ($usuarioAndSenha, $nomeAndEmail);
+$criteria->add($whereClauses);
+$criteria->add(Restrictions::fields(["nome", "email"]));
+//$criteria->add();
+print_r($criteria->show());
+
+//$criteria->add(Restrictions::and($nomeAndEmail,$usuarioAndSenha));
+
