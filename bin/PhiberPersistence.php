@@ -14,6 +14,7 @@ use util\JsonReader;
  */
 class PhiberPersistence implements IPhiberPersistence
 {
+    private $restrictions = [];
 
     public function create($obj)
     {
@@ -121,5 +122,24 @@ class PhiberPersistence implements IPhiberPersistence
         // TODO: Implement createQuery() method.
     }
 
+
+    public function add($restrictions)
+    {
+        array_push($this->restrictions, $restrictions);
+        return $this->restrictions;
+    }
+
+    public function show()
+    {
+        return $this->mergeByFunctionOnSql();
+    }
+
+    public function mergeByFunctionOnSql()
+    {
+        for ($i = 0; $i < count($this->restrictions) - 1; $i++) {
+            $this->restrictions = array_merge($this->restrictions[$i], $this->restrictions[$i + 1]);
+        }
+        return $this->restrictions;
+    }
 
 }
