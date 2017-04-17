@@ -163,6 +163,21 @@ include_once '../PhiberAutoload.php';
 $u = new Usuario();
 print_r(\phiber\Phiber::openPersist()->select($u, [
     "fields" => ["nome", "email"],
-    "conditions" => ["nome" => "marcio Lucas", "email" => "marciioluucas@gmail.com"],
-    "conjunctions" => ["and"]
+    "conditions" => [
+        [
+            "nome",
+            "LIKE",
+            "%Marcio Lucas%"
+        ],
+        [
+            "email",
+            "=",
+            "marciioluucas@gmail.com"
+        ]
+    ],
+    "conjunctions" =>
+        [
+            "and"
+        ],
+    "one_result" => false
 ]));

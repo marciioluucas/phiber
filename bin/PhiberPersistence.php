@@ -1,6 +1,7 @@
 <?php
 namespace bin;
 
+use PDO;
 use util\FuncoesReflections;
 use util\FuncoesString;
 use util\JsonReader;
@@ -80,27 +81,37 @@ class PhiberPersistence implements IPhiberPersistence
         return PhiberQueryWriter::delete($obj, $condicoes, $conjuncoes);
     }
 
-    public
-    function rowCount($obj, $condicoes = [], $conjuncoes = [])
+    public function rowCount($obj, $condicoes = [], $conjuncoes = [])
     {
         // TODO: Implement rowCount() method.
     }
 
-    public
-    function select($obj, $infos)
+    public function select($obj, $infos)
     {
         TableMysql::sync($obj);
         $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
-        $campos = FuncoesReflections::pegaAtributosDoObjeto($obj);
-        $camposV = FuncoesReflections::pegaValoresAtributoDoObjeto($obj);
 
         $sql = PhiberQueryWriter::select([
             "table" => $tabela,
-            "fields" => $infos['fields'],
-            "conditions" => $infos['conditions'],
-            "conjunctions" => $infos['conjunctions']
+            "fields" => isset($infos['fields']) ? $infos['fields'] : "*",
+            "conditions" => isset($infos['conditions']) ? $infos['conditions'] : null,
+            "conjunctions" => isset($infos['conjunctions']) ? $infos['conjunctions'] : null
         ]);
+        if (JsonReader::read(BASE_DIR . "/phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
+            $pdo = Link::getConnection()->prepare($sql);
 
+            for ($i = 0; $i < count($infos['conditions']); $i++) {
+                $pdo->bindValue("condition_" . $infos['conditions'][$i][0],
+                    $infos['conditions'][$i][2]);
+            }
+            if ($pdo->execute()) {
+                if ($infos['one_result']) {
+                    return $pdo->fetch((PDO::FETCH_ASSOC));
+                } else {
+                    return $pdo->fetchAll((PDO::FETCH_ASSOC));
+                }
+            }
+        }
         return $sql;
     }
 

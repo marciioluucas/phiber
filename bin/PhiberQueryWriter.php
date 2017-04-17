@@ -199,18 +199,18 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
 
         if ($conditions != []) {
             $sql .= "WHERE ";
-            for ($x = 0; $x < count($conditions); $x++) {
+            for ($x = 0; $x < count($infos['conditions']); $x++) {
 
-                    if ($x != count($camposNome) - 1) {
-                        $sql .= $camposNome[$x] . " = :condition_$camposNome[$x]";
-                        if ($conjunctions != null) {
-                            $sql .= " " . $conjunctions[$x] . " ";
-                        } else {
-                            $sql .= " and ";
-                        }
+                if ($x != count($infos['conditions']) - 1) {
+                    $sql .= $infos['conditions'][$x][0] . " " . $infos['conditions'][$x][1] . " :condition_" . $infos['conditions'][$x][0];
+                    if ($conjunctions != null) {
+                        $sql .= " " . $conjunctions[$x] . " ";
                     } else {
-                        $sql .= $camposNome[$x] . " = :condition_$camposNome[$x]";
+                        $sql .= " and ";
                     }
+                } else {
+                    $sql .= $infos['conditions'][$x][0] . " " . $infos['conditions'][$x][1] . " :condition_" . $infos['conditions'][$x][0];
+                }
             }
         }
         return $sql;
