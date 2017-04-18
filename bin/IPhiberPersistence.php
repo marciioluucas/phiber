@@ -15,7 +15,7 @@ interface IPhiberPersistence
 
     public function update($obj, $id);
 
-    public function delete($obj, $condicoes = [], $conjuncoes = []);
+    public function delete($obj, $infos);
 
     public function rowCount($obj, $condicoes = [], $conjuncoes = []);
 

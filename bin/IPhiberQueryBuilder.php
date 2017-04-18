@@ -8,11 +8,11 @@ namespace bin;
  */
 interface IPhiberQueryBuilder
 {
-    public static function create($table, $fields, $fieldsValues);
+    public static function create($infos);
 
-    public static function update($table, $fields, $fieldsValues, $conditions = [], $conjunctions = []);
+    public static function update($infos);
 
-    public static function delete($obj, $condicoes = [], $conjuncoes = []);
+    public static function delete($infos);
 
     public static function select($infos);
 }

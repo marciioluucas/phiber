@@ -21,23 +21,22 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
      * Faz a criação de um registro no banco com os dados de um objeto.
      * Make an insert of an object in the database
      */
-    public static function create($tabela, $campos, $camposV)
+    public static function create($infos)
     {
-
+        $tabela = $infos['table'];
+        $campos = $infos['fields'];
+        $camposV = $infos['values'];
         try {
             $camposNome = [];
-            $camposValores = [];
+
+
             for ($i = 0; $i < count($campos); $i++) {
                 if ($camposV[$i] != null) {
                     $camposNome[$i] = $campos[$i];
                 }
             }
 
-            for ($i = 0; $i < count($camposV); $i++) {
-                if ($camposV[$i] != null) {
-                    $camposValores[$i] = $camposV[$i];
-                }
-            }
+
             $camposNome = array_values($camposNome);
             $sqlInsert = "INSERT INTO $tabela (";
             for ($i = 0; $i < count($camposNome); $i++) {
@@ -69,8 +68,16 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
      * @return mixed
      * @throws PhiberException
      */
-    public static function update($tabela, $campos, $camposV, $conditions = [], $conjunctions = [])
+    public static function update($infos)
     {
+
+        $tabela = $infos['table'];
+        $conditions = isset($infos['conditions']) ? $infos['conditions'] : null;
+        $conjunctions = isset($infos['conjunctions']) ? $infos['conjunctions'] : null;
+        $campos = $infos['fields'];
+        $camposV = $infos['values'];
+        $whereCriteria = $infos['where'];
+
         try {
             $camposNome = [];
             $camposValores = [];
@@ -84,37 +91,42 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
                     $camposValores[$i] = $camposV[$i];
                 }
             }
+
             $nomeCampos = [];
             $camposNome = array_values($camposNome);
-            $camposValores = array_values($camposValores);
             $sqlUpdate = "UPDATE $tabela SET ";
+
             for ($i = 0; $i < count($camposNome); $i++) {
                 if ($i != count($camposNome) - 1) {
                     $sqlUpdate .= $camposNome[$i] . " = :" . $camposNome[$i] . ", ";
                 } else {
                     $sqlUpdate .= $camposNome[$i] . " = :" . $camposNome[$i];
-                    $conditionsComIndexInt = array_keys($conditions);
-                    for ($i = 0; $i < count($conditions); $i++) {
-                        $nomeCampos[$i] = $conditionsComIndexInt[$i];
-                    }
-                    $valoresCampos = [];
-                    for ($j = 0; $j < count($conditions); $j++) {
-                        $valoresCampos[$j] = $conditions[$nomeCampos[$j]];
-                    }
-                    if ($conditions != []) {
-                        $sqlUpdate .= " WHERE ";
-
-                        for ($x = 0; $x < count($nomeCampos); $x++) {
-                            if ($x != count($nomeCampos) - 1) {
-                                $sqlUpdate .= $nomeCampos[$x] . " = :condition_$nomeCampos[$x] $conjunctions[$x] ";
-                            } else {
-                                $sqlUpdate .= $nomeCampos[$x] . " = :condition_$nomeCampos[$x]";
-                            }
-                        }
-                    }
                 }
 
 
+
+            }
+            if ($conditions != null && $whereCriteria == null) {
+                $conditionsComIndexInt = array_keys($conditions);
+                for ($i = 0; $i < count($conditions); $i++) {
+                    $nomeCampos[$i] = $conditionsComIndexInt[$i];
+                }
+                $valoresCampos = [];
+                for ($j = 0; $j < count($conditions); $j++) {
+                    $valoresCampos[$j] = $conditions[$nomeCampos[$j]];
+                }
+
+                $sqlUpdate .= " WHERE ";
+
+                for ($x = 0; $x < count($nomeCampos); $x++) {
+                    if ($x != count($nomeCampos) - 1) {
+                        $sqlUpdate .= $nomeCampos[$x] . " = :condition_$nomeCampos[$x] $conjunctions[$x] ";
+                    } else {
+                        $sqlUpdate .= $nomeCampos[$x] . " = :condition_$nomeCampos[$x]";
+                    }
+                }
+            } else if ($conditions == null && $whereCriteria != null) {
+                $sqlUpdate .= " WHERE " . $whereCriteria;
             }
             $sqlUpdate .= ";";
         } catch (PhiberException $e) {
@@ -131,22 +143,30 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
      * @return bool|string
      * @throws PhiberException
      */
-    public static function delete($tabela, $conditions = [], $conjunctions = [])
+    public static function delete($infos)
     {
+        $tabela = $infos['table'];
+        $conditions = isset($infos['conditions']) ? $infos['conditions'] : null;
+        $conjunctions = isset($infos['conjunctions']) ? $infos['conjunctions'] : null;
+
+        $whereCriteria = $infos['where'];
+
 
         try {
             $camposNome = [];
             $camposValores = [];
-            $conditionsComIndexInt = array_keys($conditions);
-            for ($i = 0; $i < count($conditions); $i++) {
-                $camposNome[$i] = $conditionsComIndexInt[$i];
-            }
 
-            for ($j = 0; $j < count($conditions); $j++) {
-                $camposValores[$j] = $conditions[$camposNome[$j]];
-            }
             $sql = "DELETE FROM $tabela ";
-            if ($conditions != []) {
+            if ($conditions != null && $whereCriteria == null) {
+                $conditionsComIndexInt = array_keys($conditions);
+                for ($i = 0; $i < count($conditions); $i++) {
+                    $camposNome[$i] = $conditionsComIndexInt[$i];
+                }
+
+                for ($j = 0; $j < count($conditions); $j++) {
+                    $camposValores[$j] = $conditions[$camposNome[$j]];
+                }
+
                 $sql .= "WHERE ";
 
                 for ($x = 0; $x < count($camposNome); $x++) {
@@ -156,8 +176,10 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
                         $sql .= $camposNome[$x] . " = :condition_$camposNome[$x]";
                     }
                 }
+            } else if ($conditions == null && $whereCriteria != null) {
+                $sql .= " WHERE " . $whereCriteria . " ";
             }
-            return $sql;
+            return $sql . ";";
         } catch (PhiberException $e) {
             throw new PhiberException(Internationalization::translate("query_processor_error"));
         }
@@ -173,31 +195,39 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
      */
     public static function select($infos)
     {
+
         $tabela = $infos['table'];
         $campos = isset($infos['fields']) ? $infos['fields'] : ["*"];
-        $conditions = $infos['conditions'];
-        $conjunctions = $infos['conjunctions'];
+        $conditions = isset($infos['conditions']) ? $infos['conditions'] : null;
+        $conjunctions = isset($infos['conjunctions']) ? $infos['conjunctions'] : null;
+
+        /* VARIAVEIS DA CRITERIA - COMEÇO*/
+        $whereCriteria = $infos['where'];
+        /* VARIAVEIS DA CRITERIA - FIM */
+
+        /* LÓGICA - COMEÇO*/
         $camposNome = [];
         $camposValores = [];
 
 
-        $conditionsComIndexInt = array_keys($conditions);
+        $campos = gettype($campos) == "array" ? implode(", ", $campos) : $campos;
 
-        for ($i = 0; $i < count($conditions); $i++) {
-            $camposNome[$i] = $conditionsComIndexInt[$i];
-        }
+        $sql = "SELECT " . $campos . " FROM $tabela ";
 
 
-        for ($j = 0; $j < count($conditions); $j++) {
-            if ($conditions[$camposNome[$j]] != "") {
-                $camposValores[$j] = $conditions[$camposNome[$j]];
+        if ($conditions != null && $whereCriteria == null) {
+            $conditionsComIndexInt = array_keys($conditions);
+
+            for ($i = 0; $i < count($conditions); $i++) {
+                $camposNome[$i] = $conditionsComIndexInt[$i];
             }
-        }
-
-        $sql = "SELECT " . implode(", ", $campos) . " FROM $tabela ";
 
 
-        if ($conditions != []) {
+            for ($j = 0; $j < count($conditions); $j++) {
+                if ($conditions[$camposNome[$j]] != "") {
+                    $camposValores[$j] = $conditions[$camposNome[$j]];
+                }
+            }
             $sql .= "WHERE ";
             for ($x = 0; $x < count($infos['conditions']); $x++) {
 
@@ -212,8 +242,10 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
                     $sql .= $infos['conditions'][$x][0] . " " . $infos['conditions'][$x][1] . " :condition_" . $infos['conditions'][$x][0];
                 }
             }
+        } else if ($conditions == null && $whereCriteria != null) {
+            $sql .= " WHERE " . $whereCriteria . " ";
         }
-        return $sql;
+        return $sql . ";";
 
     }
 

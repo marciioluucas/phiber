@@ -14,7 +14,9 @@ use util\JsonReader;
  */
 class PhiberPersistence implements IPhiberPersistence
 {
-    private $restrictions = [];
+    private static $infos = [];
+    private static $infosMergeds = [];
+
 
     public function create($obj)
     {
@@ -23,7 +25,13 @@ class PhiberPersistence implements IPhiberPersistence
         $campos = FuncoesReflections::pegaAtributosDoObjeto($obj);
         $camposV = FuncoesReflections::pegaValoresAtributoDoObjeto($obj);
 
-        $sql = PhiberQueryWriter::create($tabela, $campos, $camposV);
+        $sql = PhiberQueryWriter::create([
+            "table" => $tabela,
+            "fields" => $campos,
+            "values" => $camposV
+
+
+        ]);
         if (JsonReader::read(BASE_DIR . "/phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
             $pdo = Link::getConnection()->prepare($sql);
             for ($i = 1; $i < count($campos); $i++) {
@@ -47,14 +55,21 @@ class PhiberPersistence implements IPhiberPersistence
      * @param array $conjunctions
      * @return mixed
      */
-    public function update($obj, $conditions = [], $conjunctions = [])
+    public function update($obj, $info = null)
     {
         TableMysql::sync($obj);
         $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
         $campos = FuncoesReflections::pegaAtributosDoObjeto($obj);
         $camposV = FuncoesReflections::pegaValoresAtributoDoObjeto($obj);
+        $conditions = self::$infosMergeds['fields_and_values'];
 
-        $sql = PhiberQueryWriter::update($tabela, $campos, $camposV, $conditions, $conjunctions);
+        $sql = PhiberQueryWriter::update([
+            "table" => $tabela,
+            "fields" => $campos,
+            "values" => $camposV,
+            "where" => self::$infosMergeds['where'],
+
+        ]);
         if (JsonReader::read(BASE_DIR . "/phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
             $pdo = Link::getConnection()->prepare($sql);
             for ($i = 1; $i < count($campos); $i++) {
@@ -77,9 +92,25 @@ class PhiberPersistence implements IPhiberPersistence
     }
 
     public
-    function delete($obj, $condicoes = [], $conjuncoes = [])
+    function delete($obj, $infos = null)
     {
-        return PhiberQueryWriter::delete($obj, $condicoes, $conjuncoes);
+        $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
+        if ($infos != null) {
+            $sql = PhiberQueryWriter::select([
+                "table" => $tabela,
+                "conditions" => isset($infos['conditions']) ? $infos['conditions'] : null,
+                "conjunctions" => isset($infos['conjunctions']) ? $infos['conjunctions'] : null
+            ]);
+        } else {
+
+
+            $sql = PhiberQueryWriter::delete([
+                "table" => $tabela,
+                "where" => self::$infosMergeds['where'],
+
+            ]);
+        }
+        return $sql;
     }
 
     public function rowCount($obj, $condicoes = [], $conjuncoes = [])
@@ -87,30 +118,54 @@ class PhiberPersistence implements IPhiberPersistence
         // TODO: Implement rowCount() method.
     }
 
-    public function select($obj, $infos)
+    public function select($obj, $infos = null)
     {
         TableMysql::sync($obj);
         $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
+        if ($infos != null) {
+            $sql = PhiberQueryWriter::select([
+                "table" => $tabela,
+                "fields" => isset($infos['fields']) ? $infos['fields'] : "*",
+                "conditions" => isset($infos['conditions']) ? $infos['conditions'] : null,
+                "conjunctions" => isset($infos['conjunctions']) ? $infos['conjunctions'] : null
+            ]);
+        } else {
+            $fields = isset(
+                self::$infosMergeds['fields']) ?
+                implode(", ", self::$infosMergeds['fields']) :
+                "*";
 
-        $sql = PhiberQueryWriter::select([
-            "table" => $tabela,
-            "fields" => isset($infos['fields']) ? $infos['fields'] : "*",
-            "conditions" => isset($infos['conditions']) ? $infos['conditions'] : null,
-            "conjunctions" => isset($infos['conjunctions']) ? $infos['conjunctions'] : null
-        ]);
+            $sql = PhiberQueryWriter::select([
+                "table" => $tabela,
+                "fields" => $fields,
+                "where" =>  isset(self::$infosMergeds['where']) ?
+                            self::$infosMergeds['where'] :
+                            null,
+
+            ]);
+        }
+
         if (JsonReader::read(BASE_DIR . "/phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
             $pdo = Link::getConnection()->prepare($sql);
-
-            for ($i = 0; $i < count($infos['conditions']); $i++) {
-                $pdo->bindValue("condition_" . $infos['conditions'][$i][0],
-                    $infos['conditions'][$i][2]);
+            if ($infos != null) {
+                for ($i = 0; $i < count($infos['conditions']); $i++) {
+                    $pdo->bindValue(
+                        "condition_" . $infos['conditions'][$i][0],
+                        $infos['conditions'][$i][2]
+                    );
+                }
+            } else {
+                if (isset(self::$infosMergeds['fields_and_values'])) {
+                    for ($i = 0; $i < count(self::$infosMergeds['fields_and_values']); $i++) {
+                        $pdo->bindValue(
+                            "condition_" . key(self::$infosMergeds['fields_and_values']),
+                            self::$infosMergeds['fields_and_values'][key(self::$infosMergeds['fields_and_values'])]
+                        );
+                    }
+                }
             }
             if ($pdo->execute()) {
-                if ($infos['one_result']) {
-                    return $pdo->fetch((PDO::FETCH_ASSOC));
-                } else {
-                    return $pdo->fetchAll((PDO::FETCH_ASSOC));
-                }
+                return $pdo->fetchAll((PDO::FETCH_ASSOC));
             }
         }
         return $sql;
@@ -123,23 +178,27 @@ class PhiberPersistence implements IPhiberPersistence
     }
 
 
-    public function add($restrictions)
+    public static function add($infos)
     {
-        array_push($this->restrictions, $restrictions);
-        return $this->restrictions;
+        array_push(self::$infos, $infos);
+        self::mergeSqlInformation();
+
     }
 
     public function show()
     {
-        return $this->mergeByFunctionOnSql();
+
+        return self::$infosMergeds;
     }
 
-    public function mergeByFunctionOnSql()
+
+    private function mergeSqlInformation()
     {
-        for ($i = 0; $i < count($this->restrictions) - 1; $i++) {
-            $this->restrictions = array_merge($this->restrictions[$i], $this->restrictions[$i + 1]);
+        array_push(self::$infos, Restrictions::getFieldsAndValues());
+        for ($i = 0; $i < count(self::$infos) - 1; $i++) {
+            self::$infosMergeds[array_keys(self::$infos[$i])[0]] =
+                self::$infos[$i][array_keys(self::$infos[$i])[0]];
         }
-        return $this->restrictions;
     }
 
 }
