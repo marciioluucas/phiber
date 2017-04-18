@@ -110,6 +110,29 @@ class PhiberPersistence implements IPhiberPersistence
 
             ]);
         }
+        if (JsonReader::read(BASE_DIR . "/phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
+            $pdo = Link::getConnection()->prepare($sql);
+            if ($infos != null) {
+                for ($i = 0; $i < count($infos['conditions']); $i++) {
+                    $pdo->bindValue(
+                        "condition_" . $infos['conditions'][$i][0],
+                        $infos['conditions'][$i][2]
+                    );
+                }
+            } else {
+                if (isset(self::$infosMergeds['fields_and_values'])) {
+                    for ($i = 0; $i < count(self::$infosMergeds['fields_and_values']); $i++) {
+                        $pdo->bindValue(
+                            "condition_" . key(self::$infosMergeds['fields_and_values']),
+                            self::$infosMergeds['fields_and_values'][key(self::$infosMergeds['fields_and_values'])]
+                        );
+                    }
+                }
+            }
+            if ($pdo->execute()) {
+                return true;
+            }
+        }
         return $sql;
     }
 
