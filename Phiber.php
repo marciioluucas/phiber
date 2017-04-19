@@ -9,7 +9,7 @@ namespace phiber;
 use bin\PhiberPersistence;
 
 /**
- *
+ *Constante que define a base de onde está localizado o projeto
  */
 define("BASE_DIR",str_replace('\\', '/', dirname(__FILE__)));
 
