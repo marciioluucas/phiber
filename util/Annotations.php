@@ -1,19 +1,26 @@
 <?php
 namespace util;
-
 /**
- * Created by PhpStorm.
+ * Classe criada por Márcio Lucas R de Oliveira (lukee)
  * User: lukee
  * Date: 16/03/17
  * Time: 20:45
  */
 
 
-//echo $a;
-//print_r($out);
-
+/**
+ * A classe Annotations é responsável por pegar por reflexão os comentários de mapeamento das classes.
+ * @package util
+ */
 class Annotations {
 
+    /**
+     * Recupera os comentários de mapeamentos das classes de modelo.
+     * @param $obj
+     *
+     * Retorna um array de atributos
+     * @return array
+     */
     public static final function getAnnotation($obj){
         $out = array();
         $pattern = '/@+_+[A-z]\w+=\w+/';
@@ -28,15 +35,6 @@ class Annotations {
 
 
         }
-
-
-
         return  $test;
-
     }
 }
-//require_once '../test/Usuario.php';
-//
-//$u = new Usuario();
-//
-//print_r(Annotations::getAnnotation($u));

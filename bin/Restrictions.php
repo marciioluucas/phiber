@@ -1,16 +1,20 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: marci
- * Date: 16/04/2017
- * Time: 22:19
+ * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
 
 namespace bin;
 
 
+/**
+ * Classe responsável por fazer as restrições das operações do banco
+ * @package bin
+ */
 class Restrictions
 {
+    /**
+     * @var array
+     */
     private static $fieldsAndValues = [];
 
     /**
@@ -22,7 +26,17 @@ class Restrictions
     }
 
 
-
+    /**
+     * Faz a query de comparação IGUAL
+     * Exemplo:
+     *  eq("idade",15);
+     *  Criará um pedaço da query do banco assim -> idade = :condition_idade
+     *  OBS: O ":condition_idade" é o responsável por depois fazer o binding do valor para
+     *  evitar SQL Injection.
+     * @param $param1
+     * @param $param2
+     * @return array
+     */
     public static function eq($param1, $param2)
     {
         self::addFieldsAndValues($param1, $param2);
@@ -34,6 +48,17 @@ class Restrictions
 
     }
 
+    /**
+     * Faz a query de comparação MAIOR QUE
+     * Exemplo:
+     *  biggerThen("idade",15);
+     *  Criará um pedaço da query do banco assim -> idade > :condition_idade
+     *  OBS: O ":condition_idade" é o responsável por depois fazer o binding do valor para
+     *  evitar SQL Injection.
+     * @param $param1
+     * @param $param2
+     * @return array
+     */
     public static function biggerThen($param1, $param2)
     {
         self::addFieldsAndValues($param1, $param2);
@@ -43,6 +68,17 @@ class Restrictions
         ];
     }
 
+    /**
+     * Faz a query de comparação MAIOR OU IGUAL A
+     * Exemplo:
+     *  greaterThan("idade",15);
+     *  Criará um pedaço da query do banco assim -> idade >= :condition_idade
+     *  OBS: O ":condition_idade" é o responsável por depois fazer o binding do valor para
+     *  evitar SQL Injection.
+     * @param $param1
+     * @param $param2
+     * @return array
+     */
     public static function greaterThan($param1, $param2)
     {
         self::addFieldsAndValues($param1, $param2);
@@ -52,6 +88,17 @@ class Restrictions
         ];
     }
 
+    /**
+     * Faz a query de comparação MENOR QUE
+     * Exemplo:
+     *  lessThen("idade",15);
+     *  Criará um pedaço da query do banco assim -> idade < :condition_idade
+     *  OBS: O ":condition_idade" é o responsável por depois fazer o binding do valor para
+     *  evitar SQL Injection.
+     * @param $param1
+     * @param $param2
+     * @return array
+     */
     public static function lessThen($param1, $param2)
     {
         self::addFieldsAndValues($param1, $param2);
@@ -61,6 +108,17 @@ class Restrictions
         ];
     }
 
+    /**
+     * Faz a query de comparação MENOR OU IGUAL A
+     * Exemplo:
+     *  lessLike("idade",15);
+     *  Criará um pedaço da query do banco assim -> idade <= :condition_idade
+     *  OBS: O ":condition_idade" é o responsável por depois fazer o binding do valor para
+     *  evitar SQL Injection.
+     * @param $param1
+     * @param $param2
+     * @return array
+     */
     public static function lessLike($param1, $param2)
     {
         self::addFieldsAndValues($param1, $param2);
@@ -70,6 +128,17 @@ class Restrictions
         ];
     }
 
+    /**
+     * Faz a query de comparação LIKE
+     * Exemplo:
+     *  like("nome","Jhon Snow");
+     *  Criará um pedaço da query do banco assim -> idade LIKE %:condition_nome%
+     *  OBS: O ":condition_nome" é o responsável por depois fazer o binding do valor para
+     *  evitar SQL Injection.
+     * @param $param1
+     * @param $param2
+     * @return array
+     */
     public static function like($param1, $param2)
     {
         self::addFieldsAndValues($param1, $param2);
@@ -79,34 +148,87 @@ class Restrictions
         ];
     }
 
+    /**
+     * Faz a query de conjunção OU
+     * Exemplo:
+     *  $condicao1 = eq("idade",15);
+     *  $condicao2 = like("nome","Jhon");
+     *  or($condicao1,$condicao2);
+     *
+     *  Criará um pedaço da query do banco assim ->
+     *    (idade = :condition_idade or nome like %:condition_nome%);
+     *  OBS: O ":condition_idade, :condition_nome" são responsáveis por depois fazer o
+     * binding do valor para evitar SQL Injection.
+     * @param $condition1
+     * @param $condition2
+     * @return array
+     */
     public static function or ($condition1, $condition2)
     {
 
         PhiberPersistence::add(self::$fieldsAndValues);
         return [
-            "where" => "(" . $condition1['where'] . " or " . $condition2['where'] . ")",
+            "where" => "(" . $condition1['where'] . " OR " . $condition2['where'] . ")",
         ];
     }
 
+    /**
+     * Faz a query de conjunção E
+     * Exemplo:
+     *  $condicao1 = eq("idade",15);
+     *  $condicao2 = like("nome","Jhon");
+     *  or($condicao1,$condicao2);
+     *
+     *  Criará um pedaço da query do banco assim ->
+     *    (idade = :condition_idade and nome like %:condition_nome%);
+     *  OBS: O ":condition_idade, :condition_nome" são responsáveis por depois fazer o
+     * binding do valor para evitar SQL Injection.
+     * @param $condition1
+     * @param $condition2
+     * @return array
+     */
     public static function and ($condition1, $condition2)
     {
 
         PhiberPersistence::add(self::$fieldsAndValues);
         return [
-            "where" => "(" . $condition1['where'] . " and " . $condition2['where'] . ")"
+            "where" => "(" . $condition1['where'] . " AND " . $condition2['where'] . ")"
         ];
     }
 
+    /**
+     * Função para determinar os campos que quer buscar no SELECT
+     * Exemplo: fields("nome, id");
+     * Gerará: Select nome, id from ...
+     * Caso não informar campos, retornará todos.
+     * @param $fields
+     * @return array
+     */
     public static function fields($fields)
     {
-        return ["fields" => $fields];
+        if($fields != null){
+            return ["fields" => $fields];
+        }else{
+            return ["fields"=> "*"];
+        }
     }
 
+    /**
+     * Adiciona os campos e os valores.
+     * @ignore
+     * @param $field
+     * @param $value
+     */
     private static function addFieldsAndValues($field, $value)
     {
         self::$fieldsAndValues['fields_and_values'][$field] = $value;
     }
 
+    /**
+     * Mostra os campos e os valores passados
+     * @ignore
+     * @return array
+     */
     public static function show()
     {
         return self::$fieldsAndValues;

@@ -1,5 +1,5 @@
 <?php
-
+namespace test;
 /**
  * Class Usuario
  *
@@ -197,6 +197,6 @@ $criteria = Phiber::openPersist();
 
 $u->setNome("Jonas do amor");
 $u->setEmail("amor@jonas.com");
-//$criteria->add(Restrictions::eq("id",4));
+$criteria->add(Restrictions::eq("id",4));
 print_r($criteria->select($u));
 

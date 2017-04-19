@@ -19,5 +19,8 @@
       "phiber\\bin\\": "bin/",
       "phiber\\util\\": "util/"
     }
+  },
+  "require-dev": {
+    "phpdocumentor/phpdocumentor": "2.*"
   }
 }

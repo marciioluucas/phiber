@@ -1,15 +1,25 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: lukee
- * Date: 16/03/17
- * Time: 19:07
+ * Classe criada por Márcio Lucas R de Oliveira (lukee)
+ * Data: 16/03/17
+ * Hora: 19:07
  */
+
 namespace phiber;
 use bin\PhiberPersistence;
 
+/**
+ *
+ */
 define("BASE_DIR",str_replace('\\', '/', dirname(__FILE__)));
 
+
+/**
+ * A classe Phiber é a responsável por ser a classe módulo entre as funcionalidades do
+ * Phiber, é por ela que você chamará desde a classe persistencia até a classe de encriptação.
+ *
+ * @package phiber
+ */
 class Phiber
 {
 
@@ -17,6 +27,8 @@ class Phiber
 
 
     /**
+     * Método responsável por retornar uma instancia da classe PhiberPersistence,
+     * que é responsável pela persistencia dos dados. (CREATE, RETREAVE, UPDATE, DELETE)
      * @return PhiberPersistence
      */
     public static function openPersist()
@@ -24,10 +36,13 @@ class Phiber
         new PhiberAutoload();
         return new PhiberPersistence();
     }
-
-    public static function openCrypt()
-    {
-        return new PhiberCrypt();
-    }
+//
+//    /**
+//     * @return PhiberCrypt
+//     */
+//    public static function openCrypt()
+//    {
+//        return new PhiberCrypt();
+//    }
 
 }

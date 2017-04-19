@@ -4,19 +4,22 @@ use Exception;
 use ReflectionClass;
 use ReflectionProperty;
 
+
 /**
- * Created by PhpStorm.
- * User: Márcio Lucas
+ * Classe criada por Márcio Lucas R de Oliveira (lukee)
  * E-mail: marciioluucas@gmail.com
  * Date: 21/10/2016
  * Time: 10:03
  */
 class FuncoesReflections
 {
+    /**
+     * @var array
+     */
     private static $p;
 
     /**
-     * FuncoesReflections constructor.
+     * Construtor da classe FuncoesReflections
      * @param $p
      */
     public function __construct()
@@ -24,22 +27,24 @@ class FuncoesReflections
         $this->p = [];
     }
 
-    public static function pegaAtributoDoObjeto($obj)
-    {
-        $reflectionClass = new ReflectionClass($obj);
-        $propriedades = $reflectionClass->getProperties(ReflectionProperty::IS_PUBLIC |
-            ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PRIVATE);
 
-        for ($i = 0; $i < count($propriedades); $i++) {
-            self::$p[$i] = $propriedades[$i]->name;
-        }
-        if ($reflectionClass->getParentClass() != null) {
-            self::pegaAtributoDoObjeto($reflectionClass->getParentClass());
-        }
-        return self::$p;
-    }
+//    public static function pegaAtributoDoObjeto($obj)
+//    {
+//        $reflectionClass = new ReflectionClass($obj);
+//        $propriedades = $reflectionClass->getProperties(ReflectionProperty::IS_PUBLIC |
+//            ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PRIVATE);
+//
+//        for ($i = 0; $i < count($propriedades); $i++) {
+//            self::$p[$i] = $propriedades[$i]->name;
+//        }
+//        if ($reflectionClass->getParentClass() != null) {
+//            self::pegaAtributoDoObjeto($reflectionClass->getParentClass());
+//        }
+//        return self::$p;
+//    }
 
     /**
+     * Função responsável por pegar o nome dos métodos do objeto retornando um array dos mesmos
      * @param $obj
      * @return array
      */
@@ -50,7 +55,8 @@ class FuncoesReflections
     }
 
     /**
-     * Passa o objeto e o nome do atributo que voce quer pegar. Se o mesmo não existir, a função retornará falso.
+     * Função responsável por pegar o nome de um atributo espefífico.
+     * Caso o atributo pesquisado não exista, a função retornará falso.
      * @param $obj
      * @param $nomeAtributo
      * @return bool|string
@@ -71,8 +77,7 @@ class FuncoesReflections
     }
 
     /**
-     * Passa o objeto e a função vai retornar todos os atributos do objeto baseado
-     * nos métodos get.
+     * Função responsável por pegar os nomes dos atributos do objeto, retornando um array dos mesmos.
      * @param $obj
      * @return array
      */
@@ -92,7 +97,7 @@ class FuncoesReflections
     }
 
     /**
-     * Passa o objeto e tambem o nome do atributo que voce quer pegar o valor.
+     * Função responsável por pegar o valor de um atributo específico do objeto.
      * @param $obj
      * @param $nomeAtributo
      * @return mixed
@@ -108,7 +113,7 @@ class FuncoesReflections
     }
 
     /**
-     * Passa o objeto e a função irá retornar o nome da classe do respectivo objeto.
+     * Função responsável por pegar o nome da classe do objeto em questão.
      * @param $obj
      * @return string
      */
@@ -118,8 +123,8 @@ class FuncoesReflections
     }
 
     /**
-     * Passa o objeto, os atributos e os valores que você quer injetar
-     * @param $obj
+     * Injeta valores nos atributos do objeto em questão.
+     * @param \Object $obj
      * @param array $atributos
      * @param array $valor
      */
@@ -135,6 +140,12 @@ class FuncoesReflections
         }
     }
 
+    /**
+     * Função responsável por verifidar se a classe é filha de alguma outra classe,
+     * se caso não for. A função retornará falso.
+     * @param \Object $obj
+     * @return bool
+     */
     public static function verificaSeEClasseFilha($obj)
     {
         $class = new ReflectionClass($obj);
@@ -145,32 +156,50 @@ class FuncoesReflections
         }
     }
 
+    /**
+     * Função responsável por retornar os valores dos atributos das classes mães,
+     * se as mesmas existirem, se caso a classe em questão não for uma classe filha, a função retornará
+     * false.
+     * @param $obj
+     * @return bool|array
+     */
     public static function retornaValoresAtributosClassesMaes($obj)
     {
-        $nomeClassesMae = self::retornaClassesMaes($obj);
-        $valores = [];
-        for ($i = 0; $i < count($nomeClassesMae); $i++) {
-            $valores[$i] = self::pegaValoresAtributoDoObjeto($nomeClassesMae[$i]);
+        if(self::verificaSeEClasseFilha($obj)){
+            $nomeClassesMae = self::retornaClassesMaes($obj);
+            $valores = [];
+            for ($i = 0; $i < count($nomeClassesMae); $i++) {
+                $valores[$i] = self::pegaValoresAtributoDoObjeto($nomeClassesMae[$i]);
+            }
+            return $valores;
         }
-//        print_r($nomeAtributos);
-        return $valores;
+        return false;
     }
 
+    /**
+     * Retorna o nome das classes mães, se caso o objeto em questão não ter uma classe mãe,
+     * a função retornará false.
+     * @param $obj
+     * @return array|bool
+     */
     public static function retornaClassesMaes($obj)
     {
         $class = new ReflectionClass($obj);
 
         $parents = [];
-
-        while ($parent = $class->getParentClass()) {
-            $parents[] = $parent->getName();
-            $class = $parent;
+        $parent = "";
+        if(self::verificaSeEClasseFilha($obj)){
+            while($class->getParentClass()) {
+                $parents[] = $class->getParentClass()->getName();
+                $class = $parent;
+            }
+            return $parents;
         }
-        return $parents;
+        return false;
     }
 
     /**
-     * Passe só o objeto e a função retorna um array de todos os valores dos atributos de um objeto
+     * Função responsável por retornar um array de todos os valores dos atributos de um objeto
      * @param $obj
      * @return array
      */
@@ -187,8 +216,13 @@ class FuncoesReflections
         return $valoresAtributosFinal;
     }
 
-    //TODO: Fazer funcionar issaque
 
+    /**
+     * Função responsável por retornar um array com todos os atributos das classes da hierarquia
+     * @todos Fazer funcionar isso aqui
+     * @param $obj
+     * @return array
+     */
     public static function retornaNomeAtributosClassesMaes($obj)
     {
         $atributos = [];
@@ -202,6 +236,11 @@ class FuncoesReflections
         return $atributos;
     }
 
+    /**
+     * Função responsável por retornar os comentários dos atributos do objeto em questão.
+     * @param $obj
+     * @return array
+     */
     public static function retornaComentariosAtributos($obj)
     {
         $arrAttributesNames = self::pegaAtributosDoObjeto($obj);

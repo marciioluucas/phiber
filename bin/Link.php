@@ -1,4 +1,10 @@
 <?php
+/**
+ * Classe criada por Márcio Lucas R de Oliveira (lukee)
+ * E-mail: marciioluucas@gmail.com
+ * Date: 19/10/2016
+ * Time: 18:50
+ */
 namespace bin;
 
 use PDO;
@@ -7,14 +13,17 @@ use util\JsonReader;
 
 
 /**
- * Created by PhpStorm.
- * User: Marcio
- * Date: 19/10/2016
- * Time: 18:50
+ * Classe responsável por criar a conexão do banco.
+ * @package bin
  */
 class Link
 {
 
+    /**
+     * Função responsável por fazer a conexão com o banco.
+     * @return PDO
+     * @throws PhiberException
+     */
     public static function getConnection()
     {
         try {

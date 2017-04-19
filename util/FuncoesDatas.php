@@ -1,5 +1,5 @@
 <?php
-
+namespace util;
 /**
  * Created by PhpStorm.
  * User: Marcio

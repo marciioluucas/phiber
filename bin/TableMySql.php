@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
+ */
+
 namespace bin;
 
 
@@ -7,16 +11,20 @@ use util\FuncoesReflections;
 use util\FuncoesString;
 use util\JsonReader;
 
+
 /**
- * Created by PhpStorm.
- * User: lukee
- * Date: 16/03/17
- * Time: 18:46
+ * Classe responsável por criar as tabelas do banco
+ * @package bin
  */
 class TableMySql extends TableFactory
 {
 
 
+    /**
+     * Sincroniza o banco com o código em tempo de instanciação.
+     * @param Object $obj
+     * @return mixed|void
+     */
     static function sync($obj)
     {
 
@@ -30,6 +38,11 @@ class TableMySql extends TableFactory
         }
     }
 
+    /**
+     * Verifica se a tabela existe, se caso não existir, a função retornará false.
+     * @param Object $obj
+     * @return bool|string
+     */
     static function exists($obj)
     {
         $tabela = strtolower(FuncoesReflections::pegaNomeClasseObjeto($obj));
@@ -51,6 +64,11 @@ class TableMySql extends TableFactory
         }
     }
 
+    /**
+     * Deleta a tabela do banco de dados.
+     * @param Object $obj
+     * @return bool|string
+     */
     static function drop($obj)
     {
         $tabela = strtolower(FuncoesReflections::pegaNomeClasseObjeto($obj));
@@ -81,6 +99,11 @@ class TableMySql extends TableFactory
         return false;
     }
 
+    /**
+     * Mostra as colunas daquela tabela.
+     * @param String $table
+     * @return array|bool
+     */
     static function columns($table)
     {
         $sql = "show columns from " . strtolower($table);
@@ -97,6 +120,11 @@ class TableMySql extends TableFactory
         }
     }
 
+    /**
+     * Altera a tabela do banco
+     * @param Object $obj
+     * @return bool|string
+     */
     static function alter($obj)
     {
         $tabela = strtolower(FuncoesReflections::pegaNomeClasseObjeto($obj));
@@ -266,7 +294,8 @@ class TableMySql extends TableFactory
     }
 
     /**
-     * @param $obj
+     * Cria a tabela
+     * @param Object $obj
      * @return bool|string
      */
     public static function create($obj)

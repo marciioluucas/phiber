@@ -1,20 +1,28 @@
 <?php
+/**
+ * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
+ */
+
 namespace bin;
 
 use util\Internationalization;
 
+
 /**
- * Created by PhpStorm.
- * User: lukee
- * Date: 17/03/17
- * Time: 15:15
+ * Classe reponsável por fazer as exceções personalizadas.
+ * @package bin
  */
 class PhiberException extends \Exception
 {
+    /**
+     * Referencia da mensagem a ser traduzida.
+     * @var string
+     */
     private $messageTranslateReference;
 
     /**
      * PhiberException constructor.
+     * @param string $messageTranslateReference
      */
     public function __construct($messageTranslateReference)
     {
@@ -22,6 +30,7 @@ class PhiberException extends \Exception
     }
 
     /**
+     * Retorna a exceção personalizada, sobrescrevendo o metodo __toString
      * @return string
      */
     public function __toString()

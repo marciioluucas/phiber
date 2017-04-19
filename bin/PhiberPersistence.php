@@ -1,23 +1,42 @@
 <?php
+/**
+ * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
+ */
+
 namespace bin;
+
 
 use PDO;
 use util\FuncoesReflections;
 use util\FuncoesString;
 use util\JsonReader;
 
+
 /**
- * Created by PhpStorm.
- * User: marci
- * Date: 12/04/2017
- * Time: 08:33
+ * Classe responsável por persistir os objetos no banco
+ * @package bin
  */
 class PhiberPersistence implements IPhiberPersistence
 {
+    /**
+     * Informações para a criação da SQL.
+     * @var array
+     */
     private static $infos = [];
+
+    /**
+     * Informações mergidas
+     * @var array
+     */
     private static $infosMergeds = [];
 
 
+    /**
+     * Faz a criação do objeto especificado no banco de dados, caso a opção
+     * execute_queries na configuração esteja habilitada.
+     * @param Object $obj
+     * @return bool|mixed
+     */
     public function create($obj)
     {
         TableMysql::sync($obj);
@@ -50,10 +69,12 @@ class PhiberPersistence implements IPhiberPersistence
 //TODO: FAZER OS METODOS DE CREATE QUERY PEGAR COMO PARAMETRO AS REFLECTIONS;
 
     /**
-     * @param $obj
-     * @param array $conditions
-     * @param array $conjunctions
+     * Faz o update no banco do objeto especificado, se caso a opção execute_queries estiver habilitada
+     * @param Object $obj
+     * @param null $info
      * @return mixed
+     * @internal param array $conditions
+     * @internal param array $conjunctions
      */
     public function update($obj, $info = null)
     {
@@ -91,6 +112,12 @@ class PhiberPersistence implements IPhiberPersistence
         return $sql;
     }
 
+    /**
+     * Faz o delete no banco do objeto especificado, se caso a opção execute_queries estiver habilitada
+     * @param Object $obj
+     * @param null $infos
+     * @return array|bool|mixed|string
+     */
     public
     function delete($obj, $infos = null)
     {
@@ -136,11 +163,24 @@ class PhiberPersistence implements IPhiberPersistence
         return $sql;
     }
 
+    /**
+     * Faz o rowCount (contagem de linhas) objeto especificado, se caso a opção execute_queries estiver habilitada
+     * @param Object $obj
+     * @param array $condicoes
+     * @param array $conjuncoes
+     * @return mixed|void
+     */
     public function rowCount($obj, $condicoes = [], $conjuncoes = [])
     {
         // TODO: Implement rowCount() method.
     }
 
+    /**
+     * Faz a seleção no banco do objeto especificado, se caso a opção execute_queries estiver habilitada
+     * @param Object $obj
+     * @param null $infos
+     * @return array|bool|mixed
+     */
     public function select($obj, $infos = null)
     {
         TableMysql::sync($obj);
@@ -194,6 +234,11 @@ class PhiberPersistence implements IPhiberPersistence
         return $sql;
     }
 
+    /**
+     * Caso queira criar uma query.
+     * @param String $query
+     * @return mixed|void
+     */
     public
     function createQuery($query)
     {
@@ -201,6 +246,10 @@ class PhiberPersistence implements IPhiberPersistence
     }
 
 
+    /**
+     * Adiciona parâmetros da classe restriction nas informações para buildar o SQL.
+     * @param $infos
+     */
     public static function add($infos)
     {
         array_push(self::$infos, $infos);
@@ -208,6 +257,10 @@ class PhiberPersistence implements IPhiberPersistence
 
     }
 
+    /**
+     * Função responsável por mostrar o array das informações adicionadas a partir da Restrictions
+     * @return array
+     */
     public function show()
     {
 
@@ -215,6 +268,9 @@ class PhiberPersistence implements IPhiberPersistence
     }
 
 
+    /**
+     *Função utilizada para mergir informações novas com as antigas da Restrictions
+     */
     private function mergeSqlInformation()
     {
         array_push(self::$infos, Restrictions::getFieldsAndValues());

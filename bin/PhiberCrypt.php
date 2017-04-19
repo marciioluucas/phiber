@@ -1,21 +1,33 @@
 <?php
+/**
+ * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
+ */
+
 namespace bin;
 
 
 /**
- * Created by PhpStorm.
- * User: lukee
- * Date: 3/20/17
- * Time: 10:41 AM
+ * Classe responsável por administrar a encriptação/decriptação de dados.
+ * @package bin
  */
 class PhiberCrypt implements ICrypt
 {
 
+    /**
+     * Encripta a informação passada no parâmetro
+     * @param $information
+     * @return mixed|void
+     */
     static function encrypt($information)
     {
         // TODO: Implement encrypt() method.
     }
 
+    /**
+     * Decripta a informação passada no parâmetro
+     * @param $information
+     * @return mixed|void
+     */
     static function decrypt($information)
     {
         // TODO: Implement decrypt() method.

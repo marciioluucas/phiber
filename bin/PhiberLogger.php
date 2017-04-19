@@ -1,17 +1,27 @@
 <?php
+/**
+ * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
+ */
+
 namespace bin;
 use util\Internationalization;
 use util\JsonReader;
 
+
 /**
- * Created by PhpStorm.
- * User: lukee
- * Date: 3/20/17
- * Time: 9:10 AM
+ * Classe responsável por criar o log do Phiber
+ * @package bin
  */
 class PhiberLogger
 {
 
+    /**
+     * Cria o log.
+     * @param $languageReference
+     * @param string $level
+     * @param string $objectName
+     * @param null $execTime
+     */
     public static function create($languageReference, $level = 'info', $objectName = '', $execTime = null)
     {
         if (JsonReader::read(BASE_DIR.'/phiber_config.json')->phiber->log == 1 ? true : false) {

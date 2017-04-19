@@ -1,18 +1,42 @@
 <?php
-namespace bin;
 /**
- * Created by PhpStorm.
- * User: marci
- * Date: 12/04/2017
- * Time: 08:31
+ * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
+ */
+
+namespace bin;
+
+
+/**
+ * Interface IPhiberQueryBuilder
+ * @package bin
  */
 interface IPhiberQueryBuilder
 {
+    /**
+     * Cria a sql do INSERT
+     * @param $infos
+     * @return mixed
+     */
     public static function create($infos);
 
+    /**
+     * Cria a sql do UPDATE
+     * @param $infos
+     * @return mixed
+     */
     public static function update($infos);
 
+    /**
+     * Cria a sql do DELETE
+     * @param $infos
+     * @return mixed
+     */
     public static function delete($infos);
 
+    /**
+     * Cria a sql do SELECT
+     * @param $infos
+     * @return mixed
+     */
     public static function select($infos);
 }
