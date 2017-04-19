@@ -1,4 +1,4 @@
-# Phiber - alfa version 0.1
+# Phiber - ALPHA version 0.1
 
 [![Imgur](http://i.imgur.com/Ad02NS2.png)](https://nodesource.com/products/nsolid)
 
