@@ -23,7 +23,7 @@ https://www.ifgoiano.edu.br/morrinhos
 
 Criador [Márcio Lucas]
 
-> I made this library to increase my knowledge and to help my friends programmers build apps in PHP more fast, cause I see an big difficulty to build SQLs and i think very boring. 
+> I made this library to increase my knowledge and to help my friends programmers build apps in PHP more fast, cause I see an big difficulty to build SQLs and i think it is very boring. 
 
 This library are in alpha test, I don't recommend to production environments.
 
