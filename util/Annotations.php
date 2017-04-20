@@ -1,11 +1,11 @@
 <?php
-namespace util;
 /**
- * Classe criada por Márcio Lucas R de Oliveira (lukee)
- * User: lukee
- * Date: 16/03/17
- * Time: 20:45
+ * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
+
+namespace util;
+
+
 
 
 /**

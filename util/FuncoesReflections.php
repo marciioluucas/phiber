@@ -1,15 +1,17 @@
 <?php
+/**
+ * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
+ */
+
 namespace util;
 use Exception;
 use ReflectionClass;
 use ReflectionProperty;
 
-
 /**
- * Classe criada por Márcio Lucas R de Oliveira (lukee)
- * E-mail: marciioluucas@gmail.com
- * Date: 21/10/2016
- * Time: 10:03
+ *
+ * Classe responsável por Fazer a reflexao das classes dos objetos.
+ * @package util
  */
 class FuncoesReflections
 {

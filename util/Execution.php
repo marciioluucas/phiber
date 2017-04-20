@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
+ */
+
 namespace util;
 
 

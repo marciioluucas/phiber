@@ -1,25 +1,43 @@
 <?php
+/**
+ * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
+ */
+
 namespace util;
 
 /**
- * Created by PhpStorm.
- * User: Márcio Lucas
- * E-mail: marciioluucas@gmail.com
- * Date: 20/10/2016
- * Time: 10:41
+ *
+ * Classe responsável por manipular strings.
+ * @package util
  */
 class FuncoesString
 {
+    /**
+     * Passa para caixa alta
+     * @param $string
+     * @return string
+     */
     public static final function paraCaixaAlta($string)
     {
         return strtoupper($string);
     }
 
+    /**
+     * Passa para caixa baixa
+     * @param $string
+     * @return string
+     */
     public static final function paraCaixaBaixa($string)
     {
         return strtolower($string);
     }
 
+    /**
+     * Verifica se a string é existente, se caso não for, retornará false.
+     * @param $string
+     * @param $stringBuscada
+     * @return bool
+     */
     public static final function verificaStringExistente($string, $stringBuscada)
     {
         if (strpos($string, $stringBuscada) !== false) {
@@ -29,11 +47,22 @@ class FuncoesString
         }
     }
 
+    /**
+     * @param $string
+     * @return string
+     */
     public static final function passarPrimeiraLetraParaCaixaAlta($string)
     {
         return ucfirst($string);
     }
 
+    /**
+     * Separa uma string.
+     * @param $string
+     * @param $posInicial
+     * @param null $posFinal
+     * @return string
+     */
     public static final function separaString($string, $posInicial, $posFinal = null)
     {
         if ($posFinal == null) {
@@ -43,17 +72,27 @@ class FuncoesString
         }
     }
 
-    /*
-    * Retorna a posicao final da ocorrencia.
-    *
-    */
+
+    /**
+     * Retorna a posição da ocorrencia, se caso não existir, a função retornará false.
+     * @param $string
+     * @param $strBusca
+     * @return int
+     */
     public static final function pegaPosStringDeterminada($string, $strBusca)
     {
         $tamanhoStrBusca = strlen($strBusca);
         return stripos($string, $strBusca) + $tamanhoStrBusca + 1;
     }
 
-    public static final function substituiOcorrenciasDeUmaString($string, $strBusca,$substituicao) {
+    /**
+     * Substitui ocorrencias de uma string. Se caso a ocorrencia não existir, a função retornará false.
+     * @param $string
+     * @param $strBusca
+     * @param $substituicao
+     * @return mixed
+     */
+    public static final function substituiOcorrenciasDeUmaString($string, $strBusca, $substituicao) {
         return str_replace($strBusca,$substituicao,$string);
     }
 

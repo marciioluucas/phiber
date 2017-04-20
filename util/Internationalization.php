@@ -1,14 +1,22 @@
 <?php
-namespace util;
 /**
- * Created by PhpStorm.
- * User: lukee
- * Date: 17/03/17
- * Time: 13:46
+ * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
+ */
+
+namespace util;
+
+/**
+ * Classe responsável pela internacionalização do projeto.
+ * @package util
  */
 class Internationalization
 {
 
+    /**
+     * Usa a referencia de linguagem no arquivo json para traduzir.
+     * @param $reference
+     * @return mixed
+     */
     public static function translate($reference) {
         $languageSettedInConfig = JsonReader::read(BASE_DIR.'/phiber_config.json')->phiber->language;
         $lang = JsonReader::read(BASE_DIR."/lang/$languageSettedInConfig.json");
