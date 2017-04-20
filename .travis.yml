@@ -16,6 +16,3 @@ matrix:
 before_script:
   - composer selfupdate
   - composer install --dev --prefer-dist
-
-script:
-  - ./vendor/bin/phpunit
