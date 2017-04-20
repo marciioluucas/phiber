@@ -163,7 +163,7 @@ Now we will create an crud class using Phiber
 Notice this class, this is where magic happens.
 model/User.php
 ```php
-<?php
+
 namespace test;
 require 'Phiber.php';
 use bin\Restrictions;
