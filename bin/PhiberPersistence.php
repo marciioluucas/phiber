@@ -34,7 +34,7 @@ class PhiberPersistence implements IPhiberPersistence
     /**
      * Faz a criação do objeto especificado no banco de dados, caso a opção
      * execute_queries na configuração esteja habilitada.
-     * @param Object $obj
+     * @param <T> $obj
      * @return bool|mixed
      */
     public function create($obj)
@@ -70,7 +70,7 @@ class PhiberPersistence implements IPhiberPersistence
 
     /**
      * Faz o update no banco do objeto especificado, se caso a opção execute_queries estiver habilitada
-     * @param Object $obj
+     * @param <T> $obj
      * @param null $info
      * @return mixed
      * @internal param array $conditions
@@ -114,7 +114,7 @@ class PhiberPersistence implements IPhiberPersistence
 
     /**
      * Faz o delete no banco do objeto especificado, se caso a opção execute_queries estiver habilitada
-     * @param Object $obj
+     * @param <T> $obj
      * @param null $infos
      * @return array|bool|mixed|string
      */
@@ -177,7 +177,7 @@ class PhiberPersistence implements IPhiberPersistence
 
     /**
      * Faz a seleção no banco do objeto especificado, se caso a opção execute_queries estiver habilitada
-     * @param Object $obj
+     * @param <T> $obj
      * @param null $infos
      * @return array|bool|mixed
      */
@@ -250,7 +250,7 @@ class PhiberPersistence implements IPhiberPersistence
      * Adiciona parâmetros da classe restriction nas informações para buildar o SQL.
      * @param $infos
      */
-    public static function add($infos)
+    public function add($infos)
     {
         array_push(self::$infos, $infos);
         self::mergeSqlInformation();
