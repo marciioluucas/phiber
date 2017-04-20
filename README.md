@@ -250,25 +250,10 @@ class User
 
 ```
 
-### TODOS://
+### TODOS:
 
- - foo
- - bar
-
-License
-----
-
-MIT
-
-
-**Free Software, Hell Yeah!**
-
-```
-
-### TODOS://
-
- - foo
- - bar
+ - Split classes correctly
+ - Do Relationables tables
 
 License
 ----
