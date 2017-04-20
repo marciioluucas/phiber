@@ -1,6 +1,7 @@
 # Phiber - ALPHA version 0.1
 
 [![Imgur](http://i.imgur.com/Ad02NS2.png)](https://nodesource.com/products/nsolid)
+[![Build Status](https://travis-ci.org/marciioluucas/phiber.svg?branch=master)](https://travis-ci.org/marciioluucas/phiber)
 
 Phiber is a simples ORM framework that helps you code your applications more fast.
 
