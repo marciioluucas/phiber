@@ -34,7 +34,6 @@ class TableMySql extends TableFactory
             self::drop($obj);
             self::alter($obj);
         } else {
-
             self::create($obj);
         }
     }

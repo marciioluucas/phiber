@@ -138,9 +138,9 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
 
             }
             if ($conditions != null && $whereCriteria == null) {
-                $conditionsComIndexInt = array_keys($conditions);
+                $condWithIntIndex = array_keys($conditions);
                 for ($i = 0; $i < count($conditions); $i++) {
-                    $nomeCampos[$i] = $conditionsComIndexInt[$i];
+                    $nomeCampos[$i] = $condWithIntIndex[$i];
                 }
                 $valoresCampos = [];
                 for ($j = 0; $j < count($conditions); $j++) {
@@ -191,9 +191,9 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
 
             $this->sql = "DELETE FROM $tabela ";
             if ($conditions != null && $whereCriteria == null) {
-                $conditionsComIndexInt = array_keys($conditions);
+                $condWithIntIndex = array_keys($conditions);
                 for ($i = 0; $i < count($conditions); $i++) {
-                    $camposNome[$i] = $conditionsComIndexInt[$i];
+                    $camposNome[$i] = $condWithIntIndex[$i];
                 }
 
                 for ($j = 0; $j < count($conditions); $j++) {
@@ -252,10 +252,10 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
 
 
         if ($conditions != null && $whereCriteria == null) {
-            $conditionsComIndexInt = array_keys($conditions);
+            $condWithIntIndex = array_keys($conditions);
 
             for ($i = 0; $i < count($conditions); $i++) {
-                $camposNome[$i] = $conditionsComIndexInt[$i];
+                $camposNome[$i] = $condWithIntIndex[$i];
             }
 
 
