@@ -217,16 +217,6 @@ class Restrictions
         self::$fieldsAndValues['fields_and_values'][$field] = $value;
     }
 
-    /**
-     * Mostra os campos e os valores passados
-     * @ignore
-     * @return array
-     */
-    public function show()
-    {
-        return self::$fieldsAndValues;
-    }
-
 
 
 

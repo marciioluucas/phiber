@@ -317,7 +317,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
      */
     public function show()
     {
-        return $this->infosMergeds;
+        return $this->sql;
     }
 
 
