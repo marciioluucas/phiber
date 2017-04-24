@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/db9f41d9b8144d27ab90a0350cb25a28)](https://www.codacy.com/app/marciioluucas/phiber?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=marciioluucas/phiber&amp;utm_campaign=Badge_Grade)
 [![GitHub issues](https://img.shields.io/github/issues/marciioluucas/phiber.svg)](https://github.com/marciioluucas/phiber/issues)
 [![GitHub forks](https://img.shields.io/github/forks/marciioluucas/phiber.svg)](https://github.com/marciioluucas/phiber/network)
 [![GitHub stars](https://img.shields.io/github/stars/marciioluucas/phiber.svg)](https://github.com/marciioluucas/phiber/stargazers)
