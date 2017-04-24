@@ -17,26 +17,26 @@ interface IPhiberQueryBuilder
      * @param $infos
      * @return mixed
      */
-    public static function create($infos);
+    public function create($infos);
 
     /**
      * Cria a sql do UPDATE
      * @param $infos
      * @return mixed
      */
-    public static function update($infos);
+    public function update($infos);
 
     /**
      * Cria a sql do DELETE
      * @param $infos
      * @return mixed
      */
-    public static function delete($infos);
+    public function delete($infos);
 
     /**
      * Cria a sql do SELECT
      * @param $infos
      * @return mixed
      */
-    public static function select($infos);
+    public function select($infos);
 }

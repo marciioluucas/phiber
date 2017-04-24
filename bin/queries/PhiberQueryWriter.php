@@ -6,8 +6,10 @@
 namespace bin\queries;
 
 use bin\exceptions\PhiberException;
-use util\Internationalization;
 use bin\interfaces\IPhiberQueryBuilder;
+use ReflectionMethod;
+use util\FuncoesReflections;
+use util\Internationalization;
 
 
 /**
@@ -18,12 +20,38 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
 {
 
     /**
+     * @var
+     */
+    private $sql;
+
+    /**
+     * PhiberQueryWriter constructor.
+     * @param $method
+     * @param $infos
+     */
+    public function __construct($method, $infos)
+    {
+
+        $reflectionMethod = new ReflectionMethod(get_class($this), $method);
+        $reflectionMethod->invoke($this, $infos);
+    }
+
+    /**
+     * @return mixed
+     */
+    function __toString()
+    {
+        return $this->sql;
+    }
+
+
+    /**
      * @param $infos
      * @return mixed
      * @throws PhiberException
      * @internal param $object
      */
-    public static function create($infos)
+    public function create($infos)
     {
         $tabela = $infos['table'];
         $campos = $infos['fields'];
@@ -40,24 +68,24 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
 
 
             $camposNome = array_values($camposNome);
-            $sqlInsert = "INSERT INTO $tabela (";
+            $this->sql = "INSERT INTO $tabela (";
             for ($i = 0; $i < count($camposNome); $i++) {
                 if ($i != count($camposNome) - 1) {
-                    $sqlInsert .= $camposNome[$i] . ", ";
+                    $this->sql .= $camposNome[$i] . ", ";
                 } else {
-                    $sqlInsert .= $camposNome[$i] . ") VALUES (";
+                    $this->sql .= $camposNome[$i] . ") VALUES (";
                 }
             }
 
             for ($j = 0; $j < count($camposNome); $j++) {
                 if ($j != count($camposNome) - 1) {
-                    $sqlInsert .= ":" . $camposNome[$j] . ", ";
+                    $this->sql .= ":" . $camposNome[$j] . ", ";
                 } else {
-                    $sqlInsert .= ":" . $camposNome[$j] . ")";
+                    $this->sql .= ":" . $camposNome[$j] . ")";
                 }
             }
 
-            return $sqlInsert;
+            return $this->sql;
 
         } catch (PhiberException $e) {
             throw new PhiberException(new Internationalization("query_processor_error"));
@@ -72,7 +100,7 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
      * @internal param $object
      * @internal param $id
      */
-    public static function update($infos)
+    public function update($infos)
     {
 
         $tabela = $infos['table'];
@@ -98,15 +126,14 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
 
             $nomeCampos = [];
             $camposNome = array_values($camposNome);
-            $sqlUpdate = "UPDATE $tabela SET ";
+            $this->sql = "UPDATE $tabela SET ";
 
             for ($i = 0; $i < count($camposNome); $i++) {
                 if ($i != count($camposNome) - 1) {
-                    $sqlUpdate .= $camposNome[$i] . " = :" . $camposNome[$i] . ", ";
+                    $this->sql .= $camposNome[$i] . " = :" . $camposNome[$i] . ", ";
                 } else {
-                    $sqlUpdate .= $camposNome[$i] . " = :" . $camposNome[$i];
+                    $this->sql .= $camposNome[$i] . " = :" . $camposNome[$i];
                 }
-
 
 
             }
@@ -120,23 +147,23 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
                     $valoresCampos[$j] = $conditions[$nomeCampos[$j]];
                 }
 
-                $sqlUpdate .= " WHERE ";
+                $this->sql .= " WHERE ";
 
                 for ($x = 0; $x < count($nomeCampos); $x++) {
                     if ($x != count($nomeCampos) - 1) {
-                        $sqlUpdate .= $nomeCampos[$x] . " = :condition_$nomeCampos[$x] $conjunctions[$x] ";
+                        $this->sql .= $nomeCampos[$x] . " = :condition_$nomeCampos[$x] $conjunctions[$x] ";
                     } else {
-                        $sqlUpdate .= $nomeCampos[$x] . " = :condition_$nomeCampos[$x]";
+                        $this->sql .= $nomeCampos[$x] . " = :condition_$nomeCampos[$x]";
                     }
                 }
             } else if ($conditions == null && $whereCriteria != null) {
-                $sqlUpdate .= " WHERE " . $whereCriteria;
+                $this->sql .= " WHERE " . $whereCriteria;
             }
-            $sqlUpdate .= ";";
+            $this->sql .= ";";
         } catch (PhiberException $e) {
             throw new PhiberException(new Internationalization("query_processor_error"));
         }
-        return $sqlUpdate;
+        return $this->sql;
     }
 
 
@@ -149,7 +176,7 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
      * @internal param array $conditions
      * @internal param array $conjunctions
      */
-    public static function delete($infos)
+    public function delete($infos)
     {
         $tabela = $infos['table'];
         $conditions = isset($infos['conditions']) ? $infos['conditions'] : null;
@@ -162,7 +189,7 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
             $camposNome = [];
             $camposValores = [];
 
-            $sql = "DELETE FROM $tabela ";
+            $this->sql = "DELETE FROM $tabela ";
             if ($conditions != null && $whereCriteria == null) {
                 $conditionsComIndexInt = array_keys($conditions);
                 for ($i = 0; $i < count($conditions); $i++) {
@@ -173,19 +200,19 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
                     $camposValores[$j] = $conditions[$camposNome[$j]];
                 }
 
-                $sql .= "WHERE ";
+                $this->sql .= "WHERE ";
 
                 for ($x = 0; $x < count($camposNome); $x++) {
                     if ($x != count($camposNome) - 1) {
-                        $sql .= $camposNome[$x] . " = :condition_$camposNome[$x] $conjunctions[$x] ";
+                        $this->sql .= $camposNome[$x] . " = :condition_$camposNome[$x] $conjunctions[$x] ";
                     } else {
-                        $sql .= $camposNome[$x] . " = :condition_$camposNome[$x]";
+                        $this->sql .= $camposNome[$x] . " = :condition_$camposNome[$x]";
                     }
                 }
             } else if ($conditions == null && $whereCriteria != null) {
-                $sql .= " WHERE " . $whereCriteria . " ";
+                $this->sql .= " WHERE " . $whereCriteria . " ";
             }
-            return $sql . ";";
+            return $this->sql . ";";
         } catch (PhiberException $e) {
             throw new PhiberException(new Internationalization("query_processor_error"));
         }
@@ -197,12 +224,12 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
      *  Faz a query de select de um registro no banco com os dados.
      *
      * @param $infos
-     * @return array|bool|mixed
+     * @return string
      * @internal param $object
      * @internal param $conditions
      * @internal param bool $onlyFirst
      */
-    public static function select($infos)
+    public function select($infos)
     {
 
         $tabela = $infos['table'];
@@ -221,7 +248,7 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
 
         $campos = gettype($campos) == "array" ? implode(", ", $campos) : $campos;
 
-        $sql = "SELECT " . $campos . " FROM $tabela ";
+        $this->sql = "SELECT " . $campos . " FROM $tabela ";
 
 
         if ($conditions != null && $whereCriteria == null) {
@@ -237,24 +264,24 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
                     $camposValores[$j] = $conditions[$camposNome[$j]];
                 }
             }
-            $sql .= "WHERE ";
+            $this->sql .= "WHERE ";
             for ($x = 0; $x < count($infos['conditions']); $x++) {
 
                 if ($x != count($infos['conditions']) - 1) {
-                    $sql .= $infos['conditions'][$x][0] . " " . $infos['conditions'][$x][1] . " :condition_" . $infos['conditions'][$x][0];
+                    $this->sql .= $infos['conditions'][$x][0] . " " . $infos['conditions'][$x][1] . " :condition_" . $infos['conditions'][$x][0];
                     if ($conjunctions != null) {
-                        $sql .= " " . $conjunctions[$x] . " ";
+                        $this->sql .= " " . $conjunctions[$x] . " ";
                     } else {
-                        $sql .= " and ";
+                        $this->sql .= " and ";
                     }
                 } else {
-                    $sql .= $infos['conditions'][$x][0] . " " . $infos['conditions'][$x][1] . " :condition_" . $infos['conditions'][$x][0];
+                    $this->sql .= $infos['conditions'][$x][0] . " " . $infos['conditions'][$x][1] . " :condition_" . $infos['conditions'][$x][0];
                 }
             }
         } else if ($conditions == null && $whereCriteria != null) {
-            $sql .= " WHERE " . $whereCriteria . " ";
+            $this->sql .= " WHERE " . $whereCriteria . " ";
         }
-        return $sql . ";";
+        return $this->sql . ";";
 
     }
 }

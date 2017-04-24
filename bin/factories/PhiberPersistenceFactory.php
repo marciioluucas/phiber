@@ -3,14 +3,25 @@
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
 
-namespace bin\interfaces;
+namespace bin\factories;
+use bin\Link;
 
 /**
  * Interface IPhiberPersistence
  * @package bin
  */
-interface IPhiberPersistence
+abstract class PhiberPersistenceFactory
 {
+
+    /**
+     * Pega a conexão com o banco
+     * @return \PDO
+     */
+    public function getConnection(){
+        $pdo = new Link();
+        return $pdo->getConnection();
+
+    }
 
 
     /**
@@ -18,7 +29,7 @@ interface IPhiberPersistence
      * @param $obj
      * @return mixed
      */
-    public function create($obj);
+    public abstract function create($obj);
 
     /**
      * Faz a alteração do objeto no banco
@@ -27,7 +38,7 @@ interface IPhiberPersistence
      * @return mixed
      * @internal param $id
      */
-    public function update($obj, $infos);
+    public abstract function update($obj, $infos);
 
     /**
      * Faz a exclusão do objeto no banco
@@ -35,7 +46,7 @@ interface IPhiberPersistence
      * @param $infos
      * @return mixed
      */
-    public function delete($obj, $infos);
+    public abstract function delete($obj, $infos);
 
     /**
      * Faz a contagem de quantos objetos está no banco
@@ -45,7 +56,7 @@ interface IPhiberPersistence
      * @internal param array $condicoes
      * @internal param array $conjuncoes
      */
-    public function rowCount($obj, $infos);
+    public abstract function rowCount($obj, $infos);
 
     /**
      * Faz a seleção dos objetos no banco
@@ -53,12 +64,12 @@ interface IPhiberPersistence
      * @param $infos
      * @return mixed
      */
-    public function select($obj, $infos);
+    public abstract function select($obj, $infos);
 
     /**
      * Usuário pode criar uma query a partir dessa função
      * @param $query
      * @return mixed
      */
-    public function createQuery($query);
+    public abstract function createQuery($query);
 }

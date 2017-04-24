@@ -6,8 +6,7 @@
 namespace bin\persistence;
 
 
-use bin\interfaces\IPhiberPersistence;
-use bin\Link;
+use bin\factories\PhiberPersistenceFactory;
 use bin\queries\PhiberQueryWriter;
 use bin\queries\Restrictions;
 use PDO;
@@ -20,7 +19,7 @@ use util\JsonReader;
  * Classe responsável por persistir os objetos no banco
  * @package bin
  */
-class PhiberPersistence implements IPhiberPersistence
+class PhiberPersistence extends PhiberPersistenceFactory
 {
     /**
      * Informações para a criação da SQL.
@@ -48,15 +47,13 @@ class PhiberPersistence implements IPhiberPersistence
         $campos = FuncoesReflections::pegaAtributosDoObjeto($obj);
         $camposV = FuncoesReflections::pegaValoresAtributoDoObjeto($obj);
 
-        $sql = PhiberQueryWriter::create([
+        $sql = new PhiberQueryWriter("create", [
             "table" => $tabela,
             "fields" => $campos,
             "values" => $camposV
-
-
         ]);
         if (JsonReader::read(BASE_DIR . "/phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
-            $pdo = Link::getConnection()->prepare($sql);
+            $pdo = $this->getConnection()->prepare($sql);
             for ($i = 1; $i < count($campos); $i++) {
                 if ($camposV[$i] != null) {
                     $pdo->bindValue($campos[$i], $camposV[$i]);
@@ -88,7 +85,7 @@ class PhiberPersistence implements IPhiberPersistence
         $camposV = FuncoesReflections::pegaValoresAtributoDoObjeto($obj);
         $conditions = self::$infosMergeds['fields_and_values'];
 
-        $sql = PhiberQueryWriter::update([
+        $sql = new PhiberQueryWriter("update", [
             "table" => $tabela,
             "fields" => $campos,
             "values" => $camposV,
@@ -96,7 +93,7 @@ class PhiberPersistence implements IPhiberPersistence
 
         ]);
         if (JsonReader::read(BASE_DIR . "/phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
-            $pdo = Link::getConnection()->prepare($sql);
+            $pdo = $this->getConnection()->prepare($sql);
             for ($i = 1; $i < count($campos); $i++) {
                 if ($camposV[$i] != null) {
                     $pdo->bindValue($campos[$i], $camposV[$i]);
@@ -122,12 +119,11 @@ class PhiberPersistence implements IPhiberPersistence
      * @param null $infos
      * @return array|bool|mixed|string
      */
-    public
-    function delete($obj, $infos = null)
+    public function delete($obj, $infos = null)
     {
         $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
         if ($infos != null) {
-            $sql = PhiberQueryWriter::select([
+            $sql = new PhiberQueryWriter("select", [
                 "table" => $tabela,
                 "conditions" => isset($infos['conditions']) ? $infos['conditions'] : null,
                 "conjunctions" => isset($infos['conjunctions']) ? $infos['conjunctions'] : null
@@ -135,14 +131,14 @@ class PhiberPersistence implements IPhiberPersistence
         } else {
 
 
-            $sql = PhiberQueryWriter::delete([
+            $sql = new PhiberQueryWriter("delete", [
                 "table" => $tabela,
                 "where" => self::$infosMergeds['where'],
 
             ]);
         }
         if (JsonReader::read(BASE_DIR . "/phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
-            $pdo = Link::getConnection()->prepare($sql);
+            $pdo = $this->getConnection()->prepare($sql);
             if ($infos != null) {
                 for ($i = 0; $i < count($infos['conditions']); $i++) {
                     $pdo->bindValue(
@@ -190,7 +186,7 @@ class PhiberPersistence implements IPhiberPersistence
         TableMysql::sync($obj);
         $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
         if ($infos != null) {
-            $sql = PhiberQueryWriter::select([
+            $sql = new PhiberQueryWriter("select", [
                 "table" => $tabela,
                 "fields" => isset($infos['fields']) ? $infos['fields'] : "*",
                 "conditions" => isset($infos['conditions']) ? $infos['conditions'] : null,
@@ -202,18 +198,18 @@ class PhiberPersistence implements IPhiberPersistence
                 implode(", ", self::$infosMergeds['fields']) :
                 "*";
 
-            $sql = PhiberQueryWriter::select([
+            $sql = new PhiberQueryWriter("select", [
                 "table" => $tabela,
                 "fields" => $fields,
-                "where" =>  isset(self::$infosMergeds['where']) ?
-                            self::$infosMergeds['where'] :
-                            null,
+                "where" => isset(self::$infosMergeds['where']) ?
+                    self::$infosMergeds['where'] :
+                    null,
 
             ]);
         }
 
         if (JsonReader::read(BASE_DIR . "/phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
-            $pdo = Link::getConnection()->prepare($sql);
+            $pdo = $this->getConnection()->prepare($sql);
             if ($infos != null) {
                 for ($i = 0; $i < count($infos['conditions']); $i++) {
                     $pdo->bindValue(

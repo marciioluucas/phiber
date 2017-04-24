@@ -10,7 +10,7 @@
       "connection_cache": true
     },
     "log": true,
-    "execute_querys": false,
+    "execute_querys": true,
     "code_sync": false
   }
 }

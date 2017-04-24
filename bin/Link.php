@@ -20,29 +20,31 @@ use util\JsonReader;
 class Link
 {
 
+    private $instancia;
+
+
+
     /**
      * Função responsável por fazer a conexão com o banco.
-     * @return PDO
      * @throws PhiberException
      */
-    public static function getConnection()
+    public function getConnection()
     {
         try {
-            if (!isset($instancia)) {
+            if ($this->instancia == null) {
                 $json = JsonReader::read(BASE_DIR . "/phiber_config.json");
                 try {
-                   $instancia = new PDO(
+                    $this->instancia = new PDO(
                         $json->phiber->link->url,
                         $json->phiber->link->user,
                         $json->phiber->link->password,
                         array(PDO::ATTR_PERSISTENT => $json->phiber->link->connection_cache == 1 ? true : false));
-                }
-                catch (PhiberException $e) {
+                } catch (PhiberException $e) {
                     throw new PhiberException(new Internationalization("database_connection_error"));
                 }
-
             }
-            return $instancia;
+
+            return $this->instancia;
         } catch (PhiberException $e) {
             throw new PhiberException(new Internationalization("database_connection_error"));
         }

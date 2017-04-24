@@ -46,8 +46,8 @@ abstract class TableFactory
      * Pega a conexão com o banco
      * @return \PDO
      */
-    public function getConnection()
-    {
-        return Link::getConnection();
+    public function getConnection(){
+        $pdo = new Link();
+        return $pdo->getConnection();
     }
 }
