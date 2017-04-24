@@ -235,9 +235,9 @@ class TableMySql extends TableFactory
                     }
             } else {
                 $stringAlterTable .= "CHANGE  `$atributosTabela[$i]` `$atributosTabela[$i]` ";
-                $strTamanhoTypeTabela = strstr($columnsTabela[$i]['Type'], '(', false);
-                $typeTabela = strstr($columnsTabela[$i]['Type'], '(', true);
-                $tamanhoTypeTabela = substr($strTamanhoTypeTabela, 1, stripos($strTamanhoTypeTabela, ')') - 1);
+//                $strTamanhoTypeTabela = strstr($columnsTabela[$i]['Type'], '(', false);
+//                $typeTabela = strstr($columnsTabela[$i]['Type'], '(', true);
+//                $tamanhoTypeTabela = substr($strTamanhoTypeTabela, 1, stripos($strTamanhoTypeTabela, ')') - 1);
 
 
 //                if ($typeTabela != $arrFinal[$i]['type'] || $tamanhoTypeTabela != $arrFinal[$i]['size']) {
