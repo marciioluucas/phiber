@@ -197,7 +197,14 @@ use Phiber;
 
 $u->setNome("Jonas do amor4");
 $u->setEmail("amor@jonas.com4");
-$criteria = Phiber::openPersist($u);
-$criteria->create();
+$phiber = new Phiber();
+$criteria = $phiber->openPersist($u);
+//$criteria->create();
+
+$id = $criteria->restrictions()->eq("id",1);
+$colunas = $criteria->restrictions()->fields(["nome","email"]);
+$criteria->add($id);
+$criteria->add($colunas);
+//$criteria->select();
 print_r($criteria->select());
 

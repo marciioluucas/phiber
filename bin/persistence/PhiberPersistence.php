@@ -48,18 +48,33 @@ class PhiberPersistence extends PhiberPersistenceFactory
      * Informações para a criação da SQL.
      * @var array
      */
-    private static $infos = [];
+    private $infos = [];
 
     /**
      * Informações mergidas
      * @var array
      */
-    private static $infosMergeds = [];
+    private $infosMergeds = [];
 
 
-    private static $sql = "";
+    /**
+     * @var string
+     */
+    private $sql = "";
 
+
+    /**
+     * @var Restrictions
+     */
     private $restrictions;
+
+    /**
+     * @return Restrictions
+     */
+    public function restrictions(): Restrictions
+    {
+        return $this->restrictions;
+    }
 
     /**
      * PhiberPersistence constructor.
@@ -86,14 +101,14 @@ class PhiberPersistence extends PhiberPersistenceFactory
     public function create()
     {
 
-        self::$sql = new PhiberQueryWriter("create", [
+        $this->sql = new PhiberQueryWriter("create", [
             "table" => $this->table,
             "fields" => $this->fields,
             "values" => $this->fieldsValues
         ]);
 
         if ($this->phiberConfig->verifyExecuteQueries()) {
-            $pdo = $this->getConnection()->prepare(self::$sql);
+            $pdo = $this->getConnection()->prepare($this->sql);
 
             for ($i = 1; $i < count($this->fields); $i++) {
                 if ($this->fieldsValues[$i] != null) {
@@ -120,17 +135,17 @@ class PhiberPersistence extends PhiberPersistenceFactory
     public function update()
     {
 
-        $conditions = self::$infosMergeds['fields_and_values'];
+        $conditions = $this->infosMergeds['fields_and_values'];
 
-        self::$sql = new PhiberQueryWriter("update", [
+        $this->sql = new PhiberQueryWriter("update", [
             "table" => $this->table,
             "fields" => $this->fields,
             "values" => $this->fieldsValues,
-            "where" => self::$infosMergeds['where'],
+            "where" => $this->infosMergeds['where'],
 
         ]);
         if ($this->phiberConfig->verifyExecuteQueries()) {
-            $pdo = $this->getConnection()->prepare(self::$sql);
+            $pdo = $this->getConnection()->prepare($this->sql);
             for ($i = 1; $i < count($this->fields); $i++) {
                 if ($this->fieldsValues[$i] != null) {
                     $pdo->bindValue($this->fields[$i], $this->fieldsValues[$i]);
@@ -147,7 +162,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
                 return true;
             }
         }
-        return self::$sql;
+        return $this->sql;
     }
 
     /**
@@ -159,22 +174,22 @@ class PhiberPersistence extends PhiberPersistenceFactory
     public function delete($infos = null)
     {
 //        if ($infos != null) {
-//            self::$sql = new PhiberQueryWriter("select", [
+//            $this->sql = new PhiberQueryWriter("select", [
 //                "table" => $this->table,
 //                "conditions" => isset($infos['conditions']) ? $infos['conditions'] : null,
 //                "conjunctions" => isset($infos['conjunctions']) ? $infos['conjunctions'] : null
 //            ]);
 //        } else if ($infos == null) {
 
-        self::$sql = new PhiberQueryWriter("delete", [
+        $this->sql = new PhiberQueryWriter("delete", [
             "table" => $this->table,
-            "where" => self::$infosMergeds['where'],
+            "where" => $this->infosMergeds['where'],
 
         ]);
 //        }
 
         if ($this->phiberConfig->verifyExecuteQueries()) {
-            $pdo = $this->getConnection()->prepare(self::$sql);
+            $pdo = $this->getConnection()->prepare($this->sql);
 //            if ($infos != null) {
 //                for ($i = 0; $i < count($infos['conditions']); $i++) {
 //                    $pdo->bindValue(
@@ -183,11 +198,11 @@ class PhiberPersistence extends PhiberPersistenceFactory
 //                    );
 //                }
 //            } else if ($infos == null) {
-            if (isset(self::$infosMergeds['fields_and_values'])) {
-                for ($i = 0; $i < count(self::$infosMergeds['fields_and_values']); $i++) {
+            if (isset($this->infosMergeds['fields_and_values'])) {
+                for ($i = 0; $i < count($this->infosMergeds['fields_and_values']); $i++) {
                     $pdo->bindValue(
-                        "condition_" . key(self::$infosMergeds['fields_and_values']),
-                        self::$infosMergeds['fields_and_values'][key(self::$infosMergeds['fields_and_values'])]
+                        "condition_" . key($this->infosMergeds['fields_and_values']),
+                        $this->infosMergeds['fields_and_values'][key($this->infosMergeds['fields_and_values'])]
                     );
                 }
             }
@@ -196,7 +211,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
                 return true;
             }
         }
-        return self::$sql;
+        return $this->sql;
     }
 
     /**
@@ -220,23 +235,22 @@ class PhiberPersistence extends PhiberPersistenceFactory
     public function select($infos = null)
     {
 //        if ($infos != null) {
-//            self::$sql = new PhiberQueryWriter("select", [
+//            $this->sql = new PhiberQueryWriter("select", [
 //                "table" => $this->table,
 //                "fields" => isset($infos['fields']) ? $infos['fields'] : "*",
 //                "conditions" => isset($infos['conditions']) ? $infos['conditions'] : null,
 //                "conjunctions" => isset($infos['conjunctions']) ? $infos['conjunctions'] : null
 //            ]);
 //        } else if ($infos == null) {
-        $fields = isset(
-            self::$infosMergeds['fields']) ?
-            implode(", ", self::$infosMergeds['fields']) :
+        $fields = isset($this->infosMergeds['fields']) ?
+            implode(", ", $this->infosMergeds['fields']) :
             "*";
 
-        self::$sql = new PhiberQueryWriter("select", [
+        $this->sql = new PhiberQueryWriter("select", [
             "table" => $this->table,
             "fields" => $fields,
-            "where" => isset(self::$infosMergeds['where']) ?
-                self::$infosMergeds['where'] :
+            "where" => isset($this->infosMergeds['where']) ?
+                $this->infosMergeds['where'] :
                 null,
 
         ]);
@@ -244,7 +258,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
 
         $result = [];
         if ($this->phiberConfig->verifyExecuteQueries()) {
-            $pdo = $this->getConnection()->prepare(self::$sql);
+            $pdo = $this->getConnection()->prepare($this->sql);
 //            if ($infos != null) {
 //                for ($i = 0; $i < count($infos['conditions']); $i++) {
 //                    $pdo->bindValue(
@@ -253,13 +267,16 @@ class PhiberPersistence extends PhiberPersistenceFactory
 //                    );
 //                }
 //            } else if ($infos == null) {
-            if (isset(self::$infosMergeds['fields_and_values'])) {
-                for ($i = 0; $i < count(self::$infosMergeds['fields_and_values']); $i++) {
+            if (isset($this->infosMergeds['fields_and_values'])) {
+
+                while (current($this->infosMergeds['fields_and_values'])) {
                     $pdo->bindValue(
-                        "condition_" . key(self::$infosMergeds['fields_and_values']),
-                        self::$infosMergeds['fields_and_values'][key(self::$infosMergeds['fields_and_values'])]
-                    );
+                        "condition_" . key($this->infosMergeds['fields_and_values']),
+                        $this->infosMergeds['fields_and_values'][key($this->infosMergeds['fields_and_values'])]);
+                    next($this->infosMergeds['fields_and_values']);
                 }
+
+
             }
 //            }
             $pdo->execute();
@@ -284,10 +301,13 @@ class PhiberPersistence extends PhiberPersistenceFactory
      * Adiciona parâmetros da classe restriction nas informações para buildar o SQL.
      * @param $infos
      */
-    public static final function add($infos)
+    public function add($infos)
     {
-        array_push(self::$infos, $infos);
-        self::mergeSqlInformation();
+        array_push($this->infos, $infos);
+        if(!isset($this->infos['fields'])){
+            $this->infos['fields'] = ["*"];
+        }
+        $this->mergeSqlInformation();
 
     }
 
@@ -297,7 +317,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
      */
     public function show()
     {
-        return self::$sql;
+        return $this->infosMergeds;
     }
 
 
@@ -306,10 +326,10 @@ class PhiberPersistence extends PhiberPersistenceFactory
      */
     private function mergeSqlInformation()
     {
-        array_push(self::$infos, $this->restrictions->getFieldsAndValues());
-        for ($i = 0; $i < count(self::$infos) - 1; $i++) {
-            self::$infosMergeds[array_keys(self::$infos[$i])[0]] =
-                self::$infos[$i][array_keys(self::$infos[$i])[0]];
+        array_push($this->infos, $this->restrictions->getFieldsAndValues());
+        for ($i = 0; $i < count($this->infos) - 1; $i++) {
+            $this->infosMergeds[array_keys($this->infos[$i])[0]] =
+                $this->infos[$i][array_keys($this->infos[$i])[0]];
         }
     }
 

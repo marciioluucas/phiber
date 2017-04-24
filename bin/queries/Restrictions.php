@@ -41,7 +41,6 @@ class Restrictions
     public function eq($param1, $param2)
     {
         self::addFieldsAndValues($param1, $param2);
-        PhiberPersistence::add(self::$fieldsAndValues);
         return
             [
                 "where" =>$param1 . " = :condition_" . $param1
@@ -63,7 +62,6 @@ class Restrictions
     public function biggerThen($param1, $param2)
     {
         self::addFieldsAndValues($param1, $param2);
-        PhiberPersistence::add(self::$fieldsAndValues);
         return [
             "where" => $param1 . " > :condition_" . $param1
         ];
@@ -83,7 +81,6 @@ class Restrictions
     public function greaterThan($param1, $param2)
     {
         self::addFieldsAndValues($param1, $param2);
-        PhiberPersistence::add(self::$fieldsAndValues);
         return [
             "where" => $param1 . " >= :condition_" . $param1,
         ];
@@ -103,7 +100,6 @@ class Restrictions
     public function lessThen($param1, $param2)
     {
         self::addFieldsAndValues($param1, $param2);
-        PhiberPersistence::add(self::$fieldsAndValues);
         return [
             "where" => $param1 . " < :condition_" . $param1,
         ];
@@ -123,7 +119,6 @@ class Restrictions
     public function lessLike($param1, $param2)
     {
         self::addFieldsAndValues($param1, $param2);
-        PhiberPersistence::add(self::$fieldsAndValues);
         return [
             "where" => $param1 . " <= :condition_" . $param1,
         ];
@@ -143,7 +138,7 @@ class Restrictions
     public function like($param1, $param2)
     {
         self::addFieldsAndValues($param1, $param2);
-        PhiberPersistence::add(self::$fieldsAndValues);
+
         return [
             "where" => $param1 . " LIKE %:condition_" . $param1 . "%",
         ];
@@ -167,7 +162,6 @@ class Restrictions
     public function or ($condition1, $condition2)
     {
 
-        PhiberPersistence::add(self::$fieldsAndValues);
         return [
             "where" => "(" . $condition1['where'] . " OR " . $condition2['where'] . ")",
         ];
@@ -191,7 +185,6 @@ class Restrictions
     public function and ($condition1, $condition2)
     {
 
-        PhiberPersistence::add(self::$fieldsAndValues);
         return [
             "where" => "(" . $condition1['where'] . " AND " . $condition2['where'] . ")"
         ];
@@ -207,11 +200,10 @@ class Restrictions
      */
     public function fields($fields)
     {
-        if($fields != null){
+        if(!empty($fields)){
             return ["fields" => $fields];
-        }else{
-            return ["fields"=> "*"];
         }
+        return ["fields"=>["*"]];
     }
 
     /**
@@ -234,5 +226,8 @@ class Restrictions
     {
         return self::$fieldsAndValues;
     }
+
+
+
 
 }
