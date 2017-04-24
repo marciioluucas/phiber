@@ -142,7 +142,7 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
                 for ($x = 0; $x < count($nomeCampos); $x++) {
                     if ($x != count($nomeCampos) - 1) {
                         $this->sql .= $nomeCampos[$x] . " = :condition_$nomeCampos[$x] $conjunctions[$x] ";
-                    } else {
+                    } else if ($x == count($nomeCampos) - 1) {
                         $this->sql .= $nomeCampos[$x] . " = :condition_$nomeCampos[$x]";
                     }
                 }
@@ -195,7 +195,7 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
                 for ($x = 0; $x < count($camposNome); $x++) {
                     if ($x != count($camposNome) - 1) {
                         $this->sql .= $camposNome[$x] . " = :condition_$camposNome[$x] $conjunctions[$x] ";
-                    } else {
+                    } else if ($x == count($camposNome) - 1) {
                         $this->sql .= $camposNome[$x] . " = :condition_$camposNome[$x]";
                     }
                 }
@@ -248,23 +248,16 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
                 $camposNome[$i] = $condWithIntIndex[$i];
             }
 
-
-            for ($j = 0; $j < count($conditions); $j++) {
-                if ($conditions[$camposNome[$j]] != "") {
-                    $camposValores[$j] = $conditions[$camposNome[$j]];
-                }
-            }
             $this->sql .= "WHERE ";
             for ($x = 0; $x < count($infos['conditions']); $x++) {
-
                 if ($x != count($infos['conditions']) - 1) {
                     $this->sql .= $infos['conditions'][$x][0] . " " . $infos['conditions'][$x][1] . " :condition_" . $infos['conditions'][$x][0];
                     if ($conjunctions != null) {
                         $this->sql .= " " . $conjunctions[$x] . " ";
-                    } else {
+                    } else if ($conjunctions == null) {
                         $this->sql .= " and ";
                     }
-                } else {
+                } else if ($x != count($infos['conditions']) - 1) {
                     $this->sql .= $infos['conditions'][$x][0] . " " . $infos['conditions'][$x][1] . " :condition_" . $infos['conditions'][$x][0];
                 }
             }
