@@ -58,6 +58,8 @@ class PhiberPersistence extends PhiberPersistenceFactory
     private static $infosMergeds = [];
 
 
+    private static $sql = "";
+
     /**
      * PhiberPersistence constructor.
      * @param $obj
@@ -79,17 +81,17 @@ class PhiberPersistence extends PhiberPersistenceFactory
      * @param <T> $obj
      * @return bool|mixed
      */
-    public function create($obj)
+    public function create()
     {
 
-        $sql = new PhiberQueryWriter("create", [
+        self::$sql = new PhiberQueryWriter("create", [
             "table" => $this->table,
             "fields" => $this->fields,
             "values" => $this->fieldsValues
         ]);
 
         if ($this->phiberConfig->verifyExecuteQueries()) {
-            $pdo = $this->getConnection()->prepare($sql);
+            $pdo = $this->getConnection()->prepare(self::$sql);
 
             for ($i = 1; $i < count($this->fields); $i++) {
                 if ($this->fieldsValues[$i] != null) {
@@ -100,7 +102,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
                 return true;
             }
         }
-        return $sql;
+        return self::$sql;
 
     }
 
@@ -121,7 +123,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
         $camposV = FuncoesReflections::pegaValoresAtributoDoObjeto($obj);
         $conditions = self::$infosMergeds['fields_and_values'];
 
-        $sql = new PhiberQueryWriter("update", [
+        self::$sql = new PhiberQueryWriter("update", [
             "table" => $tabela,
             "fields" => $campos,
             "values" => $camposV,
@@ -129,7 +131,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
 
         ]);
         if ($this->phiberConfig->verifyExecuteQueries()) {
-            $pdo = $this->getConnection()->prepare($sql);
+            $pdo = $this->getConnection()->prepare(self::$sql);
             for ($i = 1; $i < count($campos); $i++) {
                 if ($camposV[$i] != null) {
                     $pdo->bindValue($campos[$i], $camposV[$i]);
@@ -146,7 +148,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
                 return true;
             }
         }
-        return $sql;
+        return self::$sql;
     }
 
     /**
@@ -159,7 +161,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
     {
         $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
         if ($infos != null) {
-            $sql = new PhiberQueryWriter("select", [
+            self::$sql = new PhiberQueryWriter("select", [
                 "table" => $tabela,
                 "conditions" => isset($infos['conditions']) ? $infos['conditions'] : null,
                 "conjunctions" => isset($infos['conjunctions']) ? $infos['conjunctions'] : null
@@ -167,14 +169,14 @@ class PhiberPersistence extends PhiberPersistenceFactory
         } else {
 
 
-            $sql = new PhiberQueryWriter("delete", [
+            self::$sql = new PhiberQueryWriter("delete", [
                 "table" => $tabela,
                 "where" => self::$infosMergeds['where'],
 
             ]);
         }
         if ($this->phiberConfig->verifyExecuteQueries()) {
-            $pdo = $this->getConnection()->prepare($sql);
+            $pdo = $this->getConnection()->prepare(self::$sql);
             if ($infos != null) {
                 for ($i = 0; $i < count($infos['conditions']); $i++) {
                     $pdo->bindValue(
@@ -196,31 +198,31 @@ class PhiberPersistence extends PhiberPersistenceFactory
                 return true;
             }
         }
-        return $sql;
+        return self::$sql;
     }
 
     /**
      * Faz o rowCount (contagem de linhas) objeto especificado, se caso a opção execute_queries estiver habilitada
-     * @param Object $obj
-     * @param array $condicoes
-     * @param array $conjuncoes
-     * @return mixed|void
+     * @param null $infos
+     * @return mixed|int
+     * @internal param Object $obj
+     * @internal param array $condicoes
+     * @internal param array $conjuncoes
      */
-    public function rowCount($obj, $condicoes = [], $conjuncoes = [])
+    public function rowCount($infos = null)
     {
-        // TODO: Implement rowCount() method.
+        return count($this->select($infos));
     }
 
     /**
      * Faz a seleção no banco do objeto especificado, se caso a opção execute_queries estiver habilitada
-     * @param <T> $obj
      * @param null $infos
      * @return array|bool|mixed
      */
-    public function select($obj, $infos = null)
+    public function select($infos = null)
     {
         if ($infos != null) {
-            $sql = new PhiberQueryWriter("select", [
+            self::$sql = new PhiberQueryWriter("select", [
                 "table" => $this->table,
                 "fields" => isset($infos['fields']) ? $infos['fields'] : "*",
                 "conditions" => isset($infos['conditions']) ? $infos['conditions'] : null,
@@ -232,7 +234,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
                 implode(", ", self::$infosMergeds['fields']) :
                 "*";
 
-            $sql = new PhiberQueryWriter("select", [
+            self::$sql = new PhiberQueryWriter("select", [
                 "table" => $this->table,
                 "fields" => $fields,
                 "where" => isset(self::$infosMergeds['where']) ?
@@ -242,8 +244,9 @@ class PhiberPersistence extends PhiberPersistenceFactory
             ]);
         }
 
+        $result = [];
         if ($this->phiberConfig->verifyExecuteQueries()) {
-            $pdo = $this->getConnection()->prepare($sql);
+            $pdo = $this->getConnection()->prepare(self::$sql);
             if ($infos != null) {
                 for ($i = 0; $i < count($infos['conditions']); $i++) {
                     $pdo->bindValue(
@@ -262,10 +265,10 @@ class PhiberPersistence extends PhiberPersistenceFactory
                 }
             }
             if ($pdo->execute()) {
-                return $pdo->fetchAll((PDO::FETCH_ASSOC));
+                $result = $pdo->fetchAll((PDO::FETCH_ASSOC));
             }
         }
-        return $sql;
+        return $result;
     }
 
     /**
@@ -291,12 +294,12 @@ class PhiberPersistence extends PhiberPersistenceFactory
     }
 
     /**
-     * Função responsável por mostrar o array das informações adicionadas a partir da Restrictions
-     * @return array
+     * Função responsável por mostrar o string da SQL gerada a partir do objeto
+     * @return string
      */
     public function show()
     {
-        return self::$infosMergeds;
+        return self::$sql;
     }
 
 

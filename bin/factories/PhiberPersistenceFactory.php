@@ -26,45 +26,40 @@ abstract class PhiberPersistenceFactory
 
     /**
      * Faz a criação do objeto no banco
-     * @param $obj
      * @return mixed
      */
-    public abstract function create($obj);
+    public abstract function create();
 
     /**
      * Faz a alteração do objeto no banco
-     * @param $obj
      * @param $infos
      * @return mixed
      * @internal param $id
      */
-    public abstract function update($obj, $infos);
+    public abstract function update($infos);
 
     /**
      * Faz a exclusão do objeto no banco
-     * @param $obj
      * @param $infos
      * @return mixed
      */
-    public abstract function delete($obj, $infos);
+    public abstract function delete($infos);
 
     /**
      * Faz a contagem de quantos objetos está no banco
-     * @param $obj
      * @param $infos
      * @return mixed
      * @internal param array $condicoes
      * @internal param array $conjuncoes
      */
-    public abstract function rowCount($obj, $infos);
+    public abstract function rowCount($infos);
 
     /**
      * Faz a seleção dos objetos no banco
-     * @param $obj
      * @param $infos
      * @return mixed
      */
-    public abstract function select($obj, $infos);
+    public abstract function select($infos);
 
     /**
      * Usuário pode criar uma query a partir dessa função
