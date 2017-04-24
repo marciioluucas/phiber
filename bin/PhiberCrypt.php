@@ -4,6 +4,9 @@
  */
 
 namespace bin;
+use bin\interfaces\{
+    ICrypt
+};
 
 
 /**

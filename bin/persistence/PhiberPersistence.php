@@ -3,9 +3,13 @@
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
 
-namespace bin;
+namespace bin\persistence;
 
 
+use bin\interfaces\IPhiberPersistence;
+use bin\Link;
+use bin\queries\PhiberQueryWriter;
+use bin\queries\Restrictions;
 use PDO;
 use util\FuncoesReflections;
 use util\FuncoesString;
@@ -250,7 +254,7 @@ class PhiberPersistence implements IPhiberPersistence
      * Adiciona parâmetros da classe restriction nas informações para buildar o SQL.
      * @param $infos
      */
-    public function add($infos)
+    public static function add($infos)
     {
         array_push(self::$infos, $infos);
         self::mergeSqlInformation();

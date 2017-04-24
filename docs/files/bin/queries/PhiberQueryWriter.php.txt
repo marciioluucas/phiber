@@ -1,0 +1,259 @@
+<?php
+/**
+ * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
+ */
+
+namespace bin;
+
+use util\Internationalization;
+
+
+/**
+ * Classe responsável por escrever os SQLs
+ * @package bin
+ */
+class PhiberQueryWriter implements IPhiberQueryBuilder
+{
+
+    /**
+     * @param $infos
+     * @return mixed
+     * @throws PhiberException
+     * @internal param $object
+     */
+    public static function create($infos)
+    {
+        $tabela = $infos['table'];
+        $campos = $infos['fields'];
+        $camposV = $infos['values'];
+        try {
+            $camposNome = [];
+
+
+            for ($i = 0; $i < count($campos); $i++) {
+                if ($camposV[$i] != null) {
+                    $camposNome[$i] = $campos[$i];
+                }
+            }
+
+
+            $camposNome = array_values($camposNome);
+            $sqlInsert = "INSERT INTO $tabela (";
+            for ($i = 0; $i < count($camposNome); $i++) {
+                if ($i != count($camposNome) - 1) {
+                    $sqlInsert .= $camposNome[$i] . ", ";
+                } else {
+                    $sqlInsert .= $camposNome[$i] . ") VALUES (";
+                }
+            }
+
+            for ($j = 0; $j < count($camposNome); $j++) {
+                if ($j != count($camposNome) - 1) {
+                    $sqlInsert .= ":" . $camposNome[$j] . ", ";
+                } else {
+                    $sqlInsert .= ":" . $camposNome[$j] . ")";
+                }
+            }
+
+            return $sqlInsert;
+
+        } catch (PhiberException $e) {
+            throw new PhiberException(Internationalization::translate("query_processor_error"));
+        }
+    }
+
+    /**
+     * Faz a query de update de um registro no banco com os dados.
+     * @param $infos
+     * @return mixed
+     * @throws PhiberException
+     * @internal param $object
+     * @internal param $id
+     */
+    public static function update($infos)
+    {
+
+        $tabela = $infos['table'];
+        $conditions = isset($infos['conditions']) ? $infos['conditions'] : null;
+        $conjunctions = isset($infos['conjunctions']) ? $infos['conjunctions'] : null;
+        $campos = $infos['fields'];
+        $camposV = $infos['values'];
+        $whereCriteria = $infos['where'];
+
+        try {
+            $camposNome = [];
+            $camposValores = [];
+            for ($i = 0; $i < count($campos); $i++) {
+                if ($camposV[$i] != null || $camposV[$i] != "") {
+                    $camposNome[$i] = $campos[$i];
+                }
+            }
+            for ($i = 0; $i < count($camposV); $i++) {
+                if ($camposV[$i] != null || $camposV[$i] != "") {
+                    $camposValores[$i] = $camposV[$i];
+                }
+            }
+
+            $nomeCampos = [];
+            $camposNome = array_values($camposNome);
+            $sqlUpdate = "UPDATE $tabela SET ";
+
+            for ($i = 0; $i < count($camposNome); $i++) {
+                if ($i != count($camposNome) - 1) {
+                    $sqlUpdate .= $camposNome[$i] . " = :" . $camposNome[$i] . ", ";
+                } else {
+                    $sqlUpdate .= $camposNome[$i] . " = :" . $camposNome[$i];
+                }
+
+
+
+            }
+            if ($conditions != null && $whereCriteria == null) {
+                $conditionsComIndexInt = array_keys($conditions);
+                for ($i = 0; $i < count($conditions); $i++) {
+                    $nomeCampos[$i] = $conditionsComIndexInt[$i];
+                }
+                $valoresCampos = [];
+                for ($j = 0; $j < count($conditions); $j++) {
+                    $valoresCampos[$j] = $conditions[$nomeCampos[$j]];
+                }
+
+                $sqlUpdate .= " WHERE ";
+
+                for ($x = 0; $x < count($nomeCampos); $x++) {
+                    if ($x != count($nomeCampos) - 1) {
+                        $sqlUpdate .= $nomeCampos[$x] . " = :condition_$nomeCampos[$x] $conjunctions[$x] ";
+                    } else {
+                        $sqlUpdate .= $nomeCampos[$x] . " = :condition_$nomeCampos[$x]";
+                    }
+                }
+            } else if ($conditions == null && $whereCriteria != null) {
+                $sqlUpdate .= " WHERE " . $whereCriteria;
+            }
+            $sqlUpdate .= ";";
+        } catch (PhiberException $e) {
+            throw new PhiberException(Internationalization::translate("query_processor_error"));
+        }
+        return $sqlUpdate;
+    }
+
+
+    /**
+     *  Faz a query de delete de um registro no banco com os dados.
+     * @param $infos
+     * @return bool|string
+     * @throws PhiberException
+     * @internal param $object
+     * @internal param array $conditions
+     * @internal param array $conjunctions
+     */
+    public static function delete($infos)
+    {
+        $tabela = $infos['table'];
+        $conditions = isset($infos['conditions']) ? $infos['conditions'] : null;
+        $conjunctions = isset($infos['conjunctions']) ? $infos['conjunctions'] : null;
+
+        $whereCriteria = $infos['where'];
+
+
+        try {
+            $camposNome = [];
+            $camposValores = [];
+
+            $sql = "DELETE FROM $tabela ";
+            if ($conditions != null && $whereCriteria == null) {
+                $conditionsComIndexInt = array_keys($conditions);
+                for ($i = 0; $i < count($conditions); $i++) {
+                    $camposNome[$i] = $conditionsComIndexInt[$i];
+                }
+
+                for ($j = 0; $j < count($conditions); $j++) {
+                    $camposValores[$j] = $conditions[$camposNome[$j]];
+                }
+
+                $sql .= "WHERE ";
+
+                for ($x = 0; $x < count($camposNome); $x++) {
+                    if ($x != count($camposNome) - 1) {
+                        $sql .= $camposNome[$x] . " = :condition_$camposNome[$x] $conjunctions[$x] ";
+                    } else {
+                        $sql .= $camposNome[$x] . " = :condition_$camposNome[$x]";
+                    }
+                }
+            } else if ($conditions == null && $whereCriteria != null) {
+                $sql .= " WHERE " . $whereCriteria . " ";
+            }
+            return $sql . ";";
+        } catch (PhiberException $e) {
+            throw new PhiberException(Internationalization::translate("query_processor_error"));
+        }
+    }
+
+
+    /**
+     *
+     *  Faz a query de select de um registro no banco com os dados.
+     *
+     * @param $infos
+     * @return array|bool|mixed
+     * @internal param $object
+     * @internal param $conditions
+     * @internal param bool $onlyFirst
+     */
+    public static function select($infos)
+    {
+
+        $tabela = $infos['table'];
+        $campos = isset($infos['fields']) ? $infos['fields'] : ["*"];
+        $conditions = isset($infos['conditions']) ? $infos['conditions'] : null;
+        $conjunctions = isset($infos['conjunctions']) ? $infos['conjunctions'] : null;
+
+        /* VARIAVEIS DA CRITERIA - COMEÇO*/
+        $whereCriteria = $infos['where'];
+        /* VARIAVEIS DA CRITERIA - FIM */
+
+        /* LÓGICA - COMEÇO*/
+        $camposNome = [];
+        $camposValores = [];
+
+
+        $campos = gettype($campos) == "array" ? implode(", ", $campos) : $campos;
+
+        $sql = "SELECT " . $campos . " FROM $tabela ";
+
+
+        if ($conditions != null && $whereCriteria == null) {
+            $conditionsComIndexInt = array_keys($conditions);
+
+            for ($i = 0; $i < count($conditions); $i++) {
+                $camposNome[$i] = $conditionsComIndexInt[$i];
+            }
+
+
+            for ($j = 0; $j < count($conditions); $j++) {
+                if ($conditions[$camposNome[$j]] != "") {
+                    $camposValores[$j] = $conditions[$camposNome[$j]];
+                }
+            }
+            $sql .= "WHERE ";
+            for ($x = 0; $x < count($infos['conditions']); $x++) {
+
+                if ($x != count($infos['conditions']) - 1) {
+                    $sql .= $infos['conditions'][$x][0] . " " . $infos['conditions'][$x][1] . " :condition_" . $infos['conditions'][$x][0];
+                    if ($conjunctions != null) {
+                        $sql .= " " . $conjunctions[$x] . " ";
+                    } else {
+                        $sql .= " and ";
+                    }
+                } else {
+                    $sql .= $infos['conditions'][$x][0] . " " . $infos['conditions'][$x][1] . " :condition_" . $infos['conditions'][$x][0];
+                }
+            }
+        } else if ($conditions == null && $whereCriteria != null) {
+            $sql .= " WHERE " . $whereCriteria . " ";
+        }
+        return $sql . ";";
+
+    }
+}
+

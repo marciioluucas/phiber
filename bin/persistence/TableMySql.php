@@ -3,9 +3,10 @@
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
 
-namespace bin;
+namespace bin\persistence;
 
 
+use bin\factories\TableFactory;
 use util\Annotations;
 use util\FuncoesReflections;
 use util\FuncoesString;

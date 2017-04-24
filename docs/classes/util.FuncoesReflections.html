@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta charset="utf-8"/>
+    <title>    API Documentation &raquo; \util\FuncoesReflections
+</title>
+    <meta name="author" content=""/>
+    <meta name="description" content=""/>
+
+            <link href="../css/template.css" rel="stylesheet" media="all"/>
+    
+            <!--[if lt IE 9]>
+        <script src="https://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+        <![endif]-->
+        <script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script>
+        <script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script>
+        <script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script>
+        <script src="../js/bootstrap.js" type="text/javascript"></script>
+        <script src="../js/template.js" type="text/javascript"></script>
+        <script src="../js/prettify/prettify.min.js" type="text/javascript"></script>
+    
+            <link rel="shortcut icon" href="../img/favicon.ico"/>
+        <link rel="apple-touch-icon" href="../img/apple-touch-icon.png"/>
+        <link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png"/>
+        <link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png"/>
+    </head>
+<body>
+
+        <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span> <span class="icon-bar"></span>
+                    <span class="icon-bar"></span> </a>
+                <a class="brand" href="../index.html">API Documentation</a>
+
+                <div class="nav-collapse">
+                    <ul class="nav">
+                        <li class="dropdown">
+                            <a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                API Documentation <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                                                    <li><a>Namespaces</a></li>
+                                                                        <li><a href="../namespaces/bin.html">bin</a></li>
+                                                                        <li><a href="../namespaces/util.html">util</a></li>
+                                                                        <li><a href="../namespaces/phiber.html">phiber</a></li>
+                                                                                                                                </ul>
+                        </li>
+                        <li class="dropdown" id="charts-menu">
+                            <a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                Charts <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="../graph_class.html">
+                                        <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown" id="reports-menu">
+                            <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                Reports <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="../errors.html">
+                                        <i class="icon-list-alt"></i>&#160;Errors
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="../markers.html">
+                                        <i class="icon-list-alt"></i>&#160;Markers
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="../deprecated.html">
+                                        <i class="icon-list-alt"></i>&#160;Deprecated
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="go_to_top">
+            <a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>
+        </div>
+    </div>
+    
+    <div id="___" class="container">
+        <noscript>
+            <div class="alert alert-warning">
+                Javascript is disabled; several features are only available if Javascript is enabled.
+            </div>
+        </noscript>
+
+        
+            <style>
+        .deprecated h2 {
+            text-decoration: line-through;
+        }
+    </style>
+    <div class="row">
+        <div class="span4">
+                    <div class="btn-group view pull-right" data-toggle="buttons-radio">
+        <button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button>
+        <button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+    </div>
+    <div class="btn-group visibility" data-toggle="buttons-checkbox">
+        <button class="btn public active" title="Show public elements">Public</button>
+        <button class="btn protected" title="Show protected elements">Protected</button>
+        <button class="btn private" title="Show private elements">Private</button>
+        <button class="btn inherited active" title="Show inherited elements">Inherited</button>
+    </div>
+
+        <ul class="side-nav nav nav-list">
+        <li class="nav-header">
+            <i class="icon-custom icon-method"></i> Methods
+            <ul>
+                                                                                                    <li class="method public">
+        <a href="#method___construct" title="__construct :: Construtor da classe FuncoesReflections">
+            <span class="description">Construtor da classe FuncoesReflections</span><pre>__construct</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_injetaValorAtributo" title="injetaValorAtributo :: Injeta valores nos atributos do objeto em questão.">
+            <span class="description">Injeta valores nos atributos do objeto em questão.</span><pre>injetaValorAtributo</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_pegaAtributosDoObjeto" title="pegaAtributosDoObjeto :: Função responsável por pegar os nomes dos atributos do objeto, retornando um array dos mesmos.">
+            <span class="description">Função responsável por pegar os nomes dos atributos do objeto, retornando um array dos mesmos.</span><pre>pegaAtributosDoObjeto</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_pegaNomeAtributoEspecifico" title="pegaNomeAtributoEspecifico :: Função responsável por pegar o nome de um atributo espefífico.">
+            <span class="description">Função responsável por pegar o nome de um atributo espefífico.</span><pre>pegaNomeAtributoEspecifico</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_pegaNomeClasseObjeto" title="pegaNomeClasseObjeto :: Função responsável por pegar o nome da classe do objeto em questão.">
+            <span class="description">Função responsável por pegar o nome da classe do objeto em questão.</span><pre>pegaNomeClasseObjeto</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_pegaNomesMetodosClasse" title="pegaNomesMetodosClasse :: Função responsável por pegar o nome dos métodos do objeto retornando um array dos mesmos">
+            <span class="description">Função responsável por pegar o nome dos métodos do objeto retornando um array dos mesmos</span><pre>pegaNomesMetodosClasse</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_pegaValorAtributoEspecifico" title="pegaValorAtributoEspecifico :: Função responsável por pegar o valor de um atributo específico do objeto.">
+            <span class="description">Função responsável por pegar o valor de um atributo específico do objeto.</span><pre>pegaValorAtributoEspecifico</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_pegaValoresAtributoDoObjeto" title="pegaValoresAtributoDoObjeto :: Função responsável por retornar um array de todos os valores dos atributos de um objeto">
+            <span class="description">Função responsável por retornar um array de todos os valores dos atributos de um objeto</span><pre>pegaValoresAtributoDoObjeto</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_retornaClassesMaes" title="retornaClassesMaes :: Retorna o nome das classes mães, se caso o objeto em questão não ter uma classe mãe,
+a função retornará false.">
+            <span class="description">Retorna o nome das classes mães, se caso o objeto em questão não ter uma classe mãe,
+a função retornará false.</span><pre>retornaClassesMaes</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_retornaComentariosAtributos" title="retornaComentariosAtributos :: Função responsável por retornar os comentários dos atributos do objeto em questão.">
+            <span class="description">Função responsável por retornar os comentários dos atributos do objeto em questão.</span><pre>retornaComentariosAtributos</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_retornaNomeAtributosClassesMaes" title="retornaNomeAtributosClassesMaes :: Função responsável por retornar um array com todos os atributos das classes da hierarquia">
+            <span class="description">Função responsável por retornar um array com todos os atributos das classes da hierarquia</span><pre>retornaNomeAtributosClassesMaes</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_retornaValoresAtributosClassesMaes" title="retornaValoresAtributosClassesMaes :: Função responsável por retornar os valores dos atributos das classes mães,
+se as mesmas existirem, se caso a classe em questão não for uma classe filha, a função retornará
+false.">
+            <span class="description">Função responsável por retornar os valores dos atributos das classes mães,
+se as mesmas existirem, se caso a classe em questão não for uma classe filha, a função retornará
+false.</span><pre>retornaValoresAtributosClassesMaes</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_verificaSeEClasseFilha" title="verificaSeEClasseFilha :: Função responsável por verifidar se a classe é filha de alguma outra classe,
+se caso não for. A função retornará falso.">
+            <span class="description">Função responsável por verifidar se a classe é filha de alguma outra classe,
+se caso não for. A função retornará falso.</span><pre>verificaSeEClasseFilha</pre>
+        </a>
+    </li>
+
+                                                </ul>
+        </li>
+        <li class="nav-header protected">» Protected
+            <ul>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </ul>
+        </li>
+        <li class="nav-header private">» Private
+            <ul>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </ul>
+        </li>
+        <li class="nav-header">
+            <i class="icon-custom icon-constant"></i> Constants
+            <ul>
+                            </ul>
+        </li>
+    </ul>
+
+
+        </div>
+
+        <div class="span8">
+            <div class="element class">
+                <h1>FuncoesReflections</h1>
+                <small style="display: block; text-align: right">
+                                                        </small>
+                <p class="short_description">Classe responsável por Fazer a reflexao das classes dos objetos.</p>
+                <div class="details">
+                    <div class="long_description">
+                        
+                    </div>
+                    <table class="table table-bordered">
+                                                                                    <tr>
+                                    <th>
+                                        package
+                                                                            </th>
+                                    <td>
+                                                                                    
+                                                                                <p>util</p>
+                                    </td>
+                                </tr>
+                                                                                                                                                                                </table>
+
+                    <h3><i class="icon-custom icon-method"></i> Methods</h3>
+                                                                <a id="method___construct"></a>
+                        <div class="element clickable method public  method___construct" data-toggle="collapse" data-target=".method___construct .collapse">
+                            <h2>Construtor da classe FuncoesReflections</h2>
+                            <pre>__construct() </pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                                                    </table>
+
+                                    
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_injetaValorAtributo"></a>
+                        <div class="element clickable method public  method_injetaValorAtributo" data-toggle="collapse" data-target=".method_injetaValorAtributo .collapse">
+                            <h2>Injeta valores nos atributos do objeto em questão.</h2>
+                            <pre>injetaValorAtributo(\Object $obj, array $atributos = array(), array $valor = array()) </pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$obj</h4>
+                                                <code>\Object</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$atributos</h4>
+                                                <code>array</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$valor</h4>
+                                                <code>array</code><p></p>
+                                            </div>
+                                                                            
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_pegaAtributosDoObjeto"></a>
+                        <div class="element clickable method public  method_pegaAtributosDoObjeto" data-toggle="collapse" data-target=".method_pegaAtributosDoObjeto .collapse">
+                            <h2>Função responsável por pegar os nomes dos atributos do objeto, retornando um array dos mesmos.</h2>
+                            <pre>pegaAtributosDoObjeto( $obj) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$obj</h4>
+                                                <code></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_pegaNomeAtributoEspecifico"></a>
+                        <div class="element clickable method public  method_pegaNomeAtributoEspecifico" data-toggle="collapse" data-target=".method_pegaNomeAtributoEspecifico .collapse">
+                            <h2>Função responsável por pegar o nome de um atributo espefífico.</h2>
+                            <pre>pegaNomeAtributoEspecifico( $obj,  $nomeAtributo) : boolean|string</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"><p>Caso o atributo pesquisado não exista, a função retornará falso.</p></div>
+
+                                    <table class="table">
+                                                                                                                            <tr>
+                                                <th>Throws</th>
+                                                <td>
+                                                    <dl>
+                                                                                                            <dt>\Exception</dt>
+                                                        <dd></dd>
+                                                                                                                                                            </dl>
+                                                </td>
+                                            </tr>
+                                                                            </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$obj</h4>
+                                                <code></code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$nomeAtributo</h4>
+                                                <code></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>boolean|string</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_pegaNomeClasseObjeto"></a>
+                        <div class="element clickable method public  method_pegaNomeClasseObjeto" data-toggle="collapse" data-target=".method_pegaNomeClasseObjeto .collapse">
+                            <h2>Função responsável por pegar o nome da classe do objeto em questão.</h2>
+                            <pre>pegaNomeClasseObjeto( $obj) : string</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$obj</h4>
+                                                <code></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>string</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_pegaNomesMetodosClasse"></a>
+                        <div class="element clickable method public  method_pegaNomesMetodosClasse" data-toggle="collapse" data-target=".method_pegaNomesMetodosClasse .collapse">
+                            <h2>Função responsável por pegar o nome dos métodos do objeto retornando um array dos mesmos</h2>
+                            <pre>pegaNomesMetodosClasse( $obj) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$obj</h4>
+                                                <code></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_pegaValorAtributoEspecifico"></a>
+                        <div class="element clickable method public  method_pegaValorAtributoEspecifico" data-toggle="collapse" data-target=".method_pegaValorAtributoEspecifico .collapse">
+                            <h2>Função responsável por pegar o valor de um atributo específico do objeto.</h2>
+                            <pre>pegaValorAtributoEspecifico( $obj,  $nomeAtributo) : mixed</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$obj</h4>
+                                                <code></code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$nomeAtributo</h4>
+                                                <code></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>mixed</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_pegaValoresAtributoDoObjeto"></a>
+                        <div class="element clickable method public  method_pegaValoresAtributoDoObjeto" data-toggle="collapse" data-target=".method_pegaValoresAtributoDoObjeto .collapse">
+                            <h2>Função responsável por retornar um array de todos os valores dos atributos de um objeto</h2>
+                            <pre>pegaValoresAtributoDoObjeto( $obj) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$obj</h4>
+                                                <code></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_retornaClassesMaes"></a>
+                        <div class="element clickable method public  method_retornaClassesMaes" data-toggle="collapse" data-target=".method_retornaClassesMaes .collapse">
+                            <h2>Retorna o nome das classes mães, se caso o objeto em questão não ter uma classe mãe,
+a função retornará false.</h2>
+                            <pre>retornaClassesMaes( $obj) : array|boolean</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$obj</h4>
+                                                <code></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array|boolean</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_retornaComentariosAtributos"></a>
+                        <div class="element clickable method public  method_retornaComentariosAtributos" data-toggle="collapse" data-target=".method_retornaComentariosAtributos .collapse">
+                            <h2>Função responsável por retornar os comentários dos atributos do objeto em questão.</h2>
+                            <pre>retornaComentariosAtributos( $obj) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$obj</h4>
+                                                <code></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_retornaNomeAtributosClassesMaes"></a>
+                        <div class="element clickable method public  method_retornaNomeAtributosClassesMaes" data-toggle="collapse" data-target=".method_retornaNomeAtributosClassesMaes .collapse">
+                            <h2>Função responsável por retornar um array com todos os atributos das classes da hierarquia</h2>
+                            <pre>retornaNomeAtributosClassesMaes( $obj) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                    <tr>
+                                                <th>
+                                                    todos
+                                                </th>
+                                                <td>
+                                                                                                                                                                        
+                                                                                                                                                                        <p>Fazer funcionar isso aqui</p>
+                                                                                                    </td>
+                                            </tr>
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$obj</h4>
+                                                <code></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_retornaValoresAtributosClassesMaes"></a>
+                        <div class="element clickable method public  method_retornaValoresAtributosClassesMaes" data-toggle="collapse" data-target=".method_retornaValoresAtributosClassesMaes .collapse">
+                            <h2>Função responsável por retornar os valores dos atributos das classes mães,
+se as mesmas existirem, se caso a classe em questão não for uma classe filha, a função retornará
+false.</h2>
+                            <pre>retornaValoresAtributosClassesMaes( $obj) : boolean|array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$obj</h4>
+                                                <code></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>boolean|array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_verificaSeEClasseFilha"></a>
+                        <div class="element clickable method public  method_verificaSeEClasseFilha" data-toggle="collapse" data-target=".method_verificaSeEClasseFilha .collapse">
+                            <h2>Função responsável por verifidar se a classe é filha de alguma outra classe,
+se caso não for. A função retornará falso.</h2>
+                            <pre>verificaSeEClasseFilha(\Object $obj) : boolean</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$obj</h4>
+                                                <code>\Object</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>boolean</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                    
+                    
+                                                                <h3><i class="icon-custom icon-property"></i> Properties</h3>
+                                                    <a id="property_p"> </a>
+                            <div class="element clickable property  private property_p" data-toggle="collapse" data-target=".property_p .collapse">
+                                <h2>p</h2>
+                                <pre>p : array</pre>
+                                <div class="labels">
+                                                                        <span class="label">static</span>                                </div>
+                                <div class="row collapse">
+                                    <div class="detail-description">
+                                        <div class="long_description"></div>
+
+                                        <table class="table">
+                                                                                            <tr>
+                                                    <th>
+                                                        var
+                                                    </th>
+                                                    <td>
+                                                                                                                    
+                                                                                                            </td>
+                                                </tr>
+                                                                                    </table>
+
+                                                                                    <h3>Type(s)</h3>
+                                            <code>array</code>
+                                                                            </div>
+                                </div>
+                            </div>
+                                                            </div>
+            </div>
+            <a id="\util\FuncoesReflections"></a>
+            <ul class="breadcrumb">
+                <li><a href="../index.html"><i class="icon-custom icon-class"></i></a></li>
+                    
+    
+    <li><span class="divider">\</span><a href="../namespaces/util.html">util</a></li>
+
+                <li class="active"><span class="divider">\</span><a href="../classes/util.FuncoesReflections.html">FuncoesReflections</a></li>
+            </ul>
+        </div>
+    </div>
+
+    </div>
+
+        <footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by
+            <a href="http://glyphicons.com/">Glyphicons</a>.<br/>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and<br/>
+            generated on Thu, 20 Apr 2017 18:04:23 +0200.<br/>
+    </footer>
+    </body>
+</html>

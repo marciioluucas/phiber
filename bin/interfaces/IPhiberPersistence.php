@@ -3,7 +3,7 @@
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
 
-namespace bin;
+namespace bin\interfaces;
 
 /**
  * Interface IPhiberPersistence

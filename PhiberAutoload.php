@@ -1,5 +1,5 @@
 <?php
-namespace phiber;
+
 /**
  * Created by PhpStorm.
  * User: marci

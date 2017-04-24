@@ -182,10 +182,10 @@ class Usuario
 //]));
 
 require '../Phiber.php';
-include_once '../PhiberAutoload.php';
+include_once '../vendor/autoload.php';
 $u = new Usuario();
-use bin\Restrictions;
-use phiber\Phiber;
+use bin\queries\Restrictions;
+use Phiber;
 $criteria = Phiber::openPersist();
 //$rNome = Restrictions::biggerThen("id", 10);
 //$rEmail = Restrictions::eq("email", "marciioluucas@gmail.com");

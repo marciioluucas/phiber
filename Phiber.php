@@ -5,8 +5,8 @@
  * Hora: 19:07
  */
 
-namespace phiber;
-use bin\PhiberPersistence;
+use bin\persistence\PhiberPersistence;
+include_once 'PhiberAutoload.php';
 
 /**
  *Constante que define a base de onde está localizado o projeto
@@ -22,9 +22,6 @@ define("BASE_DIR",str_replace('\\', '/', dirname(__FILE__)));
  */
 class Phiber
 {
-
-
-
 
     /**
      * Método responsável por retornar uma instancia da classe PhiberPersistence,

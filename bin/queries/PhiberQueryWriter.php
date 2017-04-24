@@ -3,9 +3,11 @@
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
 
-namespace bin;
+namespace bin\queries;
 
+use bin\exceptions\PhiberException;
 use util\Internationalization;
+use bin\interfaces\IPhiberQueryBuilder;
 
 
 /**

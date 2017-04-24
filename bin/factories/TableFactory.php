@@ -3,8 +3,9 @@
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
 
-namespace bin;
+namespace bin\factories;
 
+use bin\Link;
 
 /**
  * Classe responsável por ser a fábrica de tabelas

@@ -3,7 +3,7 @@
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
 
-namespace bin;
+namespace bin\logger;
 use util\Internationalization;
 use util\JsonReader;
 
@@ -26,7 +26,6 @@ class PhiberLogger
     {
         if (JsonReader::read(BASE_DIR.'/phiber_config.json')->phiber->log == 1 ? true : false) {
             $date = date('Y-m-d H:i:s');
-            $color = '';
             switch ($level) {
                 case 'info':
                     $levelStr = strtoupper(Internationalization::translate("log_info"));

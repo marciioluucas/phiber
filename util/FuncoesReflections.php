@@ -121,7 +121,8 @@ class FuncoesReflections
      */
     public static function pegaNomeClasseObjeto($obj)
     {
-        return get_class($obj);
+        $reflectionClass = new ReflectionClass($obj);
+        return $reflectionClass->getShortName();
     }
 
     /**
