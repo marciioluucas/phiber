@@ -228,7 +228,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
                 "conditions" => isset($infos['conditions']) ? $infos['conditions'] : null,
                 "conjunctions" => isset($infos['conjunctions']) ? $infos['conjunctions'] : null
             ]);
-        } else if($infos == null) {
+        } else if ($infos == null) {
             $fields = isset(
                 self::$infosMergeds['fields']) ?
                 implode(", ", self::$infosMergeds['fields']) :
@@ -254,7 +254,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
                         $infos['conditions'][$i][2]
                     );
                 }
-            } else if($infos == null) {
+            } else if ($infos == null) {
                 if (isset(self::$infosMergeds['fields_and_values'])) {
                     for ($i = 0; $i < count(self::$infosMergeds['fields_and_values']); $i++) {
                         $pdo->bindValue(
@@ -264,9 +264,9 @@ class PhiberPersistence extends PhiberPersistenceFactory
                     }
                 }
             }
-            if ($pdo->execute()) {
-                $result = $pdo->fetchAll((PDO::FETCH_ASSOC));
-            }
+            $pdo->execute();
+            $result = $pdo->fetchAll((PDO::FETCH_ASSOC));
+
         }
         return $result;
     }
