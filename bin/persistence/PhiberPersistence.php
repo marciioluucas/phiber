@@ -165,7 +165,6 @@ class PhiberPersistence extends PhiberPersistenceFactory
             ]);
         } else if ($infos == null) {
 
-
             self::$sql = new PhiberQueryWriter("delete", [
                 "table" => $this->table,
                 "where" => self::$infosMergeds['where'],
@@ -304,7 +303,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
     /**
      *Função utilizada para mergir informações novas com as antigas da Restrictions
      */
-    private function mergeSqlInformation()
+    private static function mergeSqlInformation()
     {
         array_push(self::$infos, Restrictions::getFieldsAndValues());
         for ($i = 0; $i < count(self::$infos) - 1; $i++) {

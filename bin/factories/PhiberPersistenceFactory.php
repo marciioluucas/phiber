@@ -61,10 +61,11 @@ abstract class PhiberPersistenceFactory
      */
     public abstract function select($infos);
 
-    /**
-     * Usuário pode criar uma query a partir dessa função
-     * @param $query
-     * @return mixed
-     */
-    public abstract function createQuery($query);
+//
+//    /**
+//     * Usuário pode criar uma query a partir dessa função
+//     * @param $query
+//     * @return mixed
+//     */
+//    public abstract function createQuery($query);
 }
