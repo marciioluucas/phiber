@@ -1,7 +1,12 @@
+[![GitHub issues](https://img.shields.io/github/issues/marciioluucas/phiber.svg)](https://github.com/marciioluucas/phiber/issues)
+[![GitHub forks](https://img.shields.io/github/forks/marciioluucas/phiber.svg)](https://github.com/marciioluucas/phiber/network)
+[![GitHub stars](https://img.shields.io/github/stars/marciioluucas/phiber.svg)](https://github.com/marciioluucas/phiber/stargazers)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/marciioluucas/phiber/master/license)
+[![Twitter](https://img.shields.io/twitter/url/https/github.com/marciioluucas/phiber.svg?style=social)](https://twitter.com/intent/tweet?text=Wow:&url=%5Bobject%20Object%5D)
+
 # Phiber - ALPHA version 0.1
 
 [![Imgur](http://i.imgur.com/Ad02NS2.png)](https://nodesource.com/products/nsolid)
-[![Build Status](https://travis-ci.org/marciioluucas/phiber.svg?branch=master)](https://travis-ci.org/marciioluucas/phiber)
 
 Phiber is a simples ORM framework that helps you code your applications more fast.
 
@@ -20,7 +25,8 @@ You can also:
   - Activate console logs.
   
 This library has been made by a student of Technology in systems to Internet of Morrinhos - GO, Brazil.
-https://www.ifgoiano.edu.br/morrinhos
+
+[![Twitter](https://img.shields.io/badge/IF-Goiano-brightgreen.svg)](https://www.ifgoiano.edu.br/morrinhos)
 
 Criador [Márcio Lucas]
 
