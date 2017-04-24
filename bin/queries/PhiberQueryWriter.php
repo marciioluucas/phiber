@@ -68,14 +68,14 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
 
 
             $camposNome = array_values($camposNome);
-            $this->sql = "INSERT INTO $tabela (";
-            for ($i = 0; $i < count($camposNome); $i++) {
-                if ($i != count($camposNome) - 1) {
-                    $this->sql .= $camposNome[$i] . ", ";
-                } else {
-                    $this->sql .= $camposNome[$i] . ") VALUES (";
-                }
-            }
+            $this->sql = "INSERT INTO $tabela (".implode(", ",$camposNome). ") VALUES (";
+//            for ($i = 0; $i < count($camposNome); $i++) {
+//                if ($i != count($camposNome) - 1) {
+//                    $this->sql .= $camposNome[$i] . ", ";
+//                } else {
+//                    $this->sql .= $camposNome[$i] . ") VALUES (";
+//                }
+//            }
 
             for ($j = 0; $j < count($camposNome); $j++) {
                 if ($j != count($camposNome) - 1) {
@@ -84,7 +84,6 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
                     $this->sql .= ":" . $camposNome[$j] . ")";
                 }
             }
-
             return $this->sql;
 
         } catch (PhiberException $e) {

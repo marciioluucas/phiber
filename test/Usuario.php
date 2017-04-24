@@ -195,8 +195,8 @@ $criteria = Phiber::openPersist();
 //
 //$usuarioAndSenha = Restrictions:: or ($rUsuario, $rSenha);
 
-$u->setNome("Jonas do amor2");
-$u->setEmail("amor@jonas.com2");
+$u->setNome("Jonas do amor3");
+$u->setEmail("amor@jonas.com3");
 $criteria->create($u);
 print_r($criteria->select($u));
 
