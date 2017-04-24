@@ -80,7 +80,7 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
             for ($j = 0; $j < count($camposNome); $j++) {
                 if ($j != count($camposNome) - 1) {
                     $this->sql .= ":" . $camposNome[$j] . ", ";
-                } else {
+                } else if($j == count($camposNome) - 1) {
                     $this->sql .= ":" . $camposNome[$j] . ")";
                 }
             }
