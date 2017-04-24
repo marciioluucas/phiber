@@ -116,7 +116,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
      * @internal param array $conditions
      * @internal param array $conjunctions
      */
-    public function update($obj, $info = null)
+    public function update($info = null)
     {
 
         $conditions = self::$infosMergeds['fields_and_values'];
@@ -155,7 +155,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
      * @param null $infos
      * @return array|bool|mixed|string
      */
-    public function delete($obj, $infos = null)
+    public function delete($infos = null)
     {
         if ($infos != null) {
             self::$sql = new PhiberQueryWriter("select", [
@@ -269,15 +269,15 @@ class PhiberPersistence extends PhiberPersistenceFactory
         return $result;
     }
 
-    /**
-     * Caso queira criar uma query.
-     * @param String $query
-     * @return mixed|void
-     */
-    public function createQuery($query)
-    {
-        // TODO: Implement createQuery() method.
-    }
+//    /**
+//     * Caso queira criar uma query.
+//     * @param String $query
+//     * @return mixed|void
+//     */
+//    public function createQuery($query)
+//    {
+//        // TODO: Implement createQuery() method.
+//    }
 
 
     /**
