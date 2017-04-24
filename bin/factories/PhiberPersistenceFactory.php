@@ -43,7 +43,7 @@ abstract class PhiberPersistenceFactory
      * @param $infos
      * @return mixed
      */
-    public abstract function delete($infos);
+    public abstract function delete();
 
     /**
      * Faz a contagem de quantos objetos está no banco
@@ -52,14 +52,14 @@ abstract class PhiberPersistenceFactory
      * @internal param array $condicoes
      * @internal param array $conjuncoes
      */
-    public abstract function rowCount($infos);
+    public abstract function rowCount();
 
     /**
      * Faz a seleção dos objetos no banco
      * @param $infos
      * @return mixed
      */
-    public abstract function select($infos);
+    public abstract function select();
 
 //
 //    /**

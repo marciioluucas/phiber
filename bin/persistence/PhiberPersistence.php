@@ -171,7 +171,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
      * @param null $infos
      * @return array|bool|mixed|string
      */
-    public function delete($infos = null)
+    public function delete()
     {
 //        if ($infos != null) {
 //            $this->sql = new PhiberQueryWriter("select", [
@@ -222,7 +222,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
      * @internal param array $condicoes
      * @internal param array $conjuncoes
      */
-    public function rowCount($infos = null)
+    public function rowCount()
     {
         return count($this->select($infos));
     }
@@ -232,7 +232,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
      * @param null $infos
      * @return array|bool|mixed
      */
-    public function select($infos = null)
+    public function select()
     {
 //        if ($infos != null) {
 //            $this->sql = new PhiberQueryWriter("select", [
