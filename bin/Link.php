@@ -32,7 +32,8 @@ class Link
     {
         try {
             if ($this->instancia == null) {
-                $json = JsonReader::read(BASE_DIR . "/phiber_config.json");
+                $json = new JsonReader(BASE_DIR . "/phiber_config.json");
+                $json= $json->read();
                 try {
                     $this->instancia = new PDO(
                         $json->phiber->link->url,

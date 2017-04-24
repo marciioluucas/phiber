@@ -21,6 +21,29 @@ use util\JsonReader;
  */
 class PhiberPersistence extends PhiberPersistenceFactory
 {
+
+    /**
+     * Variável da configuração do Phiber
+     * @var JsonReader
+     */
+    private $phiberConfig;
+    /**
+     * Variável da tabela do objeto trabalhado
+     * @var string
+     */
+    private $table;
+    /**
+     * Campos/colunas do objeto trabalhado
+     * @var array
+     */
+    private $fields;
+    /**
+     * Valores/colunas dos campos
+     * @var array
+     */
+    private $fieldsValues;
+
+
     /**
      * Informações para a criação da SQL.
      * @var array
@@ -35,6 +58,21 @@ class PhiberPersistence extends PhiberPersistenceFactory
 
 
     /**
+     * PhiberPersistence constructor.
+     * @param $obj
+     */
+    public function __construct($obj)
+    {
+
+        TableMysql::sync($obj);
+        $this->phiberConfig = new JsonReader(BASE_DIR . "/phiber_config.json");
+        $this->table = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
+        $this->fields = FuncoesReflections::pegaAtributosDoObjeto($obj);
+        $this->fieldsValues = FuncoesReflections::pegaValoresAtributoDoObjeto($obj);
+    }
+
+
+    /**
      * Faz a criação do objeto especificado no banco de dados, caso a opção
      * execute_queries na configuração esteja habilitada.
      * @param <T> $obj
@@ -42,21 +80,19 @@ class PhiberPersistence extends PhiberPersistenceFactory
      */
     public function create($obj)
     {
-        TableMysql::sync($obj);
-        $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
-        $campos = FuncoesReflections::pegaAtributosDoObjeto($obj);
-        $camposV = FuncoesReflections::pegaValoresAtributoDoObjeto($obj);
 
         $sql = new PhiberQueryWriter("create", [
-            "table" => $tabela,
-            "fields" => $campos,
-            "values" => $camposV
+            "table" => $this->table,
+            "fields" => $this->fields,
+            "values" => $this->fieldsValues
         ]);
-        if (JsonReader::read(BASE_DIR . "/phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
+
+        if ($this->verifyConfigs()) {
             $pdo = $this->getConnection()->prepare($sql);
-            for ($i = 1; $i < count($campos); $i++) {
-                if ($camposV[$i] != null) {
-                    $pdo->bindValue($campos[$i], $camposV[$i]);
+
+            for ($i = 1; $i < count($this->fields); $i++) {
+                if ($this->fieldsValues[$i] != null) {
+                    $pdo->bindValue($this->fields[$i], $this->fieldsValues[$i]);
                 }
             }
             if ($pdo->execute()) {
@@ -79,7 +115,6 @@ class PhiberPersistence extends PhiberPersistenceFactory
      */
     public function update($obj, $info = null)
     {
-        TableMysql::sync($obj);
         $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
         $campos = FuncoesReflections::pegaAtributosDoObjeto($obj);
         $camposV = FuncoesReflections::pegaValoresAtributoDoObjeto($obj);
@@ -92,7 +127,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
             "where" => self::$infosMergeds['where'],
 
         ]);
-        if (JsonReader::read(BASE_DIR . "/phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
+        if ($this->verifyConfigs()) {
             $pdo = $this->getConnection()->prepare($sql);
             for ($i = 1; $i < count($campos); $i++) {
                 if ($camposV[$i] != null) {
@@ -137,7 +172,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
 
             ]);
         }
-        if (JsonReader::read(BASE_DIR . "/phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
+        if ($this->verifyConfigs()) {
             $pdo = $this->getConnection()->prepare($sql);
             if ($infos != null) {
                 for ($i = 0; $i < count($infos['conditions']); $i++) {
@@ -183,11 +218,9 @@ class PhiberPersistence extends PhiberPersistenceFactory
      */
     public function select($obj, $infos = null)
     {
-        TableMysql::sync($obj);
-        $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
         if ($infos != null) {
             $sql = new PhiberQueryWriter("select", [
-                "table" => $tabela,
+                "table" => $this->table,
                 "fields" => isset($infos['fields']) ? $infos['fields'] : "*",
                 "conditions" => isset($infos['conditions']) ? $infos['conditions'] : null,
                 "conjunctions" => isset($infos['conjunctions']) ? $infos['conjunctions'] : null
@@ -199,7 +232,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
                 "*";
 
             $sql = new PhiberQueryWriter("select", [
-                "table" => $tabela,
+                "table" => $this->table,
                 "fields" => $fields,
                 "where" => isset(self::$infosMergeds['where']) ?
                     self::$infosMergeds['where'] :
@@ -208,7 +241,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
             ]);
         }
 
-        if (JsonReader::read(BASE_DIR . "/phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
+        if ($this->verifyConfigs()) {
             $pdo = $this->getConnection()->prepare($sql);
             if ($infos != null) {
                 for ($i = 0; $i < count($infos['conditions']); $i++) {
@@ -239,8 +272,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
      * @param String $query
      * @return mixed|void
      */
-    public
-    function createQuery($query)
+    public function createQuery($query)
     {
         // TODO: Implement createQuery() method.
     }
@@ -250,7 +282,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
      * Adiciona parâmetros da classe restriction nas informações para buildar o SQL.
      * @param $infos
      */
-    public static function add($infos)
+    public static final function add($infos)
     {
         array_push(self::$infos, $infos);
         self::mergeSqlInformation();
@@ -278,6 +310,17 @@ class PhiberPersistence extends PhiberPersistenceFactory
             self::$infosMergeds[array_keys(self::$infos[$i])[0]] =
                 self::$infos[$i][array_keys(self::$infos[$i])[0]];
         }
+    }
+
+    /**
+     * @return bool
+     */
+    private function verifyConfigs()
+    {
+        if ($this->phiberConfig->read()->phiber->execute_querys == 1) {
+            return true;
+        }
+        return false;
     }
 
 }

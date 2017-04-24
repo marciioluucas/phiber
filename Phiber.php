@@ -28,10 +28,10 @@ class Phiber
      * que é responsável pela persistencia dos dados. (CREATE, RETREAVE, UPDATE, DELETE)
      * @return PhiberPersistence
      */
-    public static function openPersist()
+    public static function openPersist($object)
     {
         new PhiberAutoload();
-        return new PhiberPersistence();
+        return new PhiberPersistence($object);
     }
 
 }
