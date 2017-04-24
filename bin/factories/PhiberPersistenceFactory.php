@@ -36,7 +36,7 @@ abstract class PhiberPersistenceFactory
      * @return mixed
      * @internal param $id
      */
-    public abstract function update($infos);
+    public abstract function update();
 
     /**
      * Faz a exclusão do objeto no banco

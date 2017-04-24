@@ -12,7 +12,6 @@ use bin\queries\PhiberQueryWriter;
 use bin\queries\Restrictions;
 use PDO;
 use util\FuncoesReflections;
-use util\FuncoesString;
 use util\JsonReader;
 
 
@@ -114,12 +113,11 @@ class PhiberPersistence extends PhiberPersistenceFactory
     /**
      * Faz o update no banco do objeto especificado, se caso a opção execute_queries estiver habilitada
      * @param <T> $obj
-     * @param null $info
      * @return mixed
      * @internal param array $conditions
      * @internal param array $conjunctions
      */
-    public function update($info = null)
+    public function update()
     {
 
         $conditions = self::$infosMergeds['fields_and_values'];
@@ -160,40 +158,40 @@ class PhiberPersistence extends PhiberPersistenceFactory
      */
     public function delete($infos = null)
     {
-        if ($infos != null) {
-            self::$sql = new PhiberQueryWriter("select", [
-                "table" => $this->table,
-                "conditions" => isset($infos['conditions']) ? $infos['conditions'] : null,
-                "conjunctions" => isset($infos['conjunctions']) ? $infos['conjunctions'] : null
-            ]);
-        } else if ($infos == null) {
+//        if ($infos != null) {
+//            self::$sql = new PhiberQueryWriter("select", [
+//                "table" => $this->table,
+//                "conditions" => isset($infos['conditions']) ? $infos['conditions'] : null,
+//                "conjunctions" => isset($infos['conjunctions']) ? $infos['conjunctions'] : null
+//            ]);
+//        } else if ($infos == null) {
 
-            self::$sql = new PhiberQueryWriter("delete", [
-                "table" => $this->table,
-                "where" => self::$infosMergeds['where'],
+        self::$sql = new PhiberQueryWriter("delete", [
+            "table" => $this->table,
+            "where" => self::$infosMergeds['where'],
 
-            ]);
-        }
+        ]);
+//        }
 
         if ($this->phiberConfig->verifyExecuteQueries()) {
             $pdo = $this->getConnection()->prepare(self::$sql);
-            if ($infos != null) {
-                for ($i = 0; $i < count($infos['conditions']); $i++) {
+//            if ($infos != null) {
+//                for ($i = 0; $i < count($infos['conditions']); $i++) {
+//                    $pdo->bindValue(
+//                        "condition_" . $infos['conditions'][$i][0],
+//                        $infos['conditions'][$i][2]
+//                    );
+//                }
+//            } else if ($infos == null) {
+            if (isset(self::$infosMergeds['fields_and_values'])) {
+                for ($i = 0; $i < count(self::$infosMergeds['fields_and_values']); $i++) {
                     $pdo->bindValue(
-                        "condition_" . $infos['conditions'][$i][0],
-                        $infos['conditions'][$i][2]
+                        "condition_" . key(self::$infosMergeds['fields_and_values']),
+                        self::$infosMergeds['fields_and_values'][key(self::$infosMergeds['fields_and_values'])]
                     );
                 }
-            } else if ($infos == null) {
-                if (isset(self::$infosMergeds['fields_and_values'])) {
-                    for ($i = 0; $i < count(self::$infosMergeds['fields_and_values']); $i++) {
-                        $pdo->bindValue(
-                            "condition_" . key(self::$infosMergeds['fields_and_values']),
-                            self::$infosMergeds['fields_and_values'][key(self::$infosMergeds['fields_and_values'])]
-                        );
-                    }
-                }
             }
+//            }
             if ($pdo->execute()) {
                 return true;
             }
@@ -221,49 +219,49 @@ class PhiberPersistence extends PhiberPersistenceFactory
      */
     public function select($infos = null)
     {
-        if ($infos != null) {
-            self::$sql = new PhiberQueryWriter("select", [
-                "table" => $this->table,
-                "fields" => isset($infos['fields']) ? $infos['fields'] : "*",
-                "conditions" => isset($infos['conditions']) ? $infos['conditions'] : null,
-                "conjunctions" => isset($infos['conjunctions']) ? $infos['conjunctions'] : null
-            ]);
-        } else if ($infos == null) {
-            $fields = isset(
-                self::$infosMergeds['fields']) ?
-                implode(", ", self::$infosMergeds['fields']) :
-                "*";
+//        if ($infos != null) {
+//            self::$sql = new PhiberQueryWriter("select", [
+//                "table" => $this->table,
+//                "fields" => isset($infos['fields']) ? $infos['fields'] : "*",
+//                "conditions" => isset($infos['conditions']) ? $infos['conditions'] : null,
+//                "conjunctions" => isset($infos['conjunctions']) ? $infos['conjunctions'] : null
+//            ]);
+//        } else if ($infos == null) {
+        $fields = isset(
+            self::$infosMergeds['fields']) ?
+            implode(", ", self::$infosMergeds['fields']) :
+            "*";
 
-            self::$sql = new PhiberQueryWriter("select", [
-                "table" => $this->table,
-                "fields" => $fields,
-                "where" => isset(self::$infosMergeds['where']) ?
-                    self::$infosMergeds['where'] :
-                    null,
+        self::$sql = new PhiberQueryWriter("select", [
+            "table" => $this->table,
+            "fields" => $fields,
+            "where" => isset(self::$infosMergeds['where']) ?
+                self::$infosMergeds['where'] :
+                null,
 
-            ]);
-        }
+        ]);
+//        }
 
         $result = [];
         if ($this->phiberConfig->verifyExecuteQueries()) {
             $pdo = $this->getConnection()->prepare(self::$sql);
-            if ($infos != null) {
-                for ($i = 0; $i < count($infos['conditions']); $i++) {
+//            if ($infos != null) {
+//                for ($i = 0; $i < count($infos['conditions']); $i++) {
+//                    $pdo->bindValue(
+//                        "condition_" . $infos['conditions'][$i][0],
+//                        $infos['conditions'][$i][2]
+//                    );
+//                }
+//            } else if ($infos == null) {
+            if (isset(self::$infosMergeds['fields_and_values'])) {
+                for ($i = 0; $i < count(self::$infosMergeds['fields_and_values']); $i++) {
                     $pdo->bindValue(
-                        "condition_" . $infos['conditions'][$i][0],
-                        $infos['conditions'][$i][2]
+                        "condition_" . key(self::$infosMergeds['fields_and_values']),
+                        self::$infosMergeds['fields_and_values'][key(self::$infosMergeds['fields_and_values'])]
                     );
                 }
-            } else if ($infos == null) {
-                if (isset(self::$infosMergeds['fields_and_values'])) {
-                    for ($i = 0; $i < count(self::$infosMergeds['fields_and_values']); $i++) {
-                        $pdo->bindValue(
-                            "condition_" . key(self::$infosMergeds['fields_and_values']),
-                            self::$infosMergeds['fields_and_values'][key(self::$infosMergeds['fields_and_values'])]
-                        );
-                    }
-                }
             }
+//            }
             $pdo->execute();
             $result = $pdo->fetchAll((PDO::FETCH_ASSOC));
 
