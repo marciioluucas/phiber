@@ -8,7 +8,6 @@ namespace bin\queries;
 use bin\exceptions\PhiberException;
 use bin\interfaces\IPhiberQueryBuilder;
 use ReflectionMethod;
-use util\FuncoesReflections;
 use util\Internationalization;
 
 
@@ -59,7 +58,6 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
         try {
             $camposNome = [];
 
-
             for ($i = 0; $i < count($campos); $i++) {
                 if ($camposV[$i] != null) {
                     $camposNome[$i] = $campos[$i];
@@ -68,7 +66,7 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
 
 
             $camposNome = array_values($camposNome);
-            $this->sql = "INSERT INTO $tabela (".implode(", ",$camposNome). ") VALUES (";
+            $this->sql = "INSERT INTO $tabela (" . implode(", ", $camposNome) . ") VALUES (";
 //            for ($i = 0; $i < count($camposNome); $i++) {
 //                if ($i != count($camposNome) - 1) {
 //                    $this->sql .= $camposNome[$i] . ", ";
@@ -80,7 +78,7 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
             for ($j = 0; $j < count($camposNome); $j++) {
                 if ($j != count($camposNome) - 1) {
                     $this->sql .= ":" . $camposNome[$j] . ", ";
-                } else if($j == count($camposNome) - 1) {
+                } else if ($j == count($camposNome) - 1) {
                     $this->sql .= ":" . $camposNome[$j] . ")";
                 }
             }
@@ -103,23 +101,17 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
     {
 
         $tabela = $infos['table'];
-        $conditions = isset($infos['conditions']) ? $infos['conditions'] : null;
-        $conjunctions = isset($infos['conjunctions']) ? $infos['conjunctions'] : null;
+        $conditions = $infos['conditions'];
+        $conjunctions = $infos['conjunctions'];
         $campos = $infos['fields'];
         $camposV = $infos['values'];
         $whereCriteria = $infos['where'];
 
         try {
             $camposNome = [];
-            $camposValores = [];
             for ($i = 0; $i < count($campos); $i++) {
-                if ($camposV[$i] != null || $camposV[$i] != "") {
+                if ($camposV[$i] != null) {
                     $camposNome[$i] = $campos[$i];
-                }
-            }
-            for ($i = 0; $i < count($camposV); $i++) {
-                if ($camposV[$i] != null || $camposV[$i] != "") {
-                    $camposValores[$i] = $camposV[$i];
                 }
             }
 
@@ -130,12 +122,11 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
             for ($i = 0; $i < count($camposNome); $i++) {
                 if ($i != count($camposNome) - 1) {
                     $this->sql .= $camposNome[$i] . " = :" . $camposNome[$i] . ", ";
-                } else {
+                } else if ($i == count($camposNome) - 1) {
                     $this->sql .= $camposNome[$i] . " = :" . $camposNome[$i];
                 }
-
-
             }
+
             if ($conditions != null && $whereCriteria == null) {
                 $condWithIntIndex = array_keys($conditions);
                 for ($i = 0; $i < count($conditions); $i++) {
