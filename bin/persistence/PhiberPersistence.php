@@ -224,7 +224,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
      */
     public function rowCount()
     {
-        return count($this->select($infos));
+        return count($this->select());
     }
 
     /**
