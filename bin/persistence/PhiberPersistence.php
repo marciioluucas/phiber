@@ -60,14 +60,17 @@ class PhiberPersistence extends PhiberPersistenceFactory
 
     private static $sql = "";
 
+    private $restrictions;
+
     /**
      * PhiberPersistence constructor.
      * @param $obj
      */
     public function __construct($obj)
     {
+        $this->restrictions = new Restrictions();
         $funcoesReflections = new FuncoesReflections();
-        TableMysql::sync($obj);
+//        TableMysql::sync($obj);
         $this->phiberConfig = new Config();
         $this->table = FuncoesString::paraCaixaBaixa($funcoesReflections->pegaNomeClasseObjeto($obj));
         $this->fields = $funcoesReflections->pegaAtributosDoObjeto($obj);
@@ -102,7 +105,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
                 return true;
             }
         }
-        return self::$sql;
+        return false;
 
     }
 
@@ -303,9 +306,9 @@ class PhiberPersistence extends PhiberPersistenceFactory
     /**
      *Função utilizada para mergir informações novas com as antigas da Restrictions
      */
-    private static function mergeSqlInformation()
+    private function mergeSqlInformation()
     {
-        array_push(self::$infos, Restrictions::getFieldsAndValues());
+        array_push(self::$infos, $this->restrictions->getFieldsAndValues());
         for ($i = 0; $i < count(self::$infos) - 1; $i++) {
             self::$infosMergeds[array_keys(self::$infos[$i])[0]] =
                 self::$infos[$i][array_keys(self::$infos[$i])[0]];

@@ -186,7 +186,7 @@ include_once '../vendor/autoload.php';
 $u = new Usuario();
 use bin\queries\Restrictions;
 use Phiber;
-$criteria = Phiber::openPersist();
+
 //$rNome = Restrictions::biggerThen("id", 10);
 //$rEmail = Restrictions::eq("email", "marciioluucas@gmail.com");
 //$nomeAndEmail = Restrictions:: and ($rNome, $rEmail);
@@ -195,8 +195,9 @@ $criteria = Phiber::openPersist();
 //
 //$usuarioAndSenha = Restrictions:: or ($rUsuario, $rSenha);
 
-$u->setNome("Jonas do amor3");
-$u->setEmail("amor@jonas.com3");
-$criteria->create($u);
-print_r($criteria->select($u));
+$u->setNome("Jonas do amor4");
+$u->setEmail("amor@jonas.com4");
+$criteria = Phiber::openPersist($u);
+$criteria->create();
+print_r($criteria->select());
 

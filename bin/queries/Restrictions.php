@@ -21,7 +21,7 @@ class Restrictions
     /**
      * @return array
      */
-    public static function getFieldsAndValues(): array
+    public function getFieldsAndValues(): array
     {
         return self::$fieldsAndValues;
     }
@@ -38,7 +38,7 @@ class Restrictions
      * @param $param2
      * @return array
      */
-    public static function eq($param1, $param2)
+    public function eq($param1, $param2)
     {
         self::addFieldsAndValues($param1, $param2);
         PhiberPersistence::add(self::$fieldsAndValues);
@@ -60,7 +60,7 @@ class Restrictions
      * @param $param2
      * @return array
      */
-    public static function biggerThen($param1, $param2)
+    public function biggerThen($param1, $param2)
     {
         self::addFieldsAndValues($param1, $param2);
         PhiberPersistence::add(self::$fieldsAndValues);
@@ -80,7 +80,7 @@ class Restrictions
      * @param $param2
      * @return array
      */
-    public static function greaterThan($param1, $param2)
+    public function greaterThan($param1, $param2)
     {
         self::addFieldsAndValues($param1, $param2);
         PhiberPersistence::add(self::$fieldsAndValues);
@@ -100,7 +100,7 @@ class Restrictions
      * @param $param2
      * @return array
      */
-    public static function lessThen($param1, $param2)
+    public function lessThen($param1, $param2)
     {
         self::addFieldsAndValues($param1, $param2);
         PhiberPersistence::add(self::$fieldsAndValues);
@@ -120,7 +120,7 @@ class Restrictions
      * @param $param2
      * @return array
      */
-    public static function lessLike($param1, $param2)
+    public function lessLike($param1, $param2)
     {
         self::addFieldsAndValues($param1, $param2);
         PhiberPersistence::add(self::$fieldsAndValues);
@@ -140,7 +140,7 @@ class Restrictions
      * @param $param2
      * @return array
      */
-    public static function like($param1, $param2)
+    public function like($param1, $param2)
     {
         self::addFieldsAndValues($param1, $param2);
         PhiberPersistence::add(self::$fieldsAndValues);
@@ -164,7 +164,7 @@ class Restrictions
      * @param $condition2
      * @return array
      */
-    public static function or ($condition1, $condition2)
+    public function or ($condition1, $condition2)
     {
 
         PhiberPersistence::add(self::$fieldsAndValues);
@@ -188,7 +188,7 @@ class Restrictions
      * @param $condition2
      * @return array
      */
-    public static function and ($condition1, $condition2)
+    public function and ($condition1, $condition2)
     {
 
         PhiberPersistence::add(self::$fieldsAndValues);
@@ -205,7 +205,7 @@ class Restrictions
      * @param $fields
      * @return array
      */
-    public static function fields($fields)
+    public function fields($fields)
     {
         if($fields != null){
             return ["fields" => $fields];
@@ -220,7 +220,7 @@ class Restrictions
      * @param $field
      * @param $value
      */
-    private static function addFieldsAndValues($field, $value)
+    private function addFieldsAndValues($field, $value)
     {
         self::$fieldsAndValues['fields_and_values'][$field] = $value;
     }
@@ -230,7 +230,7 @@ class Restrictions
      * @ignore
      * @return array
      */
-    public static function show()
+    public function show()
     {
         return self::$fieldsAndValues;
     }
