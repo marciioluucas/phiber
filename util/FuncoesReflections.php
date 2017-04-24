@@ -4,8 +4,10 @@
  */
 
 namespace util;
+
 use Exception;
 use ReflectionClass;
+use ReflectionMethod;
 use ReflectionProperty;
 
 /**
@@ -15,22 +17,19 @@ use ReflectionProperty;
  */
 class FuncoesReflections
 {
-    /**
-     * @var array
-     */
-    private static $p;
-
-    /**
-     * Construtor da classe FuncoesReflections
-     * @param $p
-     */
-    public function __construct()
-    {
-        $this->p = [];
-    }
 
 
-//    public static function pegaAtributoDoObjeto($obj)
+//    /**
+//     * Construtor da classe FuncoesReflections
+//     */
+//    public function __construct($method, $obj)
+//    {
+//        $reflectionMethod = new ReflectionMethod(get_class($this), $method);
+//        $reflectionMethod->invoke($this, $obj);
+//    }
+
+
+//    public function pegaAtributoDoObjeto($obj)
 //    {
 //        $reflectionClass = new ReflectionClass($obj);
 //        $propriedades = $reflectionClass->getProperties(ReflectionProperty::IS_PUBLIC |
@@ -50,7 +49,7 @@ class FuncoesReflections
      * @param $obj
      * @return array
      */
-    public static function pegaNomesMetodosClasse($obj)
+    public function pegaNomesMetodosClasse($obj)
     {
         $aux = get_class_methods($obj);
         return $aux;
@@ -64,7 +63,7 @@ class FuncoesReflections
      * @return bool|string
      * @throws Exception
      */
-    public static function pegaNomeAtributoEspecifico($obj, $nomeAtributo)
+    public function pegaNomeAtributoEspecifico($obj, $nomeAtributo)
     {
         try {
             $arrayAtributosObjeto = self::pegaAtributosDoObjeto($obj);
@@ -83,19 +82,20 @@ class FuncoesReflections
      * @param $obj
      * @return array
      */
-    public static function pegaAtributosDoObjeto($obj)
+    public function pegaAtributosDoObjeto($obj)
     {
+        $properties = [];
         $reflectionClass = new ReflectionClass($obj);
         $propriedades = $reflectionClass->getProperties(ReflectionProperty::IS_PUBLIC |
             ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PRIVATE);
 
         for ($i = 0; $i < count($propriedades); $i++) {
-            self::$p[$i] = $propriedades[$i]->name;
+            $properties[$i] = $propriedades[$i]->name;
         }
 //        if ($reflectionClass->getParentClass() != null) {
 //            self::pegaAtributoDoObjeto($reflectionClass->getParentClass());
 //        }
-        return self::$p;
+        return $properties;
     }
 
     /**
@@ -104,7 +104,7 @@ class FuncoesReflections
      * @param $nomeAtributo
      * @return mixed
      */
-    public static function pegaValorAtributoEspecifico($obj, $nomeAtributo)
+    public function pegaValorAtributoEspecifico($obj, $nomeAtributo)
     {
         $nomeAtributos = $nomeAtributo;
         $reflectionClass = new ReflectionClass(self::pegaNomeClasseObjeto($obj));
@@ -119,7 +119,7 @@ class FuncoesReflections
      * @param $obj
      * @return string
      */
-    public static function pegaNomeClasseObjeto($obj)
+    public function pegaNomeClasseObjeto($obj)
     {
         $reflectionClass = new ReflectionClass($obj);
         return $reflectionClass->getShortName();
@@ -131,7 +131,7 @@ class FuncoesReflections
      * @param array $atributos
      * @param array $valor
      */
-    public static function injetaValorAtributo($obj, $atributos = [], $valor = [])
+    public function injetaValorAtributo($obj, $atributos = [], $valor = [])
     {
         $reflectionClass = new ReflectionClass($obj);
         if (count($atributos) >= 0) {
@@ -149,7 +149,7 @@ class FuncoesReflections
      * @param \Object $obj
      * @return bool
      */
-    public static function verificaSeEClasseFilha($obj)
+    public function verificaSeEClasseFilha($obj)
     {
         $class = new ReflectionClass($obj);
         if ($class->getParentClass()) {
@@ -166,9 +166,9 @@ class FuncoesReflections
      * @param $obj
      * @return bool|array
      */
-    public static function retornaValoresAtributosClassesMaes($obj)
+    public function retornaValoresAtributosClassesMaes($obj)
     {
-        if(self::verificaSeEClasseFilha($obj)){
+        if (self::verificaSeEClasseFilha($obj)) {
             $nomeClassesMae = self::retornaClassesMaes($obj);
             $valores = [];
             for ($i = 0; $i < count($nomeClassesMae); $i++) {
@@ -185,14 +185,14 @@ class FuncoesReflections
      * @param $obj
      * @return array|bool
      */
-    public static function retornaClassesMaes($obj)
+    public function retornaClassesMaes($obj)
     {
         $class = new ReflectionClass($obj);
 
         $parents = [];
         $parent = "";
-        if(self::verificaSeEClasseFilha($obj)){
-            while($class->getParentClass()) {
+        if (self::verificaSeEClasseFilha($obj)) {
+            while ($class->getParentClass()) {
                 $parents[] = $class->getParentClass()->getName();
                 $class = $parent;
             }
@@ -206,7 +206,7 @@ class FuncoesReflections
      * @param $obj
      * @return array
      */
-    public static function pegaValoresAtributoDoObjeto($obj)
+    public function pegaValoresAtributoDoObjeto($obj)
     {
         $nomeAtributos = self::pegaAtributosDoObjeto($obj);
         $valoresAtributosFinal = [];
@@ -226,7 +226,7 @@ class FuncoesReflections
      * @param $obj
      * @return array
      */
-    public static function retornaNomeAtributosClassesMaes($obj)
+    public function retornaNomeAtributosClassesMaes($obj)
     {
         $atributos = [];
         for ($i = 0;
@@ -244,18 +244,18 @@ class FuncoesReflections
      * @param $obj
      * @return array
      */
-    public static function retornaComentariosAtributos($obj)
+    public function retornaComentariosAtributos($obj)
     {
         $arrAttributesNames = self::pegaAtributosDoObjeto($obj);
         $arrAttributesComments = array();
-        for($i= 0; $i < count($arrAttributesNames); $i++){
+        for ($i = 0; $i < count($arrAttributesNames); $i++) {
 
             $reflectionAttribute = new ReflectionProperty($obj, $arrAttributesNames[$i]);
 
-           $arrAttributesComments[$arrAttributesNames[$i]] = $reflectionAttribute->getDocComment();
+            $arrAttributesComments[$arrAttributesNames[$i]] = $reflectionAttribute->getDocComment();
         }
 
-    //TODO: FAZER O FOR PARA PEGAR TODOS ATRIBUTOS, PASSAR NO SEGUNDO PARAMETRO;
+        //TODO: FAZER O FOR PARA PEGAR TODOS ATRIBUTOS, PASSAR NO SEGUNDO PARAMETRO;
 //        print_r($arrComments);
         return $arrAttributesComments;
     }

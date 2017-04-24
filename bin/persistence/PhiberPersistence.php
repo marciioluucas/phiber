@@ -66,12 +66,12 @@ class PhiberPersistence extends PhiberPersistenceFactory
      */
     public function __construct($obj)
     {
-
+        $funcoesReflections = new FuncoesReflections();
         TableMysql::sync($obj);
         $this->phiberConfig = new Config();
-        $this->table = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
-        $this->fields = FuncoesReflections::pegaAtributosDoObjeto($obj);
-        $this->fieldsValues = FuncoesReflections::pegaValoresAtributoDoObjeto($obj);
+        $this->table = FuncoesString::paraCaixaBaixa($funcoesReflections->pegaNomeClasseObjeto($obj));
+        $this->fields = $funcoesReflections->pegaAtributosDoObjeto($obj);
+        $this->fieldsValues = $funcoesReflections->pegaValoresAtributoDoObjeto($obj);
     }
 
 
@@ -118,23 +118,21 @@ class PhiberPersistence extends PhiberPersistenceFactory
      */
     public function update($obj, $info = null)
     {
-        $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
-        $campos = FuncoesReflections::pegaAtributosDoObjeto($obj);
-        $camposV = FuncoesReflections::pegaValoresAtributoDoObjeto($obj);
+
         $conditions = self::$infosMergeds['fields_and_values'];
 
         self::$sql = new PhiberQueryWriter("update", [
-            "table" => $tabela,
-            "fields" => $campos,
-            "values" => $camposV,
+            "table" => $this->table,
+            "fields" => $this->fields,
+            "values" => $this->fieldsValues,
             "where" => self::$infosMergeds['where'],
 
         ]);
         if ($this->phiberConfig->verifyExecuteQueries()) {
             $pdo = $this->getConnection()->prepare(self::$sql);
-            for ($i = 1; $i < count($campos); $i++) {
-                if ($camposV[$i] != null) {
-                    $pdo->bindValue($campos[$i], $camposV[$i]);
+            for ($i = 1; $i < count($this->fields); $i++) {
+                if ($this->fieldsValues[$i] != null) {
+                    $pdo->bindValue($this->fields[$i], $this->fieldsValues[$i]);
                 }
 
             }
@@ -159,22 +157,22 @@ class PhiberPersistence extends PhiberPersistenceFactory
      */
     public function delete($obj, $infos = null)
     {
-        $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
         if ($infos != null) {
             self::$sql = new PhiberQueryWriter("select", [
-                "table" => $tabela,
+                "table" => $this->table,
                 "conditions" => isset($infos['conditions']) ? $infos['conditions'] : null,
                 "conjunctions" => isset($infos['conjunctions']) ? $infos['conjunctions'] : null
             ]);
-        } else {
+        } else if ($infos == null) {
 
 
             self::$sql = new PhiberQueryWriter("delete", [
-                "table" => $tabela,
+                "table" => $this->table,
                 "where" => self::$infosMergeds['where'],
 
             ]);
         }
+
         if ($this->phiberConfig->verifyExecuteQueries()) {
             $pdo = $this->getConnection()->prepare(self::$sql);
             if ($infos != null) {
@@ -184,7 +182,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
                         $infos['conditions'][$i][2]
                     );
                 }
-            } else {
+            } else if ($infos == null) {
                 if (isset(self::$infosMergeds['fields_and_values'])) {
                     for ($i = 0; $i < count(self::$infosMergeds['fields_and_values']); $i++) {
                         $pdo->bindValue(
@@ -228,7 +226,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
                 "conditions" => isset($infos['conditions']) ? $infos['conditions'] : null,
                 "conjunctions" => isset($infos['conjunctions']) ? $infos['conjunctions'] : null
             ]);
-        } else {
+        } else if($infos == null) {
             $fields = isset(
                 self::$infosMergeds['fields']) ?
                 implode(", ", self::$infosMergeds['fields']) :
@@ -254,7 +252,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
                         $infos['conditions'][$i][2]
                     );
                 }
-            } else {
+            } else if($infos == null) {
                 if (isset(self::$infosMergeds['fields_and_values'])) {
                     for ($i = 0; $i < count(self::$infosMergeds['fields_and_values']); $i++) {
                         $pdo->bindValue(
@@ -314,7 +312,6 @@ class PhiberPersistence extends PhiberPersistenceFactory
                 self::$infos[$i][array_keys(self::$infos[$i])[0]];
         }
     }
-
 
 
 }
