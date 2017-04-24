@@ -21,9 +21,9 @@ class Internationalization
      */
     public function __construct(String $reference)
     {
-        $languageSettedInConfig = JsonReader::read(BASE_DIR . '/phiber_config.json')->phiber->language;
-        $lang = JsonReader::read(BASE_DIR . "/lang/$languageSettedInConfig.json");
-        $this->msgTranslated = $lang->phiber_lang->$reference . "";
+        $jsonReader = new JsonReader(BASE_DIR . '/phiber_config.json');
+        $lang = new JsonReader(BASE_DIR . "/lang/" . $jsonReader->read()->phiber->language . ".json");
+        $this->msgTranslated = $lang->read()->phiber_lang->$reference . "";
     }
 
     function __toString()
