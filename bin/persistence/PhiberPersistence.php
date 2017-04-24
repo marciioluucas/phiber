@@ -6,6 +6,7 @@
 namespace bin\persistence;
 
 
+use bin\Config;
 use bin\factories\PhiberPersistenceFactory;
 use bin\queries\PhiberQueryWriter;
 use bin\queries\Restrictions;
@@ -65,7 +66,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
     {
 
         TableMysql::sync($obj);
-        $this->phiberConfig = new JsonReader(BASE_DIR . "/phiber_config.json");
+        $this->phiberConfig = new Config();
         $this->table = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
         $this->fields = FuncoesReflections::pegaAtributosDoObjeto($obj);
         $this->fieldsValues = FuncoesReflections::pegaValoresAtributoDoObjeto($obj);
@@ -87,7 +88,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
             "values" => $this->fieldsValues
         ]);
 
-        if ($this->verifyConfigs()) {
+        if ($this->phiberConfig->verifyExecuteQueries()) {
             $pdo = $this->getConnection()->prepare($sql);
 
             for ($i = 1; $i < count($this->fields); $i++) {
@@ -127,7 +128,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
             "where" => self::$infosMergeds['where'],
 
         ]);
-        if ($this->verifyConfigs()) {
+        if ($this->phiberConfig->verifyExecuteQueries()) {
             $pdo = $this->getConnection()->prepare($sql);
             for ($i = 1; $i < count($campos); $i++) {
                 if ($camposV[$i] != null) {
@@ -172,7 +173,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
 
             ]);
         }
-        if ($this->verifyConfigs()) {
+        if ($this->phiberConfig->verifyExecuteQueries()) {
             $pdo = $this->getConnection()->prepare($sql);
             if ($infos != null) {
                 for ($i = 0; $i < count($infos['conditions']); $i++) {
@@ -241,7 +242,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
             ]);
         }
 
-        if ($this->verifyConfigs()) {
+        if ($this->phiberConfig->verifyExecuteQueries()) {
             $pdo = $this->getConnection()->prepare($sql);
             if ($infos != null) {
                 for ($i = 0; $i < count($infos['conditions']); $i++) {
@@ -295,7 +296,6 @@ class PhiberPersistence extends PhiberPersistenceFactory
      */
     public function show()
     {
-
         return self::$infosMergeds;
     }
 
@@ -312,15 +312,6 @@ class PhiberPersistence extends PhiberPersistenceFactory
         }
     }
 
-    /**
-     * @return bool
-     */
-    private function verifyConfigs()
-    {
-        if ($this->phiberConfig->read()->phiber->execute_querys == 1) {
-            return true;
-        }
-        return false;
-    }
+
 
 }
