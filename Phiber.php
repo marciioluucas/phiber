@@ -33,13 +33,5 @@ class Phiber
         new PhiberAutoload();
         return new PhiberPersistence();
     }
-//
-//    /**
-//     * @return PhiberCrypt
-//     */
-//    public static function openCrypt()
-//    {
-//        return new PhiberCrypt();
-//    }
 
 }

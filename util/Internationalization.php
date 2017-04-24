@@ -12,15 +12,24 @@ namespace util;
 class Internationalization
 {
 
+
+    private $msgTranslated;
+
     /**
      * Usa a referencia de linguagem no arquivo json para traduzir.
-     * @param $reference
-     * @return mixed
+     * @param String $reference
      */
-    public static final function translate($reference) {
-        $languageSettedInConfig = JsonReader::read(BASE_DIR.'/phiber_config.json')->phiber->language;
-        $lang = JsonReader::read(BASE_DIR."/lang/$languageSettedInConfig.json");
-        return $lang->phiber_lang->$reference;
+    public function __construct(String $reference)
+    {
+        $languageSettedInConfig = JsonReader::read(BASE_DIR . '/phiber_config.json')->phiber->language;
+        $lang = JsonReader::read(BASE_DIR . "/lang/$languageSettedInConfig.json");
+        $this->msgTranslated = $lang->phiber_lang->$reference . "";
     }
+
+    function __toString()
+    {
+        return $this->msgTranslated;
+    }
+
 
 }

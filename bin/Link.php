@@ -7,6 +7,7 @@
  */
 namespace bin;
 
+use bin\exceptions\PhiberException;
 use PDO;
 use util\Internationalization;
 use util\JsonReader;
@@ -37,13 +38,13 @@ class Link
                         array(PDO::ATTR_PERSISTENT => $json->phiber->link->connection_cache == 1 ? true : false));
                 }
                 catch (PhiberException $e) {
-                    throw new PhiberException(Internationalization::translate("database_connection_error"));
+                    throw new PhiberException(new Internationalization("database_connection_error"));
                 }
 
             }
             return $instancia;
         } catch (PhiberException $e) {
-            throw new PhiberException(Internationalization::translate("database_connection_error"));
+            throw new PhiberException(new Internationalization("database_connection_error"));
         }
     }
 }

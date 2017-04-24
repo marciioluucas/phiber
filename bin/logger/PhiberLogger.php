@@ -28,10 +28,10 @@ class PhiberLogger
             $date = date('Y-m-d H:i:s');
             switch ($level) {
                 case 'info':
-                    $levelStr = strtoupper(Internationalization::translate("log_info"));
+                    $levelStr = strtoupper(new Internationalization("log_info"));
                     $msg = "\033[0;35m PHIBER LOG -> [$date] [$levelStr]: (" .
-                    Internationalization::translate("reference") .
-                    "=> \"$objectName\") " . Internationalization::translate($languageReference) .
+                    new Internationalization("reference") .
+                    "=> \"$objectName\") " . new Internationalization($languageReference) .
                     " - ";
                     if($execTime != null){
                         $msg .=  "em " . $execTime . ".";
@@ -40,10 +40,10 @@ class PhiberLogger
                     break;
 
                 case 'warning':
-                    $levelStr = strtoupper(Internationalization::translate("log_warning"));
+                    $levelStr = strtoupper(new Internationalization("log_warning"));
                     $msg = "\033[1;33m PHIBER LOG -> [$date] [$levelStr]: (" .
-                        Internationalization::translate("reference") .
-                        "=> \"$objectName\") " . Internationalization::translate($languageReference) .
+                        new Internationalization("reference") .
+                        "=> \"$objectName\") " . new Internationalization($languageReference) .
                         " - ";
                     if($execTime != null){
                         $msg .=  "em " . $execTime . ".";
@@ -52,10 +52,10 @@ class PhiberLogger
                     break;
 
                 case 'error':
-                    $levelStr = strtoupper(Internationalization::translate("log_error"));
+                    $levelStr = strtoupper(new Internationalization("log_error"));
                     $msg = "\033[0;31m PHIBER LOG -> [$date] [$levelStr]: (" .
-                        Internationalization::translate("reference") .
-                        "=> \"$objectName\") " . Internationalization::translate($languageReference) .
+                        new Internationalization("reference") .
+                        "=> \"$objectName\") " . new Internationalization($languageReference) .
                         " - ";
                     if($execTime != null){
                         $msg .=  "em " . $execTime . ".";

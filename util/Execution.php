@@ -5,7 +5,6 @@
 
 namespace util;
 
-
 /**
  * Classe responsável por medir o tempo de execução das tarefas.
  * @package util
@@ -45,7 +44,8 @@ class Execution
     {
         $finalTime = self::getTime();
         $execTime = $finalTime - self::$time;
-        return number_format($execTime, 6) . " " .Internationalization::translate("seconds");
+        $msgTranslated = new Internationalization("seconds");
+        return number_format($execTime, 6) . " " . $msgTranslated;
     }
 }
 

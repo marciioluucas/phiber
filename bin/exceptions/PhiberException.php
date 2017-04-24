@@ -35,9 +35,9 @@ class PhiberException extends \Exception
      */
     public function __toString()
     {
-        return strtoupper(Internationalization::translate('phiber_exception')) .
-            ": " . Internationalization::translate('line') . ": " . $this->getLine() . " " .
-            Internationalization::translate('message') . ": " . Internationalization::translate($this->messageTranslateReference);
+        return strtoupper(new Internationalization('phiber_exception')) .
+            ": " . new Internationalization('line') . ": " . $this->getLine() . " " .
+            new Internationalization('message') . ": " . new Internationalization($this->messageTranslateReference);
     }
 
 

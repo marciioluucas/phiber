@@ -60,7 +60,7 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
             return $sqlInsert;
 
         } catch (PhiberException $e) {
-            throw new PhiberException(Internationalization::translate("query_processor_error"));
+            throw new PhiberException(new Internationalization("query_processor_error"));
         }
     }
 
@@ -134,7 +134,7 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
             }
             $sqlUpdate .= ";";
         } catch (PhiberException $e) {
-            throw new PhiberException(Internationalization::translate("query_processor_error"));
+            throw new PhiberException(new Internationalization("query_processor_error"));
         }
         return $sqlUpdate;
     }
@@ -187,7 +187,7 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
             }
             return $sql . ";";
         } catch (PhiberException $e) {
-            throw new PhiberException(Internationalization::translate("query_processor_error"));
+            throw new PhiberException(new Internationalization("query_processor_error"));
         }
     }
 
