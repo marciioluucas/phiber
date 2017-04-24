@@ -233,7 +233,6 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
 
         /* LÓGICA - COMEÇO*/
         $camposNome = [];
-        $camposValores = [];
 
 
         $campos = gettype($campos) == "array" ? implode(", ", $campos) : $campos;

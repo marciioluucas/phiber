@@ -72,7 +72,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
         $funcoesReflections = new FuncoesReflections();
 //        TableMysql::sync($obj);
         $this->phiberConfig = new Config();
-        $this->table = FuncoesString::paraCaixaBaixa($funcoesReflections->pegaNomeClasseObjeto($obj));
+        $this->table = strtolower($funcoesReflections->pegaNomeClasseObjeto($obj));
         $this->fields = $funcoesReflections->pegaAtributosDoObjeto($obj);
         $this->fieldsValues = $funcoesReflections->pegaValoresAtributoDoObjeto($obj);
     }
