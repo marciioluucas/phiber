@@ -7,7 +7,6 @@ namespace util;
 
 use Exception;
 use ReflectionClass;
-use ReflectionMethod;
 use ReflectionProperty;
 
 /**
@@ -98,21 +97,6 @@ class FuncoesReflections
         return $properties;
     }
 
-    /**
-     * Função responsável por pegar o valor de um atributo específico do objeto.
-     * @param $obj
-     * @param $nomeAtributo
-     * @return mixed
-     */
-    public function pegaValorAtributoEspecifico($obj, $nomeAtributo)
-    {
-        $nomeAtributos = $nomeAtributo;
-        $reflectionClass = new ReflectionClass(self::pegaNomeClasseObjeto($obj));
-        $reflectionProperty = $reflectionClass->getProperty($nomeAtributos);
-        $reflectionProperty->setAccessible(true);
-        $valoresAtributosFinal = $reflectionProperty->getValue($obj);
-        return $valoresAtributosFinal;
-    }
 
     /**
      * Função responsável por pegar o nome da classe do objeto em questão.
@@ -125,23 +109,6 @@ class FuncoesReflections
         return $reflectionClass->getShortName();
     }
 
-    /**
-     * Injeta valores nos atributos do objeto em questão.
-     * @param \Object $obj
-     * @param array $atributos
-     * @param array $valor
-     */
-    public function injetaValorAtributo($obj, $atributos = [], $valor = [])
-    {
-        $reflectionClass = new ReflectionClass($obj);
-        if (count($atributos) >= 0) {
-            for ($i = 0; $i < count($atributos); $i++) {
-                $reflectionProperty = $reflectionClass->getProperty($atributos[$i]);
-                $reflectionProperty->setAccessible(true);
-                $reflectionProperty->setValue($obj, $valor[$i]);
-            }
-        }
-    }
 
     /**
      * Função responsável por verifidar se a classe é filha de alguma outra classe,
@@ -154,9 +121,9 @@ class FuncoesReflections
         $class = new ReflectionClass($obj);
         if ($class->getParentClass()) {
             return true;
-        } else {
-            return false;
         }
+        return false;
+
     }
 
     /**
@@ -209,14 +176,14 @@ class FuncoesReflections
     public function pegaValoresAtributoDoObjeto($obj)
     {
         $nomeAtributos = self::pegaAtributosDoObjeto($obj);
-        $valoresAtributosFinal = [];
+        $valAtrFinal = [];
         $reflectionClass = new ReflectionClass($obj);
         for ($i = 0; $i < count($nomeAtributos); $i++) {
             $reflectionProperty = $reflectionClass->getProperty($nomeAtributos[$i]);
             $reflectionProperty->setAccessible(true);
-            $valoresAtributosFinal[$i] = $reflectionProperty->getValue($obj);
+            $valAtrFinal[$i] = $reflectionProperty->getValue($obj);
         }
-        return $valoresAtributosFinal;
+        return $valAtrFinal;
     }
 
 
@@ -230,10 +197,10 @@ class FuncoesReflections
     {
         $atributos = [];
         for ($i = 0;
-             $i < count(FuncoesReflections::retornaClassesMaes($obj));
+             $i < count(self::retornaClassesMaes($obj));
              $i++) {
-            $atributos[$i] = array(FuncoesReflections::retornaClassesMaes($obj)[$i] =>
-                FuncoesReflections::pegaAtributosDoObjeto(FuncoesReflections::retornaClassesMaes($obj)[$i]));
+            $atributos[$i] = array(self::retornaClassesMaes($obj)[$i] =>
+                self::pegaAtributosDoObjeto(self::retornaClassesMaes($obj)[$i]));
         }
 
         return $atributos;
@@ -246,32 +213,18 @@ class FuncoesReflections
      */
     public function retornaComentariosAtributos($obj)
     {
-        $arrAttributesNames = self::pegaAtributosDoObjeto($obj);
-        $arrAttributesComments = array();
-        for ($i = 0; $i < count($arrAttributesNames); $i++) {
+        $arrAttrNames = self::pegaAtributosDoObjeto($obj);
+        $arrAttrComm = array();
+        for ($i = 0; $i < count($arrAttrNames); $i++) {
 
-            $reflectionAttribute = new ReflectionProperty($obj, $arrAttributesNames[$i]);
+            $reflectionAttr = new ReflectionProperty($obj, $arrAttrNames[$i]);
 
-            $arrAttributesComments[$arrAttributesNames[$i]] = $reflectionAttribute->getDocComment();
+            $arrAttrComm[$arrAttrNames[$i]] = $reflectionAttr->getDocComment();
         }
 
         //TODO: FAZER O FOR PARA PEGAR TODOS ATRIBUTOS, PASSAR NO SEGUNDO PARAMETRO;
-//        print_r($arrComments);
-        return $arrAttributesComments;
+        return $arrAttrComm;
     }
 
 
 }
-//
-//require_once '../model/Usuario.php';
-//require_once '../model/Funcionario.php';
-//require_once '../model/Cargo.php';
-//$u = new Funcionario();
-//$u->setNome("Marcio Lucas");
-//$u->setCpf("03794335163");
-//$c = new Cargo();
-//$c->setNome("PAMONHA");
-////print_r(FuncoesReflections::pegaValoresAtributoDoObjeto($u));
-////print_r(FuncoesReflections::pegaValoresAtributoDoObjeto($u));
-//
-//print_r(FuncoesReflections::retornaNomeAtributosClassesMaes($u));
