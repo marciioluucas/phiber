@@ -18,15 +18,15 @@ class PhiberException extends \Exception
      * Referencia da mensagem a ser traduzida.
      * @var string
      */
-    private $messageTranslateReference;
+    private $msgTranslateRef;
 
     /**
      * PhiberException constructor.
-     * @param string $messageTranslateReference
+     * @param string $msgTranslateRef
      */
-    public function __construct($messageTranslateReference)
+    public function __construct($msgTranslateRef)
     {
-        $this->messageTranslateReference = $messageTranslateReference;
+        $this->msgTranslateRef = $msgTranslateRef;
     }
 
     /**
@@ -37,7 +37,7 @@ class PhiberException extends \Exception
     {
         return strtoupper(new Internationalization('phiber_exception')) .
             ": " . new Internationalization('line') . ": " . $this->getLine() . " " .
-            new Internationalization('message') . ": " . new Internationalization($this->messageTranslateReference);
+            new Internationalization('message') . ": " . new Internationalization($this->msgTranslateRef);
     }
 
 
