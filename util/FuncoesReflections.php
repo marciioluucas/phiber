@@ -50,8 +50,7 @@ class FuncoesReflections
      */
     public function pegaNomesMetodosClasse($obj)
     {
-        $aux = get_class_methods($obj);
-        return $aux;
+        return get_class_methods($obj);
     }
 
     /**

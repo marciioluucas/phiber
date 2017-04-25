@@ -42,9 +42,8 @@ class FuncoesString
     {
         if (strpos($string, $stringBuscada) !== false) {
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**
@@ -67,9 +66,9 @@ class FuncoesString
     {
         if ($posFinal == null) {
             return substr($string, $posInicial - 1);
-        } else {
-            return substr($string, $posInicial - 1, ($posFinal - 1) * (-1));
         }
+        return substr($string, $posInicial - 1, ($posFinal - 1) * (-1));
+
     }
 
 
@@ -92,8 +91,9 @@ class FuncoesString
      * @param $substituicao
      * @return mixed
      */
-    public function substituiOcorrenciasDeUmaString($string, $strBusca, $substituicao) {
-        return str_replace($strBusca,$substituicao,$string);
+    public function substituiOcorrenciasDeUmaString($string, $strBusca, $substituicao)
+    {
+        return str_replace($strBusca, $substituicao, $string);
     }
 
 }
