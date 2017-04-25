@@ -30,7 +30,7 @@ class Restrictions
     /**
      * Faz a query de comparação IGUAL
      * Exemplo:
-     *  eq("idade",15);
+     *  equals("idade",15);
      *  Criará um pedaço da query do banco assim -> idade = :condition_idade
      *  OBS: O ":condition_idade" é o responsável por depois fazer o binding do valor para
      *  evitar SQL Injection.
@@ -38,7 +38,7 @@ class Restrictions
      * @param $param2
      * @return array
      */
-    public function eq($param1, $param2)
+    public function equals($param1, $param2)
     {
         self::addFieldsAndValues($param1, $param2);
         return
@@ -147,9 +147,9 @@ class Restrictions
     /**
      * Faz a query de conjunção OU
      * Exemplo:
-     *  $condicao1 = eq("idade",15);
+     *  $condicao1 = equals("idade",15);
      *  $condicao2 = like("nome","Jhon");
-     *  or($condicao1,$condicao2);
+     *  either($condicao1,$condicao2);
      *
      *  Criará um pedaço da query do banco assim ->
      *    (idade = :condition_idade or nome like %:condition_nome%);
@@ -159,7 +159,7 @@ class Restrictions
      * @param $condition2
      * @return array
      */
-    public function or ($condition1, $condition2)
+    public function either ($condition1, $condition2)
     {
 
         return [
