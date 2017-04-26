@@ -159,7 +159,7 @@ class Restrictions
      * @param $condition2
      * @return array
      */
-    public function either ($condition1, $condition2)
+    public function either($condition1, $condition2)
     {
 
         return [

@@ -201,10 +201,10 @@ $phiber = new Phiber();
 $criteria = $phiber->openPersist($u);
 //$criteria->create();
 
-$id = $criteria->restrictions()->eq("id",1);
+$id = $criteria->restrictions()->equals("id",1);
 $colunas = $criteria->restrictions()->fields(["nome","email"]);
 $criteria->add($id);
 $criteria->add($colunas);
-//$criteria->select();
-print_r($criteria->select());
+$criteria->select();
+print_r($criteria->show());
 
