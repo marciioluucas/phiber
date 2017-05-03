@@ -10,10 +10,10 @@
  * Time: 13:34
  */
 
-namespace bin;
+namespace phiber\bin;
 
 
-use util\JsonReader;
+use phiber\util\JsonReader;
 
 /**
  * Classe responsável por recuperar as informações de configuração do Phiber

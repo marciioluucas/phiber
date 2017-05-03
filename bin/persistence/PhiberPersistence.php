@@ -3,16 +3,16 @@
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
 
-namespace bin\persistence;
+namespace phiber\bin\persistence;
 
 
-use bin\Config;
-use bin\factories\PhiberPersistenceFactory;
-use bin\queries\PhiberQueryWriter;
-use bin\queries\Restrictions;
-use PDO;
-use util\FuncoesReflections;
-use util\JsonReader;
+use phiber\bin\Config;
+use phiber\bin\factories\PhiberPersistenceFactory;
+use phiber\bin\queries\PhiberQueryWriter;
+use phiber\bin\queries\Restrictions;
+use \PDO;
+use phiber\util\FuncoesReflections;
+use phiber\util\JsonReader;
 
 
 /**

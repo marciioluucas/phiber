@@ -3,7 +3,7 @@
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
 
-namespace util;
+namespace phiber\util;
 
 /**
  * Classe responsável por medir o tempo de execução das tarefas.

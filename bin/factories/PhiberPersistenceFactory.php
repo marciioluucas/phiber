@@ -3,8 +3,8 @@
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
 
-namespace bin\factories;
-use bin\Link;
+namespace phiber\bin\factories;
+use phiber\bin\Link;
 
 /**
  * Interface IPhiberPersistence

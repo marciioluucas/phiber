@@ -3,9 +3,9 @@
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
 
-namespace bin\logger;
-use util\Internationalization;
-use util\JsonReader;
+namespace phiber\bin\logger;
+use phiber\util\Internationalization;
+use phiber\util\JsonReader;
 
 
 /**

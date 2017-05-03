@@ -3,8 +3,8 @@
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
 
-namespace bin\queries;
-use bin\persistence\PhiberPersistence;
+namespace phiber\bin\queries;
+use phiber\bin\persistence\PhiberPersistence;
 
 
 /**

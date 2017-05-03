@@ -3,12 +3,12 @@
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
 
-namespace bin\queries;
+namespace phiber\bin\queries;
 
-use bin\exceptions\PhiberException;
-use bin\interfaces\IPhiberQueryBuilder;
+use phiber\bin\exceptions\PhiberException;
+use phiber\bin\interfaces\IPhiberQueryBuilder;
 use ReflectionMethod;
-use util\Internationalization;
+use phiber\util\Internationalization;
 
 
 /**

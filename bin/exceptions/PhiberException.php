@@ -3,9 +3,9 @@
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
 
-namespace bin\exceptions;
+namespace phiber\bin\exceptions;
 
-use util\Internationalization;
+use phiber\util\Internationalization;
 
 
 /**
