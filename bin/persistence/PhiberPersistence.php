@@ -307,9 +307,6 @@ class PhiberPersistence extends PhiberPersistenceFactory
         if(!isset($this->infos['fields'])){
             $this->infos['fields'] = ["*"];
         }
-        if(empty($this->infos['where'])){
-            $this->infos['where'] = [''];
-        }
         $this->mergeSqlInformation();
 
     }
