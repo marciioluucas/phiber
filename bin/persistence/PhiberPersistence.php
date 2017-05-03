@@ -3,16 +3,16 @@
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
 
-namespace bin\persistence;
+namespace phiber\bin\persistence;
 
 
-use bin\factories\PhiberPersistenceFactory;
-use bin\queries\PhiberQueryWriter;
-use bin\queries\Restrictions;
-use PDO;
-use util\FuncoesReflections;
-use util\FuncoesString;
-use util\JsonReader;
+use phiber\bin\Config;
+use phiber\bin\factories\PhiberPersistenceFactory;
+use phiber\bin\queries\PhiberQueryWriter;
+use phiber\bin\queries\Restrictions;
+use \PDO;
+use phiber\util\FuncoesReflections;
+use phiber\util\JsonReader;
 
 
 /**
@@ -21,17 +21,75 @@ use util\JsonReader;
  */
 class PhiberPersistence extends PhiberPersistenceFactory
 {
+
+    /**
+     * Variável da configuração do Phiber
+     * @var JsonReader
+     */
+    private $phiberConfig;
+    /**
+     * Variável da tabela do objeto trabalhado
+     * @var string
+     */
+    private $table;
+    /**
+     * Campos/colunas do objeto trabalhado
+     * @var array
+     */
+    private $fields;
+    /**
+     * Valores/colunas dos campos
+     * @var array
+     */
+    private $fieldsValues;
+
+
     /**
      * Informações para a criação da SQL.
      * @var array
      */
-    private static $infos = [];
+    private $infos = [];
 
     /**
      * Informações mergidas
      * @var array
      */
-    private static $infosMergeds = [];
+    private $infosMergeds = [];
+
+
+    /**
+     * @var string
+     */
+    private $sql = "";
+
+
+    /**
+     * @var Restrictions
+     */
+    private $restrictions;
+
+    /**
+     * @return Restrictions
+     */
+    public function restrictions(): Restrictions
+    {
+        return $this->restrictions;
+    }
+
+    /**
+     * PhiberPersistence constructor.
+     * @param $obj
+     */
+    public function __construct($obj)
+    {
+        $this->restrictions = new Restrictions();
+        $funcoesReflections = new FuncoesReflections();
+//        TableMysql::sync($obj);
+        $this->phiberConfig = new Config();
+        $this->table = strtolower($funcoesReflections->pegaNomeClasseObjeto($obj));
+        $this->fields = $funcoesReflections->pegaAtributosDoObjeto($obj);
+        $this->fieldsValues = $funcoesReflections->pegaValoresAtributoDoObjeto($obj);
+    }
 
 
     /**
@@ -40,30 +98,28 @@ class PhiberPersistence extends PhiberPersistenceFactory
      * @param <T> $obj
      * @return bool|mixed
      */
-    public function create($obj)
+    public function create()
     {
-        TableMysql::sync($obj);
-        $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
-        $campos = FuncoesReflections::pegaAtributosDoObjeto($obj);
-        $camposV = FuncoesReflections::pegaValoresAtributoDoObjeto($obj);
 
-        $sql = new PhiberQueryWriter("create", [
-            "table" => $tabela,
-            "fields" => $campos,
-            "values" => $camposV
+        $this->sql = new PhiberQueryWriter("create", [
+            "table" => $this->table,
+            "fields" => $this->fields,
+            "values" => $this->fieldsValues
         ]);
-        if (JsonReader::read(BASE_DIR . "/phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
-            $pdo = $this->getConnection()->prepare($sql);
-            for ($i = 1; $i < count($campos); $i++) {
-                if ($camposV[$i] != null) {
-                    $pdo->bindValue($campos[$i], $camposV[$i]);
+
+        if ($this->phiberConfig->verifyExecuteQueries()) {
+            $pdo = $this->getConnection()->prepare($this->sql);
+
+            for ($i = 1; $i < count($this->fields); $i++) {
+                if ($this->fieldsValues[$i] != null) {
+                    $pdo->bindValue($this->fields[$i], $this->fieldsValues[$i]);
                 }
             }
             if ($pdo->execute()) {
                 return true;
             }
         }
-        return $sql;
+        return false;
 
     }
 
@@ -72,31 +128,27 @@ class PhiberPersistence extends PhiberPersistenceFactory
     /**
      * Faz o update no banco do objeto especificado, se caso a opção execute_queries estiver habilitada
      * @param <T> $obj
-     * @param null $info
      * @return mixed
      * @internal param array $conditions
      * @internal param array $conjunctions
      */
-    public function update($obj, $info = null)
+    public function update()
     {
-        TableMysql::sync($obj);
-        $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
-        $campos = FuncoesReflections::pegaAtributosDoObjeto($obj);
-        $camposV = FuncoesReflections::pegaValoresAtributoDoObjeto($obj);
-        $conditions = self::$infosMergeds['fields_and_values'];
 
-        $sql = new PhiberQueryWriter("update", [
-            "table" => $tabela,
-            "fields" => $campos,
-            "values" => $camposV,
-            "where" => self::$infosMergeds['where'],
+        $conditions = $this->infosMergeds['fields_and_values'];
+
+        $this->sql = new PhiberQueryWriter("update", [
+            "table" => $this->table,
+            "fields" => $this->fields,
+            "values" => $this->fieldsValues,
+            "where" => $this->infosMergeds['where'],
 
         ]);
-        if (JsonReader::read(BASE_DIR . "/phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
-            $pdo = $this->getConnection()->prepare($sql);
-            for ($i = 1; $i < count($campos); $i++) {
-                if ($camposV[$i] != null) {
-                    $pdo->bindValue($campos[$i], $camposV[$i]);
+        if ($this->phiberConfig->verifyExecuteQueries()) {
+            $pdo = $this->getConnection()->prepare($this->sql);
+            for ($i = 1; $i < count($this->fields); $i++) {
+                if ($this->fieldsValues[$i] != null) {
+                    $pdo->bindValue($this->fields[$i], $this->fieldsValues[$i]);
                 }
 
             }
@@ -110,7 +162,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
                 return true;
             }
         }
-        return $sql;
+        return $this->sql;
     }
 
     /**
@@ -119,152 +171,153 @@ class PhiberPersistence extends PhiberPersistenceFactory
      * @param null $infos
      * @return array|bool|mixed|string
      */
-    public function delete($obj, $infos = null)
+    public function delete()
     {
-        $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
-        if ($infos != null) {
-            $sql = new PhiberQueryWriter("select", [
-                "table" => $tabela,
-                "conditions" => isset($infos['conditions']) ? $infos['conditions'] : null,
-                "conjunctions" => isset($infos['conjunctions']) ? $infos['conjunctions'] : null
-            ]);
-        } else {
+//        if ($infos != null) {
+//            $this->sql = new PhiberQueryWriter("select", [
+//                "table" => $this->table,
+//                "conditions" => isset($infos['conditions']) ? $infos['conditions'] : null,
+//                "conjunctions" => isset($infos['conjunctions']) ? $infos['conjunctions'] : null
+//            ]);
+//        } else if ($infos == null) {
 
+        $this->sql = new PhiberQueryWriter("delete", [
+            "table" => $this->table,
+            "where" => $this->infosMergeds['where'],
 
-            $sql = new PhiberQueryWriter("delete", [
-                "table" => $tabela,
-                "where" => self::$infosMergeds['where'],
+        ]);
+//        }
 
-            ]);
-        }
-        if (JsonReader::read(BASE_DIR . "/phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
-            $pdo = $this->getConnection()->prepare($sql);
-            if ($infos != null) {
-                for ($i = 0; $i < count($infos['conditions']); $i++) {
+        if ($this->phiberConfig->verifyExecuteQueries()) {
+            $pdo = $this->getConnection()->prepare($this->sql);
+//            if ($infos != null) {
+//                for ($i = 0; $i < count($infos['conditions']); $i++) {
+//                    $pdo->bindValue(
+//                        "condition_" . $infos['conditions'][$i][0],
+//                        $infos['conditions'][$i][2]
+//                    );
+//                }
+//            } else if ($infos == null) {
+            if (isset($this->infosMergeds['fields_and_values'])) {
+                for ($i = 0; $i < count($this->infosMergeds['fields_and_values']); $i++) {
                     $pdo->bindValue(
-                        "condition_" . $infos['conditions'][$i][0],
-                        $infos['conditions'][$i][2]
+                        "condition_" . key($this->infosMergeds['fields_and_values']),
+                        $this->infosMergeds['fields_and_values'][key($this->infosMergeds['fields_and_values'])]
                     );
                 }
-            } else {
-                if (isset(self::$infosMergeds['fields_and_values'])) {
-                    for ($i = 0; $i < count(self::$infosMergeds['fields_and_values']); $i++) {
-                        $pdo->bindValue(
-                            "condition_" . key(self::$infosMergeds['fields_and_values']),
-                            self::$infosMergeds['fields_and_values'][key(self::$infosMergeds['fields_and_values'])]
-                        );
-                    }
-                }
             }
+//            }
             if ($pdo->execute()) {
                 return true;
             }
         }
-        return $sql;
+        return $this->sql;
     }
 
     /**
      * Faz o rowCount (contagem de linhas) objeto especificado, se caso a opção execute_queries estiver habilitada
-     * @param Object $obj
-     * @param array $condicoes
-     * @param array $conjuncoes
-     * @return mixed|void
+     * @param null $infos
+     * @return mixed|int
+     * @internal param Object $obj
+     * @internal param array $condicoes
+     * @internal param array $conjuncoes
      */
-    public function rowCount($obj, $condicoes = [], $conjuncoes = [])
+    public function rowCount()
     {
-        // TODO: Implement rowCount() method.
+        return count($this->select());
     }
 
     /**
      * Faz a seleção no banco do objeto especificado, se caso a opção execute_queries estiver habilitada
-     * @param <T> $obj
      * @param null $infos
      * @return array|bool|mixed
      */
-    public function select($obj, $infos = null)
+    public function select()
     {
-        TableMysql::sync($obj);
-        $tabela = FuncoesString::paraCaixaBaixa(FuncoesReflections::pegaNomeClasseObjeto($obj));
-        if ($infos != null) {
-            $sql = new PhiberQueryWriter("select", [
-                "table" => $tabela,
-                "fields" => isset($infos['fields']) ? $infos['fields'] : "*",
-                "conditions" => isset($infos['conditions']) ? $infos['conditions'] : null,
-                "conjunctions" => isset($infos['conjunctions']) ? $infos['conjunctions'] : null
-            ]);
-        } else {
-            $fields = isset(
-                self::$infosMergeds['fields']) ?
-                implode(", ", self::$infosMergeds['fields']) :
-                "*";
+//        if ($infos != null) {
+//            $this->sql = new PhiberQueryWriter("select", [
+//                "table" => $this->table,
+//                "fields" => isset($infos['fields']) ? $infos['fields'] : "*",
+//                "conditions" => isset($infos['conditions']) ? $infos['conditions'] : null,
+//                "conjunctions" => isset($infos['conjunctions']) ? $infos['conjunctions'] : null
+//            ]);
+//        } else if ($infos == null) {
+        $fields = isset($this->infosMergeds['fields']) ?
+            implode(", ", $this->infosMergeds['fields']) :
+            "*";
 
-            $sql = new PhiberQueryWriter("select", [
-                "table" => $tabela,
-                "fields" => $fields,
-                "where" => isset(self::$infosMergeds['where']) ?
-                    self::$infosMergeds['where'] :
-                    null
+        $this->sql = new PhiberQueryWriter("select", [
+            "table" => $this->table,
+            "fields" => $fields,
+            "where" => isset($this->infosMergeds['where']) ?
+                $this->infosMergeds['where'] :
+                null
 
-            ]);
-        }
+        ]);
+//        }
 
-        if (JsonReader::read(BASE_DIR . "/phiber_config.json")->phiber->execute_querys == 1 ? true : false) {
-            $pdo = $this->getConnection()->prepare($sql);
-            if ($infos != null) {
-                for ($i = 0; $i < count($infos['conditions']); $i++) {
+        $result = [];
+        if ($this->phiberConfig->verifyExecuteQueries()) {
+            $pdo = $this->getConnection()->prepare($this->sql);
+//            if ($infos != null) {
+//                for ($i = 0; $i < count($infos['conditions']); $i++) {
+//                    $pdo->bindValue(
+//                        "condition_" . $infos['conditions'][$i][0],
+//                        $infos['conditions'][$i][2]
+//                    );
+//                }
+//            } else if ($infos == null) {
+            if (isset($this->infosMergeds['fields_and_values'])) {
+
+                while (current($this->infosMergeds['fields_and_values'])) {
                     $pdo->bindValue(
-                        "condition_" . $infos['conditions'][$i][0],
-                        $infos['conditions'][$i][2]
-                    );
+                        "condition_" . key($this->infosMergeds['fields_and_values']),
+                        $this->infosMergeds['fields_and_values'][key($this->infosMergeds['fields_and_values'])]);
+                    next($this->infosMergeds['fields_and_values']);
                 }
-            } else {
-                if (isset(self::$infosMergeds['fields_and_values'])) {
-                    for ($i = 0; $i < count(self::$infosMergeds['fields_and_values']); $i++) {
-                        $pdo->bindValue(
-                            "condition_" . key(self::$infosMergeds['fields_and_values']),
-                            self::$infosMergeds['fields_and_values'][key(self::$infosMergeds['fields_and_values'])]
-                        );
-                    }
-                }
+
+
             }
-            if ($pdo->execute()) {
-                return $pdo->fetchAll((PDO::FETCH_ASSOC));
-            }
+//            }
+            $pdo->execute();
+            $result = $pdo->fetchAll((PDO::FETCH_ASSOC));
+
         }
-        return $sql;
+        return $result;
     }
 
-    /**
-     * Caso queira criar uma query.
-     * @param String $query
-     * @return mixed|void
-     */
-    public
-    function createQuery($query)
-    {
-        // TODO: Implement createQuery() method.
-    }
+//    /**
+//     * Caso queira criar uma query.
+//     * @param String $query
+//     * @return mixed|void
+//     */
+//    public function createQuery($query)
+//    {
+//        // TODO: Implement createQuery() method.
+//    }
 
 
     /**
      * Adiciona parâmetros da classe restriction nas informações para buildar o SQL.
      * @param $infos
      */
-    public static function add($infos)
+    public function add($infos)
     {
-        array_push(self::$infos, $infos);
-        self::mergeSqlInformation();
+        array_push($this->infos, $infos);
+        if(!isset($this->infos['fields'])){
+            $this->infos['fields'] = ["*"];
+        }
+        $this->mergeSqlInformation();
 
     }
 
     /**
-     * Função responsável por mostrar o array das informações adicionadas a partir da Restrictions
-     * @return array
+     * Função responsável por mostrar o string da SQL gerada a partir do objeto
+     * @return string
      */
     public function show()
     {
-
-        return self::$infosMergeds;
+        return $this->sql;
     }
 
 
@@ -273,11 +326,12 @@ class PhiberPersistence extends PhiberPersistenceFactory
      */
     private function mergeSqlInformation()
     {
-        array_push(self::$infos, Restrictions::getFieldsAndValues());
-        for ($i = 0; $i < count(self::$infos) - 1; $i++) {
-            self::$infosMergeds[array_keys(self::$infos[$i])[0]] =
-                self::$infos[$i][array_keys(self::$infos[$i])[0]];
+        array_push($this->infos, $this->restrictions->getFieldsAndValues());
+        for ($i = 0; $i < count($this->infos) - 1; $i++) {
+            $this->infosMergeds[array_keys($this->infos[$i])[0]] =
+                $this->infos[$i][array_keys($this->infos[$i])[0]];
         }
     }
+
 
 }
