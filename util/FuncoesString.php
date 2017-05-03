@@ -3,7 +3,7 @@
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
 
-namespace util;
+namespace phiber\util;
 
 /**
  *
@@ -17,7 +17,7 @@ class FuncoesString
      * @param $string
      * @return string
      */
-    public static final function paraCaixaAlta($string)
+    public function paraCaixaAlta($string)
     {
         return strtoupper($string);
     }
@@ -27,7 +27,7 @@ class FuncoesString
      * @param $string
      * @return string
      */
-    public static final function paraCaixaBaixa($string)
+    public function paraCaixaBaixa($string)
     {
         return strtolower($string);
     }
@@ -38,20 +38,19 @@ class FuncoesString
      * @param $stringBuscada
      * @return bool
      */
-    public static final function verificaStringExistente($string, $stringBuscada)
+    public function verificaStringExistente($string, $stringBuscada)
     {
         if (strpos($string, $stringBuscada) !== false) {
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**
      * @param $string
      * @return string
      */
-    public static final function passarPrimeiraLetraParaCaixaAlta($string)
+    public function passarPrimeiraLetraParaCaixaAlta($string)
     {
         return ucfirst($string);
     }
@@ -63,13 +62,13 @@ class FuncoesString
      * @param null $posFinal
      * @return string
      */
-    public static final function separaString($string, $posInicial, $posFinal = null)
+    public function separaString($string, $posInicial, $posFinal = null)
     {
         if ($posFinal == null) {
             return substr($string, $posInicial - 1);
-        } else {
-            return substr($string, $posInicial - 1, ($posFinal - 1) * (-1));
         }
+        return substr($string, $posInicial - 1, ($posFinal - 1) * (-1));
+
     }
 
 
@@ -79,7 +78,7 @@ class FuncoesString
      * @param $strBusca
      * @return int
      */
-    public static final function pegaPosStringDeterminada($string, $strBusca)
+    public function pegaPosStringDeterminada($string, $strBusca)
     {
         $tamanhoStrBusca = strlen($strBusca);
         return stripos($string, $strBusca) + $tamanhoStrBusca + 1;
@@ -92,8 +91,9 @@ class FuncoesString
      * @param $substituicao
      * @return mixed
      */
-    public static final function substituiOcorrenciasDeUmaString($string, $strBusca, $substituicao) {
-        return str_replace($strBusca,$substituicao,$string);
+    public function substituiOcorrenciasDeUmaString($string, $strBusca, $substituicao)
+    {
+        return str_replace($strBusca, $substituicao, $string);
     }
 
 }

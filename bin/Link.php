@@ -5,12 +5,12 @@
  * Date: 19/10/2016
  * Time: 18:50
  */
-namespace bin;
+namespace phiber\bin;
 
-use bin\exceptions\PhiberException;
+use phiber\bin\exceptions\PhiberException;
 use PDO;
-use util\Internationalization;
-use util\JsonReader;
+use phiber\util\Internationalization;
+use phiber\util\JsonReader;
 
 
 /**
@@ -32,7 +32,14 @@ class Link
     {
         try {
             if ($this->instancia == null) {
-                $json = JsonReader::read(BASE_DIR . "/phiber_config.json");
+
+                $json = new JsonReader(BASE_DIR . "/phiber_config.json");
+
+                if (!empty(glob(dirname(__DIR__, 4) . "/phiber_config.json")[0])) {
+                    $json = new JsonReader(glob(dirname(__DIR__, 4) . "/phiber_config.json")[0]);
+                }
+
+                $json= $json->read();
                 try {
                     $this->instancia = new PDO(
                         $json->phiber->link->url,

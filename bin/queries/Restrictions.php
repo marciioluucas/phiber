@@ -3,8 +3,8 @@
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
 
-namespace bin\queries;
-use bin\persistence\PhiberPersistence;
+namespace phiber\bin\queries;
+
 
 
 /**
@@ -21,7 +21,7 @@ class Restrictions
     /**
      * @return array
      */
-    public static function getFieldsAndValues(): array
+    public function getFieldsAndValues(): array
     {
         return self::$fieldsAndValues;
     }
@@ -30,7 +30,7 @@ class Restrictions
     /**
      * Faz a query de comparação IGUAL
      * Exemplo:
-     *  eq("idade",15);
+     *  equals("idade",15);
      *  Criará um pedaço da query do banco assim -> idade = :condition_idade
      *  OBS: O ":condition_idade" é o responsável por depois fazer o binding do valor para
      *  evitar SQL Injection.
@@ -38,10 +38,9 @@ class Restrictions
      * @param $param2
      * @return array
      */
-    public static function eq($param1, $param2)
+    public function equals($param1, $param2)
     {
         self::addFieldsAndValues($param1, $param2);
-        PhiberPersistence::add(self::$fieldsAndValues);
         return
             [
                 "where" =>$param1 . " = :condition_" . $param1
@@ -60,10 +59,9 @@ class Restrictions
      * @param $param2
      * @return array
      */
-    public static function biggerThen($param1, $param2)
+    public function biggerThen($param1, $param2)
     {
         self::addFieldsAndValues($param1, $param2);
-        PhiberPersistence::add(self::$fieldsAndValues);
         return [
             "where" => $param1 . " > :condition_" . $param1
         ];
@@ -80,10 +78,9 @@ class Restrictions
      * @param $param2
      * @return array
      */
-    public static function greaterThan($param1, $param2)
+    public function greaterThan($param1, $param2)
     {
         self::addFieldsAndValues($param1, $param2);
-        PhiberPersistence::add(self::$fieldsAndValues);
         return [
             "where" => $param1 . " >= :condition_" . $param1,
         ];
@@ -100,10 +97,9 @@ class Restrictions
      * @param $param2
      * @return array
      */
-    public static function lessThen($param1, $param2)
+    public function lessThen($param1, $param2)
     {
         self::addFieldsAndValues($param1, $param2);
-        PhiberPersistence::add(self::$fieldsAndValues);
         return [
             "where" => $param1 . " < :condition_" . $param1,
         ];
@@ -120,10 +116,9 @@ class Restrictions
      * @param $param2
      * @return array
      */
-    public static function lessLike($param1, $param2)
+    public function lessLike($param1, $param2)
     {
         self::addFieldsAndValues($param1, $param2);
-        PhiberPersistence::add(self::$fieldsAndValues);
         return [
             "where" => $param1 . " <= :condition_" . $param1,
         ];
@@ -140,21 +135,21 @@ class Restrictions
      * @param $param2
      * @return array
      */
-    public static function like($param1, $param2)
+    public function like($param1, $param2)
     {
         self::addFieldsAndValues($param1, $param2);
-        PhiberPersistence::add(self::$fieldsAndValues);
+
         return [
-            "where" => $param1 . " LIKE %:condition_" . $param1 . "%",
+            "where" => $param1 . " LIKE CONCAT('%',:condition_" . $param1 . ",'%')",
         ];
     }
 
     /**
      * Faz a query de conjunção OU
      * Exemplo:
-     *  $condicao1 = eq("idade",15);
+     *  $condicao1 = equals("idade",15);
      *  $condicao2 = like("nome","Jhon");
-     *  or($condicao1,$condicao2);
+     *  either($condicao1,$condicao2);
      *
      *  Criará um pedaço da query do banco assim ->
      *    (idade = :condition_idade or nome like %:condition_nome%);
@@ -164,10 +159,9 @@ class Restrictions
      * @param $condition2
      * @return array
      */
-    public static function or ($condition1, $condition2)
+    public function either($condition1, $condition2)
     {
 
-        PhiberPersistence::add(self::$fieldsAndValues);
         return [
             "where" => "(" . $condition1['where'] . " OR " . $condition2['where'] . ")",
         ];
@@ -188,10 +182,9 @@ class Restrictions
      * @param $condition2
      * @return array
      */
-    public static function and ($condition1, $condition2)
+    public function and ($condition1, $condition2)
     {
 
-        PhiberPersistence::add(self::$fieldsAndValues);
         return [
             "where" => "(" . $condition1['where'] . " AND " . $condition2['where'] . ")"
         ];
@@ -205,13 +198,12 @@ class Restrictions
      * @param $fields
      * @return array
      */
-    public static function fields($fields)
+    public function fields($fields)
     {
-        if($fields != null){
+        if(!empty($fields)){
             return ["fields" => $fields];
-        }else{
-            return ["fields"=> "*"];
         }
+        return ["fields"=>["*"]];
     }
 
     /**
@@ -220,19 +212,12 @@ class Restrictions
      * @param $field
      * @param $value
      */
-    private static function addFieldsAndValues($field, $value)
+    private function addFieldsAndValues($field, $value)
     {
         self::$fieldsAndValues['fields_and_values'][$field] = $value;
     }
 
-    /**
-     * Mostra os campos e os valores passados
-     * @ignore
-     * @return array
-     */
-    public static function show()
-    {
-        return self::$fieldsAndValues;
-    }
+
+
 
 }

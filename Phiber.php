@@ -4,9 +4,9 @@
  * Data: 16/03/17
  * Hora: 19:07
  */
-
-use bin\persistence\PhiberPersistence;
-include_once 'PhiberAutoload.php';
+namespace phiber;
+use phiber\bin\persistence\PhiberPersistence;
+//include_once 'PhiberAutoload.php';
 
 /**
  *Constante que define a base de onde está localizado o projeto
@@ -28,10 +28,10 @@ class Phiber
      * que é responsável pela persistencia dos dados. (CREATE, RETREAVE, UPDATE, DELETE)
      * @return PhiberPersistence
      */
-    public static function openPersist()
+    public function openPersist($object)
     {
-        new PhiberAutoload();
-        return new PhiberPersistence();
+//        new PhiberAutoload();
+        return new PhiberPersistence($object);
     }
 
 }

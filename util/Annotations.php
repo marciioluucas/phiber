@@ -3,7 +3,7 @@
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
 
-namespace util;
+namespace phiber\util;
 
 
 
@@ -22,10 +22,11 @@ class Annotations {
      * @return array
      */
     public static final function getAnnotation($obj){
+        $funReflec = new FuncoesReflections();
         $out = array();
         $pattern = '/@+_+[A-z]\w+=\w+/';
-        $fullComments = FuncoesReflections::retornaComentariosAtributos($obj);
-        $attributos = FuncoesReflections::pegaAtributosDoObjeto($obj);
+        $fullComments = $funReflec->retornaComentariosAtributos($obj);
+        $attributos = $funReflec->pegaAtributosDoObjeto($obj);
         $test =[];
         for($i = 0; $i < count($attributos); $i++){
             preg_match_all($pattern,

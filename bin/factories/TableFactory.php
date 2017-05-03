@@ -3,9 +3,9 @@
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
 
-namespace bin\factories;
+namespace phiber\bin\factories;
 
-use bin\Link;
+use phiber\bin\Link;
 
 /**
  * Classe responsável por ser a fábrica de tabelas

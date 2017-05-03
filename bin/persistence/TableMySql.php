@@ -3,7 +3,7 @@
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
 
-namespace bin\persistence;
+namespace phiber\bin\persistence;
 
 
 use bin\factories\TableFactory;

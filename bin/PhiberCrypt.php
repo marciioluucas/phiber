@@ -3,8 +3,8 @@
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
 
-namespace bin;
-use bin\interfaces\{
+namespace phiber\bin;
+use phiber\bin\interfaces\{
     ICrypt
 };
 
