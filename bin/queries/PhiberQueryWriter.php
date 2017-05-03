@@ -167,7 +167,9 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
 
         try {
             $this->sql = "DELETE FROM $tabela ";
-            $this->sql .= " WHERE " . $whereCriteria . " ";
+            if($whereCriteria!=null){
+                $this->sql .= " WHERE " . $whereCriteria . " ";
+            }
             return $this->sql . ";";
         } catch (PhiberException $e) {
             throw new PhiberException(new Internationalization("query_processor_error"));
@@ -193,7 +195,9 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
             $campos = gettype($campos) == "array" ? implode(", ", $campos) : $campos;
 
             $this->sql = "SELECT " . $campos . " FROM $tabela ";
-            $this->sql .= " WHERE " . $whereCriteria . " ";
+            if($whereCriteria != null){
+                $this->sql .= " WHERE " . $whereCriteria . " ";
+            }
 
             return $this->sql . ";";
 

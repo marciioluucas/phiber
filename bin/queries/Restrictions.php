@@ -4,7 +4,7 @@
  */
 
 namespace phiber\bin\queries;
-use phiber\bin\persistence\PhiberPersistence;
+
 
 
 /**
@@ -140,7 +140,7 @@ class Restrictions
         self::addFieldsAndValues($param1, $param2);
 
         return [
-            "where" => $param1 . " LIKE %:condition_" . $param1 . "%",
+            "where" => $param1 . " LIKE CONCAT('%',:condition_" . $param1 . ",'%')",
         ];
     }
 
