@@ -203,7 +203,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
                 "fields" => $fields,
                 "where" => isset(self::$infosMergeds['where']) ?
                     self::$infosMergeds['where'] :
-                    null,
+                    null
 
             ]);
         }

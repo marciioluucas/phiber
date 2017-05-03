@@ -75,14 +75,11 @@
         <CLASSES>
           <root url="file://$MODULE_DIR$/vendor/cilex/cilex" />
           <root url="file://$MODULE_DIR$/vendor/cilex/console-service-provider" />
-          <root url="file://$MODULE_DIR$/vendor/clue/graph" />
           <root url="file://$MODULE_DIR$/vendor/container-interop/container-interop" />
           <root url="file://$MODULE_DIR$/vendor/doctrine/annotations" />
           <root url="file://$MODULE_DIR$/vendor/doctrine/instantiator" />
           <root url="file://$MODULE_DIR$/vendor/doctrine/lexer" />
           <root url="file://$MODULE_DIR$/vendor/erusev/parsedown" />
-          <root url="file://$MODULE_DIR$/vendor/graphp/algorithms" />
-          <root url="file://$MODULE_DIR$/vendor/graphp/graphviz" />
           <root url="file://$MODULE_DIR$/vendor/herrera-io/json" />
           <root url="file://$MODULE_DIR$/vendor/herrera-io/phar-update" />
           <root url="file://$MODULE_DIR$/vendor/jms/metadata" />
@@ -131,14 +128,11 @@
         <SOURCES>
           <root url="file://$MODULE_DIR$/vendor/cilex/cilex" />
           <root url="file://$MODULE_DIR$/vendor/cilex/console-service-provider" />
-          <root url="file://$MODULE_DIR$/vendor/clue/graph" />
           <root url="file://$MODULE_DIR$/vendor/container-interop/container-interop" />
           <root url="file://$MODULE_DIR$/vendor/doctrine/annotations" />
           <root url="file://$MODULE_DIR$/vendor/doctrine/instantiator" />
           <root url="file://$MODULE_DIR$/vendor/doctrine/lexer" />
           <root url="file://$MODULE_DIR$/vendor/erusev/parsedown" />
-          <root url="file://$MODULE_DIR$/vendor/graphp/algorithms" />
-          <root url="file://$MODULE_DIR$/vendor/graphp/graphviz" />
           <root url="file://$MODULE_DIR$/vendor/herrera-io/json" />
           <root url="file://$MODULE_DIR$/vendor/herrera-io/phar-update" />
           <root url="file://$MODULE_DIR$/vendor/jms/metadata" />
