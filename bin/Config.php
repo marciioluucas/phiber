@@ -33,6 +33,10 @@ class Config
     public function __construct()
     {
         $this->phiberConfig = new JsonReader(BASE_DIR . "/phiber_config.json");
+
+        if (!empty(glob(dirname(__DIR__, 4) . "/phiber_config.json")[0])) {
+            $this->phiberConfig = new JsonReader(glob(dirname(__DIR__, 4) . "/phiber_config.json")[0]);
+        }
     }
 
     /**
