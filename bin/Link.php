@@ -32,7 +32,13 @@ class Link
     {
         try {
             if ($this->instancia == null) {
+
                 $json = new JsonReader(BASE_DIR . "/phiber_config.json");
+
+                if (!empty(glob(dirname(__DIR__, 4) . "/phiber_config.json")[0])) {
+                    $json = new JsonReader(glob(dirname(__DIR__, 4) . "/phiber_config.json")[0]);
+                }
+
                 $json= $json->read();
                 try {
                     $this->instancia = new PDO(
