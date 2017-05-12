@@ -19,12 +19,21 @@ class Restrictions
     private static $fieldsAndValues = [];
 
     /**
+     * Restrictions constructor.
+     */
+    public function __construct()
+    {
+        self::$fieldsAndValues = [];
+    }
+
+    /**
      * @return array
      */
     public function getFieldsAndValues(): array
     {
         return self::$fieldsAndValues;
     }
+
 
 
     /**
