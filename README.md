@@ -19,14 +19,16 @@ Phiber is a simples ORM framework that helps you code your applications more fas
 # New Features!
 
   - Persistence
-  - Tables Creation (NON RELATIONABLES)
+  - Build websites, apps and api without a line of SQL.
+  
+  
 
 
 You can also:
   - See generated SQL
   - Activate console logs.
   
-This library has been made by a student of Technology in systems to Internet of Morrinhos - GO, Brazil.
+This library has been made by a student of Technology in Systems to Internet of Morrinhos - GO, Brazil.
 
 [![Twitter](https://img.shields.io/badge/IF-Goiano-brightgreen.svg)](https://www.ifgoiano.edu.br/morrinhos)
 
@@ -41,6 +43,10 @@ This library are in alpha test, I don't recommend to production environments.
 Phiber uses just pure PHP and until now only has been builded the part to MySQL 5.5+.
 *In the next versions we will implement in BDs like PostgreSQL and Oracle.
 
+
+### Dependencies
+
+Phiber have depdencies with just Composer.
 
 
 ### Installation
