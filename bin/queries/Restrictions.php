@@ -55,6 +55,17 @@ class Restrictions
 
     }
 
+    /**
+     * Faz a query de comparação DIFERENTE
+     * Exemplo:
+     *  different("idade",15);
+     *  Criará um pedaço da query do banco assim -> idade != :condition_idade
+     *  OBS: O ":condition_idade" é o responsável por depois fazer o binding do valor para
+     *  evitar SQL Injection.
+     * @param $param1
+     * @param $param2
+     * @return array
+     */
     public function different($param1, $param2)
     {
         self::addFieldsAndValues($param1, $param2);
