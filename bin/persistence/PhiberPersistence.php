@@ -6,11 +6,11 @@
 namespace phiber\bin\persistence;
 
 
+use PDO;
 use phiber\bin\Config;
 use phiber\bin\factories\PhiberPersistenceFactory;
 use phiber\bin\queries\PhiberQueryWriter;
 use phiber\bin\queries\Restrictions;
-use \PDO;
 use phiber\util\FuncoesReflections;
 use phiber\util\JsonReader;
 
@@ -68,12 +68,22 @@ class PhiberPersistence extends PhiberPersistenceFactory
      */
     private $restrictions;
 
+    private $returnSelectWithArray = false;
+
     /**
      * @return Restrictions
      */
     public function restrictions(): Restrictions
     {
         return $this->restrictions;
+    }
+
+    /**
+     * @param bool $isArray
+     */
+    public function returnArray(bool $isArray = false): void
+    {
+        $this->returnSelectWithArray = $isArray;
     }
 
     /**
@@ -95,7 +105,6 @@ class PhiberPersistence extends PhiberPersistenceFactory
     /**
      * Faz a criação do objeto especificado no banco de dados, caso a opção
      * execute_queries na configuração esteja habilitada.
-     * @param <T> $obj
      * @return bool|mixed
      */
     public function create()
@@ -123,11 +132,9 @@ class PhiberPersistence extends PhiberPersistenceFactory
 
     }
 
-//TODO: FAZER OS METODOS DE CREATE QUERY PEGAR COMO PARAMETRO AS REFLECTIONS;
 
     /**
      * Faz o update no banco do objeto especificado, se caso a opção execute_queries estiver habilitada
-     * @param <T> $obj
      * @return mixed
      * @internal param array $conditions
      * @internal param array $conjunctions
@@ -162,7 +169,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
                 return true;
             }
         }
-        return $this->sql;
+        return false;
     }
 
     /**
@@ -211,7 +218,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
                 return true;
             }
         }
-        return $this->sql;
+        return false;
     }
 
     /**
@@ -280,11 +287,9 @@ class PhiberPersistence extends PhiberPersistenceFactory
             }
 //            }
             $pdo->execute();
-            $result =$pdo->fetch(PDO::FETCH_ASSOC);
-            if($pdo->rowCount() == 0) {
-                $result = [];
-            }
-            if($pdo->rowCount() >1){
+
+            $result = $pdo->fetch(PDO::FETCH_ASSOC);
+            if ($this->returnSelectWithArray) {
                 $result = $pdo->fetchAll((PDO::FETCH_ASSOC));
             }
 
@@ -310,7 +315,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
     public function add($infos)
     {
         array_push($this->infos, $infos);
-        if(!isset($this->infos['fields'])){
+        if (!isset($this->infos['fields'])) {
             $this->infos['fields'] = ["*"];
         }
         $this->mergeSqlInformation();

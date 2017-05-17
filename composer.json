@@ -1,6 +1,8 @@
 {
   "name": "marciioluucas/phiber",
-  "description": "Simples biblioteca ORM para PHP",
+  "version": "0.0.1",
+  "description": "Simple PHP ORM",
+  "keywords": ["orm","php orm", "simple orm","php framework","automatize sql writing"],
   "type": "library",
   "license": "MIT",
   "authors": [
@@ -22,5 +24,11 @@
   },
   "require-dev": {
     "phpdocumentor/phpdocumentor": "2.*"
-  }
+  },
+  "repositories": [
+    {
+      "type": "git",
+      "url": "http://github.com/marciioluucas/phiber"
+    }
+  ]
 }
