@@ -8,9 +8,9 @@
 
 # Phiber - ALPHA version 0.1
 
-[![Imgur](http://i.imgur.com/Ad02NS2.png)](https://nodesource.com/products/nsolid)
+[![Imgur](http://i.imgur.com/Ad02NS2.png)](https://marciioluucas.github.io/phiber)
 
-Phiber is a simples ORM framework that helps you code your applications more fast.
+Phiber is a simple ORM framework that helps you code your applications more fast.
 
   - MySQL integration
   - Object Orientation
@@ -81,8 +81,7 @@ phiber/phiber_config.json
       "connection_cache": true 
     },
     "log": true, 
-    "execute_queries": true, 
-    "code_sync": false 
+    "execute_queries": true
   }
 }
 ```
@@ -95,7 +94,6 @@ model/User.php
 ```php
 
 namespace test;
-require 'Phiber.php';
 use bin\Restrictions;
 use Exception;
 use phiber\Phiber;
@@ -118,7 +116,7 @@ class User
         $this->$prop = $value;
     }
 
-    public function validadeInfos()
+    public function validateInfos()
     {
         if ($this->name != null && $this->name != "") {
             if ($this->email != null && $this->email != "") {
@@ -133,8 +131,10 @@ class User
     public function create()
     {
         try {
-            if ($this->validadeInfos()) {
-                if (Phiber::openPersist()->create($this)) {
+        $phiber = new Phiber();
+        $criteria = $phiber->openPersist($this)
+            if ($this->validateInfos()) {
+                if ($criteria->create()) {
                     return json_encode(
                         [
                             "message" => "Success!!!",
@@ -163,34 +163,35 @@ class User
         }
     }
 
-    public function retrave()
+    public function retreave()
     {
-        $criteria = Phiber::openPersist();
+        $phiber = new Phiber();
+        $criteria = $phiber->openPersist($this)
         $restrictionName = "";
         $restrictionEmail = "";
 
         /* Here I created a retriction for each attribute */
         if ($this->name != null && $this->name != "") {
-            $restrictionName = Restrictions::like("name", $this->name);
+            $restrictionName = $criteria->restrictions()->like("name", $this->name);
             $criteria->add($restrictionName);
 
         } else if ($this->email != null && $this->email != "") {
-            $restrictionEmail = Restrictions::like("email", $this->email);
+            $restrictionEmail = $criteria->restrictions()->like("email", $this->email);
             $criteria->add($restrictionEmail);
 
         }
         /* And here I created a conjunction "AND" with the two restrictions*/
-        $criteria->add(Restrictions::and($restrictionEmail,$restrictionName));
-        return json_encode($criteria->select($this));
+        $criteria->add($criteria->restrictions()->and($restrictionEmail,$restrictionName));
+        return json_encode($criteria->select());
     }
 
     public function update()
     {
         try {
-            $criteria = Phiber::openPersist();
-
-
-            $criteria->add(Restrictions::eq("id", $this->id));
+            $phiber = new Phiber();
+            $criteria = $phiber->openPersist($this);
+            
+            $criteria->add($criteria->restrictions()->equals("id", $this->id));
             /*  Here I added a condition "equal" in WHERE of the query.
                 The responsible class that creates the query, will return something like this.
                 Select from user where id = :condition_id;
@@ -231,10 +232,10 @@ class User
 
     public function delete()
     {
-        $criteria = Phiber::openPersist();
+        $phiber = new Phiber();
+        $criteria = $phiber->openPersist($this)
 
-
-        $criteria->add(Restrictions::eq("id", $this->id));
+        $criteria->add($criteria->restrictions()->eq("id", $this->id));
         /*  Here I added a condition "equal" in WHERE of the query.
             The responsible class that creates the query, will return something like this.
             Select from user where id = :condition_id;
