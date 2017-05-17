@@ -6,7 +6,6 @@
 namespace phiber\bin\queries;
 
 
-
 /**
  * Classe responsável por fazer as restrições das operações do banco
  * @package bin
@@ -35,7 +34,6 @@ class Restrictions
     }
 
 
-
     /**
      * Faz a query de comparação IGUAL
      * Exemplo:
@@ -52,7 +50,17 @@ class Restrictions
         self::addFieldsAndValues($param1, $param2);
         return
             [
-                "where" =>$param1 . " = :condition_" . $param1
+                "where" => $param1 . " = :condition_" . $param1
+            ];
+
+    }
+
+    public function different($param1, $param2)
+    {
+        self::addFieldsAndValues($param1, $param2);
+        return
+            [
+                "where" => $param1 . " != :condition_" . $param1
             ];
 
     }
@@ -209,10 +217,10 @@ class Restrictions
      */
     public function fields($fields)
     {
-        if(!empty($fields)){
+        if (!empty($fields)) {
             return ["fields" => $fields];
         }
-        return ["fields"=>["*"]];
+        return ["fields" => ["*"]];
     }
 
     /**
@@ -225,8 +233,6 @@ class Restrictions
     {
         self::$fieldsAndValues['fields_and_values'][$field] = $value;
     }
-
-
 
 
 }
