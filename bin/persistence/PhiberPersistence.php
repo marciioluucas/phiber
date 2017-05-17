@@ -290,8 +290,10 @@ class PhiberPersistence extends PhiberPersistenceFactory
 
             if ($this->returnSelectWithArray and $pdo->rowCount() > 1) {
                 $result = $pdo->fetchAll((PDO::FETCH_ASSOC));
-            }else if(!($this->returnSelectWithArray and $pdo->rowCount() > 1)){
-                $result = $pdo->fetch(PDO::FETCH_ASSOC);
+            }else{
+                if($pdo->rowCount() != 0){
+                    $result = $pdo->fetch(PDO::FETCH_ASSOC);
+                }
             }
         }
         return $result;
