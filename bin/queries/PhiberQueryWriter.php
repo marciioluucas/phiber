@@ -109,14 +109,16 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
             }
 //
 //            $nomeCampos = [];
-//            $camposNome = array_values($camposNome);
+            $camposNome = array_values($camposNome);
             $this->sql = "UPDATE $tabela SET ";
 //
             for ($i = 0; $i < count($camposNome); $i++) {
-                if ($i != count($camposNome) - 1) {
-                    $this->sql .= $camposNome[$i] . " = :" . $camposNome[$i] . ", ";
-                } else if ($i == count($camposNome) - 1) {
-                    $this->sql .= $camposNome[$i] . " = :" . $camposNome[$i];
+                if(!empty($camposNome[$i])){
+                    if ($i != count($camposNome) - 1) {
+                        $this->sql .= $camposNome[$i] . " = :" . $camposNome[$i] . ", ";
+                    } else {
+                        $this->sql .= $camposNome[$i] . " = :" . $camposNome[$i];
+                    }
                 }
             }
 //
