@@ -81,7 +81,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
     /**
      * @param bool $isArray
      */
-    public function returnArray(bool $isArray = false): void
+    public function returnArray(bool $isArray = false)
     {
         $this->returnSelectWithArray = $isArray;
     }
