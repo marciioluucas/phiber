@@ -268,6 +268,7 @@ class User
 
 ### TODOS:
 
+ - In the create method, make the support for the composition and others.
  - Split classes correctly
  - Do Relationables tables
 
