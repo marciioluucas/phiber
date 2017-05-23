@@ -56,6 +56,12 @@ class PhiberPersistence extends PhiberPersistenceFactory
      */
     private $infosMergeds = [];
 
+    /**
+     * Informações mergidas
+     * @var array
+     */
+    private $rowCount = 0;
+
 
     /**
      * @var string
@@ -84,6 +90,19 @@ class PhiberPersistence extends PhiberPersistenceFactory
     public function returnArray(bool $isArray = false)
     {
         $this->returnSelectWithArray = $isArray;
+    }
+
+    /**
+     * Faz o rowCount (contagem de linhas) objeto especificado, se caso a opção execute_queries estiver habilitada
+     * @param null $infos
+     * @return mixed|int
+     * @internal param Object $obj
+     * @internal param array $condicoes
+     * @internal param array $conjuncoes
+     */
+    public function rowCount()
+    {
+        return $this->rowCount;
     }
 
     /**
@@ -221,18 +240,6 @@ class PhiberPersistence extends PhiberPersistenceFactory
         return false;
     }
 
-    /**
-     * Faz o rowCount (contagem de linhas) objeto especificado, se caso a opção execute_queries estiver habilitada
-     * @param null $infos
-     * @return mixed|int
-     * @internal param Object $obj
-     * @internal param array $condicoes
-     * @internal param array $conjuncoes
-     */
-    public function rowCount()
-    {
-        return count($this->select());
-    }
 
     /**
      * Faz a seleção no banco do objeto especificado, se caso a opção execute_queries estiver habilitada
@@ -287,13 +294,15 @@ class PhiberPersistence extends PhiberPersistenceFactory
             }
 //            }
             $pdo->execute();
+
             if ($this->returnSelectWithArray and $pdo->rowCount() > 1) {
                 $result = $pdo->fetchAll((PDO::FETCH_ASSOC));
-            }else{
-                if($pdo->rowCount() != 0){
+            } else {
+                if ($pdo->rowCount() != 0) {
                     $result = $pdo->fetch(PDO::FETCH_ASSOC);
                 }
             }
+            $this->rowCount = $pdo->rowCount();
         }
         return $result;
     }
