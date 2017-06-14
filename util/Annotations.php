@@ -29,7 +29,8 @@ class Annotations {
         $fullComments = $funReflec->retornaComentariosAtributos($obj);
         $attributos = $funReflec->pegaAtributosDoObjeto($obj);
         $ann = [];
-        for($i = 0; $i < count($attributos); $i++){
+        $tamanho = count($attributos);
+        for ($i = 0; $i < $tamanho; $i++) {
             preg_match_all($pattern,
                 $fullComments[$attributos[$i]],
                 $out);

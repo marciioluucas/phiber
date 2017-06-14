@@ -86,8 +86,8 @@ class FuncoesReflections
         $reflectionClass = new ReflectionClass($obj);
         $propriedades = $reflectionClass->getProperties(ReflectionProperty::IS_PUBLIC |
             ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PRIVATE);
-
-        for ($i = 0; $i < count($propriedades); $i++) {
+        $tamanho = count($propriedades);
+        for ($i = 0; $i < $tamanho; $i++) {
             $properties[$i] = $propriedades[$i]->name;
         }
 //        if ($reflectionClass->getParentClass() != null) {
@@ -108,6 +108,26 @@ class FuncoesReflections
         return $reflectionClass->getShortName();
     }
 
+    /**
+     * Função responsável por retornar os valores dos atributos das classes mães,
+     * se as mesmas existirem, se caso a classe em questão não for uma classe filha, a função retornará
+     * false.
+     * @param $obj
+     * @return bool|array
+     */
+    public function retornaValoresAtributosClassesMaes($obj)
+    {
+        if (self::verificaSeEClasseFilha($obj)) {
+            $nomeClassesMae = self::retornaClassesMaes($obj);
+            $valores = [];
+            $tamanho = count($nomeClassesMae);
+            for ($i = 0; $i < $tamanho; $i++) {
+                $valores[$i] = self::pegaValoresAtributoDoObjeto($nomeClassesMae[$i]);
+            }
+            return $valores;
+        }
+        return false;
+    }
 
     /**
      * Função responsável por verifidar se a classe é filha de alguma outra classe,
@@ -123,26 +143,6 @@ class FuncoesReflections
         }
         return false;
 
-    }
-
-    /**
-     * Função responsável por retornar os valores dos atributos das classes mães,
-     * se as mesmas existirem, se caso a classe em questão não for uma classe filha, a função retornará
-     * false.
-     * @param $obj
-     * @return bool|array
-     */
-    public function retornaValoresAtributosClassesMaes($obj)
-    {
-        if (self::verificaSeEClasseFilha($obj)) {
-            $nomeClassesMae = self::retornaClassesMaes($obj);
-            $valores = [];
-            for ($i = 0; $i < count($nomeClassesMae); $i++) {
-                $valores[$i] = self::pegaValoresAtributoDoObjeto($nomeClassesMae[$i]);
-            }
-            return $valores;
-        }
-        return false;
     }
 
     /**
@@ -177,7 +177,8 @@ class FuncoesReflections
         $nomeAtributos = self::pegaAtributosDoObjeto($obj);
         $valAtrFinal = [];
         $reflectionClass = new ReflectionClass($obj);
-        for ($i = 0; $i < count($nomeAtributos); $i++) {
+        $tamanho = count($nomeAtributos);
+        for ($i = 0; $i < $tamanho; $i++) {
             $reflectionProperty = $reflectionClass->getProperty($nomeAtributos[$i]);
             $reflectionProperty->setAccessible(true);
             $valAtrFinal[$i] = $reflectionProperty->getValue($obj);
@@ -195,8 +196,9 @@ class FuncoesReflections
     public function retornaNomeAtributosClassesMaes($obj)
     {
         $atributos = [];
+        $tamanho = count(self::retornaClassesMaes($obj));
         for ($i = 0;
-             $i < count(self::retornaClassesMaes($obj));
+             $i < $tamanho;
              $i++) {
             $atributos[$i] = array(self::retornaClassesMaes($obj)[$i] =>
                 self::pegaAtributosDoObjeto(self::retornaClassesMaes($obj)[$i]));
@@ -214,7 +216,8 @@ class FuncoesReflections
     {
         $arrAttrNames = self::pegaAtributosDoObjeto($obj);
         $arrAttrComm = array();
-        for ($i = 0; $i < count($arrAttrNames); $i++) {
+        $tamanho = count($arrAttrNames);
+        for ($i = 0; $i < $tamanho; $i++) {
 
             $reflectionAttr = new ReflectionProperty($obj, $arrAttrNames[$i]);
 
