@@ -26,7 +26,7 @@ class Internationalization
         $this->msgTranslated = $lang->read()->phiber_lang->$reference . "";
     }
 
-    function __toString()
+    public function __toString()
     {
         return $this->msgTranslated;
     }

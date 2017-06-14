@@ -1,12 +1,15 @@
 <?php
 /**
+ * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
+ */
+
+/**
  * Classe criada por Márcio Lucas R de Oliveira (lukee)
  * Data: 16/03/17
  * Hora: 19:07
  */
 namespace phiber;
 use phiber\bin\persistence\PhiberPersistence;
-//include_once 'PhiberAutoload.php';
 
 /**
  *Constante que define a base de onde está localizado o projeto
@@ -30,7 +33,6 @@ class Phiber
      */
     public function openPersist($object)
     {
-//        new PhiberAutoload();
         return new PhiberPersistence($object);
     }
 

@@ -1,5 +1,9 @@
 <?php
+/**
+ * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
+ */
 
+namespace phiber;
 /**
  * Created by PhpStorm.
  * User: marci
@@ -8,7 +12,7 @@
  */
 class PhiberAutoload
 {
-    function __construct()
+    public function __construct()
     {
         spl_autoload_register(function ($class) {
             include_once(str_replace('\\', '/', $class . '.php'));

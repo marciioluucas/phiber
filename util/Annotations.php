@@ -21,21 +21,22 @@ class Annotations {
      * Retorna um array de atributos
      * @return array
      */
-    public static final function getAnnotation($obj){
+    public final static function getAnnotation($obj)
+    {
         $funReflec = new FuncoesReflections();
         $out = array();
         $pattern = '/@+_+[A-z]\w+=\w+/';
         $fullComments = $funReflec->retornaComentariosAtributos($obj);
         $attributos = $funReflec->pegaAtributosDoObjeto($obj);
-        $test =[];
+        $ann = [];
         for($i = 0; $i < count($attributos); $i++){
             preg_match_all($pattern,
                 $fullComments[$attributos[$i]],
                 $out);
-            $test[$attributos[$i]] = $out[0];
+            $ann[$attributos[$i]] = $out[0];
 
 
         }
-        return  $test;
+        return $ann;
     }
 }

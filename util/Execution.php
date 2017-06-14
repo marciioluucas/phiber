@@ -21,7 +21,7 @@ class Execution
     /**
      * @return mixed
      */
-    function getTime()
+    public final function getTime()
     {
         return microtime(TRUE);
     }
@@ -30,7 +30,7 @@ class Execution
     /**
      *  Procedimento responsável por calcular o tempo incial da execução
      */
-    static function start()
+    public final static function start()
     {
         self::$time = self::getTime();
     }
@@ -40,7 +40,7 @@ class Execution
      * formata o número para 6 digitos após a vírgula.
      * @return string
      */
-    static function end()
+    public final static function end()
     {
         $finalTime = self::getTime();
         $execTime = $finalTime - self::$time;
