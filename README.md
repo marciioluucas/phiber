@@ -20,7 +20,7 @@ Phiber is a simple ORM framework that helps you code your applications faster.
 # New Features!
 
   - Persistence
-  - Build websites, apps and api without a line of SQL.
+  - Build websites, apps and api without a single SQL query line.
   - Choose if you wanna make your SQL manually or by Object Mapping.
   
 
@@ -29,13 +29,13 @@ You can also:
   - See generated SQL
   - Activate console logs.
   
-This library has been made by a student of Technology in Systems to Internet of Morrinhos - GO, Brazil.
+This library has been made by a Internet Systems Tecnology's student from Morrinhos - GO, Brazil.
 
 [![IFGoiano](https://img.shields.io/badge/IF-Goiano-brightgreen.svg)](https://www.ifgoiano.edu.br/morrinhos)
 
-Criador [Márcio Lucas]
+Creator [Márcio Lucas]
 
-> I made this library to increase my knowledge and to help my friends programmers build apps in PHP more fast, cause I see an big difficulty to build SQLs and i think it is very boring. 
+> I made this library to increase my knowledge and to help my programmer friends build apps in PHP faster, because I see big difficulty to build SQLs and i think it is very boring. 
 
 This library are in alpha test, I don't recommend to production environments.
 
@@ -47,7 +47,7 @@ Phiber uses just pure PHP and until now only has been builded the part to MySQL 
 
 ### Dependencies
 
-Phiber have depdencies with just Composer.
+Phiber have only depdencies with Composer.
 
 
 ### Installation
@@ -56,16 +56,15 @@ Phiber requires  PHP 5.3.3+ to run and MySQL 5.5+.
 
 Installing Phiber in your project.
 
-You can install by two ways. First is making the Download from github repository and putting the folder of your project
-The second way is installing via composer with this command bellow:
+The Phiber instalation is made by Composer, using the console code below:
 ```sh
 $ composer require marciioluucas/phiber
 ```
 
 ### Config
 
-To config Phiber is very simple,
-you have to create an archive called phiber_config.json in your root path of your project
+To configure Phiber is very simple,
+you have to create an archive called phiber_config.json in your project root path 
 same like this.
 
 $ROOT_PROJECT_PATH/phiber_config.json
@@ -88,7 +87,7 @@ $ROOT_PROJECT_PATH/phiber_config.json
 ```
 
 ### Examples
-Now we will create an crud class using Phiber
+Now we will create a crud class using Phiber
 
 Notice this class, this is where magic happens.
 model/User.php
