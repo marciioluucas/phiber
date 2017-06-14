@@ -11,7 +11,7 @@
 
 [![Imgur](http://i.imgur.com/Ad02NS2.png)](https://marciioluucas.github.io/phiber)
 
-Phiber is a simple ORM framework that helps you code your applications more fast.
+Phiber is a simple ORM framework that helps you code your applications faster.
 
   - MySQL integration
   - Object Orientation
@@ -21,7 +21,7 @@ Phiber is a simple ORM framework that helps you code your applications more fast
 
   - Persistence
   - Build websites, apps and api without a line of SQL.
-  
+  - Choose if you wanna make your SQL manually or by Object Mapping.
   
 
 
@@ -59,16 +59,16 @@ Installing Phiber in your project.
 You can install by two ways. First is making the Download from github repository and putting the folder of your project
 The second way is installing via composer with this command bellow:
 ```sh
-$ composer install marciioluucas/phiber
+$ composer require marciioluucas/phiber
 ```
 
 ### Config
 
 To config Phiber is very simple,
-inside the folder phiber or vendor/phiber gonna have an archive .json called phiber_config.
-You are therefore the credentials of the bank and other settings.
+you have to create an archive called phiber_config.json in your root path of your project
+same like this.
 
-phiber/phiber_config.json
+$ROOT_PROJECT_PATH/phiber_config.json
 ```json
 {
   "phiber": {
