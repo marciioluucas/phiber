@@ -254,7 +254,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
 
     /**
      * Faz a seleção no banco do objeto especificado, se caso a opção execute_queries estiver habilitada
-     * @return array|bool|mixed
+     * @return array
      * @internal param null $infos
      */
     public function select()
@@ -292,7 +292,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
             }
             $this->rowCount = $pdo->rowCount();
         }
-        return $result;
+        return (array)$result;
     }
 
 
