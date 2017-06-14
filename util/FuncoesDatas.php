@@ -17,7 +17,7 @@ class FuncoesDatas
      * @param $data
      * @return false|string
      */
-    public final static function converterDataParaBrasileira($data)
+    final public static function converterDataParaBrasileira($data)
     {
         return date('d-m-Y', strtotime($data));
     }
@@ -27,7 +27,7 @@ class FuncoesDatas
      * @param $data
      * @return string
      */
-    public final static function converterDataPorExtenso($data)
+    final public static function converterDataPorExtenso($data)
     {
         setlocale(LC_ALL, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
         date_default_timezone_set('America/Sao_Paulo');

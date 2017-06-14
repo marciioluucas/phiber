@@ -21,7 +21,7 @@ class Annotations {
      * Retorna um array de atributos
      * @return array
      */
-    public final static function getAnnotation($obj)
+    final public static function getAnnotation($obj)
     {
         $funReflec = new FuncoesReflections();
         $out = array();

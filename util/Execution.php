@@ -19,20 +19,19 @@ class Execution
     private static $time;
 
     /**
-     * @return mixed
-     */
-    public final function getTime()
-    {
-        return microtime(TRUE);
-    }
-
-
-    /**
      *  Procedimento responsável por calcular o tempo incial da execução
      */
-    public final static function start()
+    final public static function start()
     {
         self::$time = self::getTime();
+    }
+
+    /**
+     * @return mixed
+     */
+    final public function getTime()
+    {
+        return microtime(TRUE);
     }
 
     /**
@@ -40,7 +39,7 @@ class Execution
      * formata o número para 6 digitos após a vírgula.
      * @return string
      */
-    public final static function end()
+    final public static function end()
     {
         $finalTime = self::getTime();
         $execTime = $finalTime - self::$time;
