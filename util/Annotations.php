@@ -23,6 +23,7 @@ class Annotations {
      */
     final public static function getAnnotation($obj)
     {
+
         $funReflec = new FuncoesReflections();
         $out = array();
         $pattern = '/@+_+[A-z]\w+=\w+/';
