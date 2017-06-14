@@ -120,7 +120,6 @@ class PhiberPersistence extends PhiberPersistenceFactory
     }
 
 
-
     /**
      * Faz o rowCount (contagem de linhas) objeto especificado, se caso a opção execute_queries estiver habilitada
      * @return int|mixed
@@ -287,13 +286,9 @@ class PhiberPersistence extends PhiberPersistenceFactory
                 }
             }
             $pdo->execute();
-
-            if ($this->returnSelectWithArray and $pdo->rowCount() > 1) {
+            $result = $pdo->fetch(PDO::FETCH_ASSOC);
+            if ($this->returnSelectWithArray) {
                 $result = $pdo->fetchAll((PDO::FETCH_ASSOC));
-            } else {
-                if ($pdo->rowCount() != 0) {
-                    $result = $pdo->fetch(PDO::FETCH_ASSOC);
-                }
             }
             $this->rowCount = $pdo->rowCount();
         }
