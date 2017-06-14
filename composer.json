@@ -2,7 +2,13 @@
   "name": "marciioluucas/phiber",
   "version": "0.0.1",
   "description": "Simple PHP ORM",
-  "keywords": ["orm","php orm", "simple orm","php framework","automatize sql writing"],
+  "keywords": [
+    "orm",
+    "php orm",
+    "simple orm",
+    "php framework",
+    "automatize sql writing"
+  ],
   "type": "library",
   "license": "MIT",
   "authors": [
@@ -29,7 +35,9 @@
     {
       "type": "git",
       "url": "http://github.com/marciioluucas/phiber"
-      
     }
-  ]
+  ],
+  "config": {
+    "secure-http": false
+  }
 }
