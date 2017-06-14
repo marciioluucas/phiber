@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/marciioluucas/phiber.svg?branch=master)](https://travis-ci.org/marciioluucas/phiber)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/db9f41d9b8144d27ab90a0350cb25a28)](https://www.codacy.com/app/marciioluucas/phiber?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=marciioluucas/phiber&amp;utm_campaign=Badge_Grade)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/marciioluucas/phiber/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/marciioluucas/phiber/?branch=master)
 [![GitHub issues](https://img.shields.io/github/issues/marciioluucas/phiber.svg)](https://github.com/marciioluucas/phiber/issues)
 [![GitHub forks](https://img.shields.io/github/forks/marciioluucas/phiber.svg)](https://github.com/marciioluucas/phiber/network)
 [![GitHub stars](https://img.shields.io/github/stars/marciioluucas/phiber.svg)](https://github.com/marciioluucas/phiber/stargazers)
@@ -30,7 +31,7 @@ You can also:
   
 This library has been made by a student of Technology in Systems to Internet of Morrinhos - GO, Brazil.
 
-[![Twitter](https://img.shields.io/badge/IF-Goiano-brightgreen.svg)](https://www.ifgoiano.edu.br/morrinhos)
+[![IFGoiano](https://img.shields.io/badge/IF-Goiano-brightgreen.svg)](https://www.ifgoiano.edu.br/morrinhos)
 
 Criador [Márcio Lucas]
 
