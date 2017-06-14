@@ -1,0 +1,15 @@
+filter:
+    excluded_paths:
+        - 'bin/*'
+        - 'test/*'
+        - '*.min.js'
+        - 'docs/*'
+checks:
+    php: true
+    javascript: false
+coding_style:
+    php:
+        spaces:
+            around_operators:
+                concatenation: true
+build: true
