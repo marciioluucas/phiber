@@ -6,7 +6,6 @@ filter:
         - 'docs/*'
 checks:
     php: true
-    javascript: false
 coding_style:
     php:
         spaces:
