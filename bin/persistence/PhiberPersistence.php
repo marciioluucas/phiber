@@ -79,7 +79,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
     /**
      * @return Restrictions
      */
-    public function restrictions(): Restrictions
+    public function restrictions()
     {
         return $this->restrictions;
     }

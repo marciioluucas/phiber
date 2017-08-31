@@ -197,28 +197,30 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
             $whereCriteria = $infos['where'];
             $limitCriteria = $infos['limit'];
             $offsetCriteria = $infos['offset'];
-            $orderByCriteria = $infos['orderBy'];
+            $orderByCriteria = $infos['orderby'];
+
+
+            $campos = gettype($campos) == "array" ? implode(", ", $campos) : $campos;
+            $this->sql = "SELECT " . $campos . " FROM $tabela ";
+            if (!empty($whereCriteria)) {
+                $this->sql .= " WHERE " . $whereCriteria . " ";
+            }
+
+            if(!is_null($orderByCriteria)){
+                $orderBy = gettype($orderByCriteria) == "array" ? implode(", ", $orderByCriteria) : $orderByCriteria;
+
+                $this->sql .= " ORDER BY ". $orderBy ." ";
+            }
 
             if(!empty($limitCriteria)){
                 $this->sql .= " LIMIT " . $limitCriteria. " ";
             }
 
             if(!empty($offsetCriteria)) {
+
                 $this->sql .= " OFFSET " . $offsetCriteria . " ";
             }
 
-            if(!empty($orderByCriteria)){
-                $orderBy = gettype($orderByCriteria) == "array" ? implode(", ", $orderByCriteria) : $orderByCriteria;
-                $this->sql .= $orderBy;
-            }
-
-
-            $campos = gettype($campos) == "array" ? implode(", ", $campos) : $campos;
-
-            $this->sql = "SELECT " . $campos . " FROM $tabela ";
-            if (!empty($whereCriteria)) {
-                $this->sql .= " WHERE " . $whereCriteria . " ";
-            }
             return $this->sql . ";";
 
         } catch (PhiberException $phiberException) {
