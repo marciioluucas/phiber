@@ -195,6 +195,23 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
             $campos = isset($infos['fields']) ? $infos['fields'] : ["*"];
 
             $whereCriteria = $infos['where'];
+            $limitCriteria = $infos['limit'];
+            $offsetCriteria = $infos['offset'];
+            $orderByCriteria = $infos['orderBy'];
+
+            if(!empty($limitCriteria)){
+                $this->sql .= " LIMIT " . $limitCriteria. " ";
+            }
+
+            if(!empty($offsetCriteria)) {
+                $this->sql .= " OFFSET " . $offsetCriteria . " ";
+            }
+
+            if(!empty($orderByCriteria)){
+                $orderBy = gettype($orderByCriteria) == "array" ? implode(", ", $orderByCriteria) : $orderByCriteria;
+                $this->sql .= $orderBy;
+            }
+
 
             $campos = gettype($campos) == "array" ? implode(", ", $campos) : $campos;
 

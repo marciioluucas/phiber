@@ -219,6 +219,50 @@ class Restrictions
     }
 
     /**
+     * Faz a query de limite.
+     * Exemplo:
+     * Retornar os primeiros registros com o limite 15
+     * LIMIT 15
+     * @param $limit
+     * @return array
+     */
+    public function limit($limit)
+    {
+        return [
+            "limit" => $limit . " "
+        ];
+    }
+
+    /**
+     * Faz a query de offset (a partir de )
+     * Exemplo:
+     * Retorne os x resultados a partir de 15
+     * OFFSET 15
+     * @param $offset
+     * @return array
+     */
+    public function offset($offset)
+    {
+        return ["offset" => $offset];
+    }
+
+    /**
+     * Faz a query de OrderBy
+     * EXEMPLO:
+     * Passará um array com os orderBys e se quer desc ou asc.
+     * Se caso quiser tudo desc ou tudo asc, colocar DESC|ASC somente no ultimo.
+     * orderBy(["nome asc","id desc"])
+     * @param array $orderBy
+     * @return array
+     */
+    public function orderBy(array $orderBy)
+    {
+        return [
+            "orderby"=> $orderBy
+        ];
+    }
+
+    /**
      * Função para determinar os campos que quer buscar no SELECT
      * Exemplo: fields("nome, id");
      * Gerará: Select nome, id from ...

@@ -196,7 +196,15 @@ class PhiberPersistence extends PhiberPersistenceFactory
             "table" => $this->table,
             "fields" => $this->fields,
             "values" => $this->fieldsValues,
-            "where" => $this->infosMergeds['where'],
+            "where" => isset($this->infosMergeds['where']) ?
+                $this->infosMergeds['where'] :
+                null,
+            "limit" => isset($this->infosMergeds['limit']) ?
+                $this->infosMergeds['limit'] :
+                null,
+            "offset" => isset($this->infosMergeds['offset']) ?
+                $this->infosMergeds['offset'] :
+                null
 
         ]);
         if ($this->phiberConfig->verifyExecuteQueries()) {
@@ -230,7 +238,15 @@ class PhiberPersistence extends PhiberPersistenceFactory
     {
         $this->sql = new PhiberQueryWriter("delete", [
             "table" => $this->table,
-            "where" => $this->infosMergeds['where'],
+            "where" => isset($this->infosMergeds['where']) ?
+                $this->infosMergeds['where'] :
+                null,
+            "limit" => isset($this->infosMergeds['limit']) ?
+                $this->infosMergeds['limit'] :
+                null,
+            "offset" => isset($this->infosMergeds['offset']) ?
+                $this->infosMergeds['offset'] :
+                null
         ]);
 
         if ($this->phiberConfig->verifyExecuteQueries()) {
@@ -269,8 +285,16 @@ class PhiberPersistence extends PhiberPersistenceFactory
             "fields" => $fields,
             "where" => isset($this->infosMergeds['where']) ?
                 $this->infosMergeds['where'] :
+                null,
+            "limit" => isset($this->infosMergeds['limit']) ?
+                $this->infosMergeds['limit'] :
+                null,
+            "offset" => isset($this->infosMergeds['offset']) ?
+                $this->infosMergeds['offset'] :
+                null,
+            "orderby" => isset($this->infosMergeds['orderby']) ?
+                $this->infosMergeds['orderby'] :
                 null
-
         ]);
 
         $result = [];
