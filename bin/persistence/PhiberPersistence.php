@@ -137,16 +137,14 @@ class PhiberPersistence extends PhiberPersistenceFactory
      * PhiberPersistence constructor.
      * @param $obj
      */
-    public function __construct($obj = "")
+    public function __construct($obj)
     {
         $this->restrictions = new Restrictions();
         $funcoesReflections = new FuncoesReflections();
         $this->phiberConfig = new Config();
-        if($obj != "") {
-            $this->table = strtolower($funcoesReflections->pegaNomeClasseObjeto($obj));
-            $this->fields = $funcoesReflections->pegaAtributosDoObjeto($obj);
-            $this->fieldsValues = $funcoesReflections->pegaValoresAtributoDoObjeto($obj);
-        }
+        $this->table = strtolower($funcoesReflections->pegaNomeClasseObjeto($obj));
+        $this->fields = $funcoesReflections->pegaAtributosDoObjeto($obj);
+        $this->fieldsValues = $funcoesReflections->pegaValoresAtributoDoObjeto($obj);
     }
 
 
@@ -312,9 +310,11 @@ class PhiberPersistence extends PhiberPersistenceFactory
                 }
             }
             $pdo->execute();
-            $result = $pdo->fetch(PDO::FETCH_ASSOC);
-            if ($this->returnSelectWithArray) {
-                $result = $pdo->fetchAll((PDO::FETCH_ASSOC));
+
+            $result = $pdo->fetchAll((PDO::FETCH_ASSOC));
+
+            if ($this->returnSelectWithArray == false) {
+                $result = $pdo->fetch((PDO::FETCH_ASSOC));
             }
             $this->rowCount = $pdo->rowCount();
         }
