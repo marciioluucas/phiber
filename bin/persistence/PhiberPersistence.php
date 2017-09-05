@@ -137,14 +137,16 @@ class PhiberPersistence extends PhiberPersistenceFactory
      * PhiberPersistence constructor.
      * @param $obj
      */
-    public function __construct($obj)
+    public function __construct($obj = "")
     {
         $this->restrictions = new Restrictions();
         $funcoesReflections = new FuncoesReflections();
         $this->phiberConfig = new Config();
-        $this->table = strtolower($funcoesReflections->pegaNomeClasseObjeto($obj));
-        $this->fields = $funcoesReflections->pegaAtributosDoObjeto($obj);
-        $this->fieldsValues = $funcoesReflections->pegaValoresAtributoDoObjeto($obj);
+        if($obj != "") {
+            $this->table = strtolower($funcoesReflections->pegaNomeClasseObjeto($obj));
+            $this->fields = $funcoesReflections->pegaAtributosDoObjeto($obj);
+            $this->fieldsValues = $funcoesReflections->pegaValoresAtributoDoObjeto($obj);
+        }
     }
 
 
