@@ -142,10 +142,12 @@ class PhiberPersistence extends PhiberPersistenceFactory
         $this->restrictions = new Restrictions();
         $funcoesReflections = new FuncoesReflections();
         $this->phiberConfig = new Config();
-        if($obj != "") {
+        if ($obj != "") {
             $this->table = strtolower($funcoesReflections->pegaNomeClasseObjeto($obj));
             $this->fields = $funcoesReflections->pegaAtributosDoObjeto($obj);
+
             $this->fieldsValues = $funcoesReflections->pegaValoresAtributoDoObjeto($obj);
+
         }
     }
 
@@ -312,14 +314,14 @@ class PhiberPersistence extends PhiberPersistenceFactory
                 }
             }
             $pdo->execute();
-
-            $result = $pdo->fetchAll((PDO::FETCH_ASSOC));
-
-            if ($this->returnSelectWithArray == false) {
-                $result = $pdo->fetch((PDO::FETCH_ASSOC));
+            $result = $pdo->fetch(PDO::FETCH_ASSOC);
+            if ($this->returnSelectWithArray && $pdo->rowCount() > 1) {
+                $result = $pdo->fetchAll((PDO::FETCH_ASSOC));
             }
             $this->rowCount = $pdo->rowCount();
         }
+
+        print_r($this->fields);
         return (array)$result;
     }
 
@@ -334,8 +336,8 @@ class PhiberPersistence extends PhiberPersistenceFactory
         if (!isset($this->infos['fields'])) {
             $this->infos['fields'] = ["*"];
         }
-
         $this->mergeSqlInformation();
+
     }
 
     /**
@@ -354,12 +356,12 @@ class PhiberPersistence extends PhiberPersistenceFactory
     private function mergeSqlInformation()
     {
         array_push($this->infos, $this->restrictions->getFieldsAndValues());
-
         for ($i = 0; $i < count($this->infos) - 1; $i++) {
-            if ((isset(array_keys($this->infos[$i])[0]))) {
+            if (isset(array_keys($this->infos[$i])[0])) {
                 $this->infosMergeds[array_keys($this->infos[$i])[0]] =
                     $this->infos[$i][array_keys($this->infos[$i])[0]];
             }
+
         }
     }
 
