@@ -72,7 +72,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
     /**
      * @var Restrictions
      */
-    protected $restrictions;
+    public $restrictions;
 
     private $returnSelectWithArray = false;
 

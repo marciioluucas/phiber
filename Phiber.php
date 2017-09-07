@@ -27,15 +27,16 @@ class Phiber extends PhiberPersistence
 {
     /**
      * Phiber constructor.
-     * @param string|\stdClass $obj
+     * @param string|\stdClass $object
      */
-    public function __construct($obj = "")
+    public function __construct($object = "")
     {
-        parent::__construct($obj);
+        parent::__construct($object);
     }
 
 
     /**
+     * @deprecated
      * Método opcional responsável por retornar uma instância da classe PhiberPersistence,
      * que é responsável pela persistencia dos dados. (CREATE, RETREAVE, UPDATE, DELETE)
      * @param string|\stdClass $object
