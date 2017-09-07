@@ -4,6 +4,7 @@
  */
 
 namespace phiber\bin\queries;
+
 use phiber\bin\exceptions\{
     PhiberException
 };
@@ -268,18 +269,33 @@ class Restrictions
     public function join(string $table, array $on, string $type = "INNER")
     {
 
-        if (count($on) > 2){
+        if (count($on) > 2) {
             throw new PhiberException("error_on_join");
         }
-        if($type != strtoupper("INNER") ||
-            $type != strtoupper("LEFT") ||
-            $type != strtoupper("RIGHT") ||
-            $type != strtoupper("FULL OUTER")){
+        try {
+
+            switch (strtoupper($type)){
+                case "INNER":
+                    return [
+                        "join" => "INNER JOIN " . $table . " ON " . $on[0] . " = " . $on[1] . " "
+                    ];
+                case "LEFT":
+                    return [
+                        "join" => "LEFT JOIN " . $table . " ON " . $on[0] . " = " . $on[1] . " "
+                    ];
+                case "RIGHT":
+                    return [
+                        "join" => "RIGHT JOIN " . $table . " ON " . $on[0] . " = " . $on[1] . " "
+                    ];
+                case "FULL OUTER":
+                    return [
+                        "join" => "FULL OUTER JOIN " . $table . " ON " . $on[0] . " = " . $on[1] . " "
+                    ];
+            }
+
+        }catch (PhiberException $phiberException){
             throw new PhiberException("join_no_exists");
         }
-            return [
-                "join" => strtoupper($type) . " JOIN " . $table . " ON " . $on[0] . " = " . $on[1] . " "
-            ];
     }
 
 
