@@ -23,12 +23,22 @@ define("BASE_DIR",str_replace('\\', '/', dirname(__FILE__)));
  *
  * @package phiber
  */
-class Phiber
+class Phiber extends PhiberPersistence
 {
+    /**
+     * Phiber constructor.
+     * @param string|\stdClass $obj
+     */
+    public function __construct($obj = "")
+    {
+        parent::__construct($obj);
+    }
+
 
     /**
-     * Método responsável por retornar uma instancia da classe PhiberPersistence,
+     * Método opcional responsável por retornar uma instância da classe PhiberPersistence,
      * que é responsável pela persistencia dos dados. (CREATE, RETREAVE, UPDATE, DELETE)
+     * @param string|\stdClass $object
      * @return PhiberPersistence
      */
     public function openPersist($object = "")

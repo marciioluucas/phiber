@@ -31,17 +31,17 @@ class PhiberPersistence extends PhiberPersistenceFactory
      * Variável da tabela do objeto trabalhado
      * @var string
      */
-    private $table;
+    private $table = "";
     /**
      * Campos/colunas do objeto trabalhado
      * @var array
      */
-    private $fields;
+    private $fields = [];
     /**
      * Valores/colunas dos campos
      * @var array
      */
-    private $fieldsValues;
+    private $fieldsValues = [];
 
 
     /**
@@ -72,11 +72,12 @@ class PhiberPersistence extends PhiberPersistenceFactory
     /**
      * @var Restrictions
      */
-    private $restrictions;
+    protected $restrictions;
 
     private $returnSelectWithArray = false;
 
     /**
+     * @deprecated use restriction sem o parênteses.
      * @return Restrictions
      */
     public function restrictions()
