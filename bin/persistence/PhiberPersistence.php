@@ -280,10 +280,12 @@ class PhiberPersistence extends PhiberPersistenceFactory
      */
     public function select()
     {
-
-        $fields = isset($this->infosMergeds['fields']) ?
-            implode(", ", $this->infosMergeds['fields']) :
-            "*";
+        $fields = $this->fields;
+        if($this->fields != null) {
+            $fields = isset($this->infosMergeds['fields']) ?
+                implode(", ", $this->infosMergeds['fields']) :
+                "*";
+        }
 
         $this->sql = new PhiberQueryWriter("select", [
             "table" => $this->table,
@@ -299,7 +301,10 @@ class PhiberPersistence extends PhiberPersistenceFactory
                 null,
             "orderby" => isset($this->infosMergeds['orderby']) ?
                 $this->infosMergeds['orderby'] :
-                null
+                null,
+            "join" => isset($this->infosMergeds['join']) ?
+                $this->infosMergeds['join'] :
+                null,
         ]);
 
         $result = [];
@@ -322,7 +327,6 @@ class PhiberPersistence extends PhiberPersistenceFactory
             $this->rowCount = $pdo->rowCount();
         }
 
-        print_r($this->fields);
         return (array)$result;
     }
 

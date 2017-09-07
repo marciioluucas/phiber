@@ -113,7 +113,7 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
             $this->sql = "UPDATE $tabela SET ";
 //
             for ($i = 0; $i < count($camposNome); $i++) {
-                if(!empty($camposNome[$i])){
+                if (!empty($camposNome[$i])) {
                     if ($i != count($camposNome) - 1) {
                         $this->sql .= $camposNome[$i] . " = :" . $camposNome[$i] . ", ";
                     } else {
@@ -195,6 +195,7 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
             $campos = isset($infos['fields']) ? $infos['fields'] : ["*"];
 
             $whereCriteria = $infos['where'];
+            $joins = $infos['join'];
             $limitCriteria = $infos['limit'];
             $offsetCriteria = $infos['offset'];
             $orderByCriteria = $infos['orderby'];
@@ -202,21 +203,24 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
 
             $campos = gettype($campos) == "array" ? implode(", ", $campos) : $campos;
             $this->sql = "SELECT " . $campos . " FROM $tabela ";
+            if (!empty($joins)) {
+                $this->sql .= " " . $joins . " ";
+            }
             if (!empty($whereCriteria)) {
                 $this->sql .= " WHERE " . $whereCriteria . " ";
             }
 
-            if(!is_null($orderByCriteria)){
+            if (!is_null($orderByCriteria)) {
                 $orderBy = gettype($orderByCriteria) == "array" ? implode(", ", $orderByCriteria) : $orderByCriteria;
 
-                $this->sql .= " ORDER BY ". $orderBy ." ";
+                $this->sql .= " ORDER BY " . $orderBy . " ";
             }
 
-            if(!empty($limitCriteria)){
-                $this->sql .= " LIMIT " . $limitCriteria. " ";
+            if (!empty($limitCriteria)) {
+                $this->sql .= " LIMIT " . $limitCriteria . " ";
             }
 
-            if(!empty($offsetCriteria)) {
+            if (!empty($offsetCriteria)) {
 
                 $this->sql .= " OFFSET " . $offsetCriteria . " ";
             }

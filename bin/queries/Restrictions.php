@@ -4,6 +4,9 @@
  */
 
 namespace phiber\bin\queries;
+use phiber\bin\exceptions\{
+    PhiberException
+};
 
 
 /**
@@ -258,9 +261,27 @@ class Restrictions
     public function orderBy(array $orderBy)
     {
         return [
-            "orderby"=> $orderBy
+            "orderby" => $orderBy
         ];
     }
+
+    public function join(string $table, array $on, string $type = "INNER")
+    {
+
+        if (count($on) > 2){
+            throw new PhiberException("error_on_join");
+        }
+        if($type != strtoupper("INNER") ||
+            $type != strtoupper("LEFT") ||
+            $type != strtoupper("RIGHT") ||
+            $type != strtoupper("FULL OUTER")){
+            throw new PhiberException("join_no_exists");
+        }
+            return [
+                "join" => strtoupper($type) . " JOIN " . $table . " ON " . $on[0] . " = " . $on[1] . " "
+            ];
+    }
+
 
     /**
      * Função para determinar os campos que quer buscar no SELECT
