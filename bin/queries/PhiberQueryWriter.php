@@ -202,30 +202,32 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
 
 
             $campos = gettype($campos) == "array" ? implode(", ", $campos) : $campos;
-            $this->sql = "SELECT " . $campos . " FROM $tabela ";
+            $this->sql = "SELECT " . $campos . " FROM $tabela";
             if (!empty($joins)) {
-                $this->sql .= " " . $joins . " ";
+                foreach ($joins as $join){
+                    $this->sql .= " " . $join . " ";
+                }
             }
             if (!empty($whereCriteria)) {
-                $this->sql .= " WHERE " . $whereCriteria . " ";
+                $this->sql .= " WHERE " . $whereCriteria;
             }
 
             if (!is_null($orderByCriteria)) {
                 $orderBy = gettype($orderByCriteria) == "array" ? implode(", ", $orderByCriteria) : $orderByCriteria;
 
-                $this->sql .= " ORDER BY " . $orderBy . " ";
+                $this->sql .= " ORDER BY " . $orderBy;
             }
 
             if (!empty($limitCriteria)) {
-                $this->sql .= " LIMIT " . $limitCriteria . " ";
+                $this->sql .= " LIMIT " . $limitCriteria;
             }
 
             if (!empty($offsetCriteria)) {
 
-                $this->sql .= " OFFSET " . $offsetCriteria . " ";
+                $this->sql .= " OFFSET " . $offsetCriteria;
             }
-
-            return $this->sql . ";";
+            $this->sql .= ";";
+            return $this->sql;
 
         } catch (PhiberException $phiberException) {
             throw new PhiberException(new Internationalization("query_processor_error"));

@@ -21,6 +21,8 @@ class Restrictions
      */
     private static $fieldsAndValues = [];
 
+    private $joins = [];
+
     /**
      * Restrictions constructor.
      */
@@ -273,29 +275,31 @@ class Restrictions
             throw new PhiberException("error_on_join");
         }
         try {
-
-            switch (strtoupper($type)){
+            switch (strtoupper($type)) {
                 case "INNER":
-                    return [
-                        "join" => "INNER JOIN " . $table . " ON " . $on[0] . " = " . $on[1] . " "
-                    ];
+                    array_push($this->joins, "INNER JOIN " . $table . " ON " . $on[0] . " = " . $on[1]);
+                    break;
+
                 case "LEFT":
-                    return [
-                        "join" => "LEFT JOIN " . $table . " ON " . $on[0] . " = " . $on[1] . " "
-                    ];
+                    array_push($this->joins, "LEFT JOIN " . $table . " ON " . $on[0] . " = " . $on[1]);
+                    break;
+
                 case "RIGHT":
-                    return [
-                        "join" => "RIGHT JOIN " . $table . " ON " . $on[0] . " = " . $on[1] . " "
-                    ];
+                    array_push($this->joins, "RIGHT JOIN " . $table . " ON " . $on[0] . " = " . $on[1]);
+                    break;
+
                 case "FULL OUTER":
-                    return [
-                        "join" => "FULL OUTER JOIN " . $table . " ON " . $on[0] . " = " . $on[1] . " "
-                    ];
+                    array_push($this->joins, "FULL OUTER JOIN " . $table . " ON " . $on[0] . " = " . $on[1]);
+                    break;
+
+                default:
+                    array_push($this->joins, "INNER JOIN " . $table . " ON " . $on[0] . " = " . $on[1]);
             }
 
-        }catch (PhiberException $phiberException){
+        } catch (PhiberException $phiberException) {
             throw new PhiberException("join_no_exists");
         }
+        return ["join"=>$this->joins];
     }
 
 
