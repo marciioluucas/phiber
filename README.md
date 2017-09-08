@@ -7,7 +7,7 @@
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/marciioluucas/phiber/master/license)
 [![Twitter](https://img.shields.io/twitter/url/https/github.com/marciioluucas/phiber.svg?style=social)](https://twitter.com/intent/tweet?text=Wow:&url=%5Bobject%20Object%5D)
 
-# Phiber - ALPHA version 0.1
+# Phiber - ALPHA version 1.2
 
 [![Imgur](http://i.imgur.com/Ad02NS2.png)](https://marciioluucas.github.io/phiber)
 
