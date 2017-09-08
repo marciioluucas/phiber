@@ -280,8 +280,8 @@ class PhiberPersistence extends PhiberPersistenceFactory
      */
     public function select()
     {
-        $fields = $this->fields;
-        if($this->fields != null) {
+        $fields = !empty($this->fields) ? $this->fields : ["*"];
+        if(empty($this->fields)) {
             $fields = isset($this->infosMergeds['fields']) ?
                 implode(", ", $this->infosMergeds['fields']) :
                 "*";
@@ -304,7 +304,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
                 null,
             "join" => isset($this->infosMergeds['join']) ?
                 $this->infosMergeds['join'] :
-                null,
+                null
         ]);
 
         $result = [];

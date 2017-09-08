@@ -183,7 +183,7 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
 
     /**
      * Faz a query de select de um registro no banco com os dados.
-     * @param $infos
+     * @param array $infos
      * @return string
      * @throws PhiberException
      */
@@ -192,7 +192,7 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
         try {
 
             $tabela = $infos['table'];
-            $campos = isset($infos['fields']) ? $infos['fields'] : ["*"];
+            $campos = $infos['fields'];
 
             $whereCriteria = $infos['where'];
             $joins = $infos['join'];
@@ -202,7 +202,6 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
 
 
             $campos = gettype($campos) == "array" ? implode(", ", $campos) : $campos;
-            $campos = $campos == "" ? $campos = "*" : $campos;
             $this->sql = "SELECT " . $campos . " FROM $tabela ";
             if (!empty($joins)) {
                 $this->sql .= " " . $joins . " ";
