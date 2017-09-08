@@ -87,7 +87,7 @@ $ROOT_PROJECT_PATH/phiber_config.json
 ```
 
 ### Examples
-```
+```php
 InnerJoin example:
 $phiber = new Phiber();
 
