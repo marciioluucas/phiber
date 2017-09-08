@@ -68,6 +68,8 @@ class PhiberPersistence extends PhiberPersistenceFactory
      */
     private $sql = "";
 
+    private $joins = [];
+
 
     /**
      * @var Restrictions
@@ -281,7 +283,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
     public function select()
     {
         $fields = !empty($this->fields) ? $this->fields : ["*"];
-        if(empty($this->fields)) {
+        if (empty($this->fields)) {
             $fields = isset($this->infosMergeds['fields']) ?
                 implode(", ", $this->infosMergeds['fields']) :
                 "*";
@@ -302,8 +304,8 @@ class PhiberPersistence extends PhiberPersistenceFactory
             "orderby" => isset($this->infosMergeds['orderby']) ?
                 $this->infosMergeds['orderby'] :
                 null,
-            "join" => isset($this->infosMergeds['join']) ?
-                $this->infosMergeds['join'] :
+            "join" => isset($this->joins) ?
+                $this->joins :
                 null
         ]);
 
@@ -340,6 +342,10 @@ class PhiberPersistence extends PhiberPersistenceFactory
         array_push($this->infos, $infos);
         if (!isset($this->infos['fields'])) {
             $this->infos['fields'] = ["*"];
+        }
+
+        if (isset($infos['join'])) {
+            array_push($this->joins, $infos['join']);
         }
         $this->mergeSqlInformation();
 

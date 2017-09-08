@@ -204,8 +204,8 @@ class PhiberQueryWriter implements IPhiberQueryBuilder
             $campos = gettype($campos) == "array" ? implode(", ", $campos) : $campos;
             $this->sql = "SELECT " . $campos . " FROM $tabela";
             if (!empty($joins)) {
-                foreach ($joins as $join){
-                    $this->sql .= " " . $join . " ";
+                for ($i = 0; $i < count($joins); $i++) {
+                    $this->sql .= " " . $joins[$i] . " ";
                 }
             }
             if (!empty($whereCriteria)) {
