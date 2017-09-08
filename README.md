@@ -87,183 +87,21 @@ $ROOT_PROJECT_PATH/phiber_config.json
 ```
 
 ### Examples
-Now we will create a crud class using Phiber
+```
+InnerJoin example:
+$phiber = new Phiber();
 
-Notice this class, this is where magic happens.
-model/User.php
-```php
-
-namespace test;
-use bin\Restrictions;
-use Exception;
-use phiber\Phiber;
-
-class User
-{
-
-    private $id;
-    private $name;
-    private $email;
-    private $password;
-
-    function get($prop)
-    {
-        return $this->$prop;
-    }
-
-    function set($prop, $value)
-    {
-        $this->$prop = $value;
-    }
-
-    public function validateInfos()
-    {
-        if ($this->name != null && $this->name != "") {
-            if ($this->email != null && $this->email != "") {
-                if ($this->password != null && $this->password != "") {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public function create()
-    {
-        try {
-        $phiber = new Phiber();
-        $criteria = $phiber->openPersist($this)
-            if ($this->validateInfos()) {
-                if ($criteria->create()) {
-                    return json_encode(
-                        [
-                            "message" => "Success!!!",
-                            "type_message" => "INFO"
-                        ]
-                    );
-                } else {
-                    return json_encode(
-                        [
-                            "message" => "Someting wrong happened",
-                            "type_message" => "ERROR"
-                        ]
-                    );
-                }
-            } else {
-                return json_encode(
-                    [
-                        "message" => "Invalid past values",
-                        "type_message" => "ERROR"
-                    ]
-                );
-            }
-
-        } catch (Exception $e) {
-            throw new Exception($e->getMessage());
-        }
-    }
-
-    public function retreave()
-    {
-        $phiber = new Phiber();
-        $criteria = $phiber->openPersist($this)
-        $restrictionName = "";
-        $restrictionEmail = "";
-
-        /* Here I created a retriction for each attribute */
-        if ($this->name != null && $this->name != "") {
-            $restrictionName = $criteria->restrictions()->like("name", $this->name);
-            $criteria->add($restrictionName);
-
-        } else if ($this->email != null && $this->email != "") {
-            $restrictionEmail = $criteria->restrictions()->like("email", $this->email);
-            $criteria->add($restrictionEmail);
-
-        }
-        /* And here I created a conjunction "AND" with the two restrictions*/
-        $criteria->add($criteria->restrictions()->and($restrictionEmail,$restrictionName));
-        return json_encode($criteria->select());
-    }
-
-    public function update()
-    {
-        try {
-            $phiber = new Phiber();
-            $criteria = $phiber->openPersist($this);
-            
-            $criteria->add($criteria->restrictions()->equals("id", $this->id));
-            /*  Here I added a condition "equal" in WHERE of the query.
-                The responsible class that creates the query, will return something like this.
-                Select from user where id = :condition_id;
-                After that, it will be done the binding of values and will be substituted
-                the ":condition_id" by your value.
-                Read the API doc book to know more about restrictions.
-            */
-
-            if ($this->validadeInfos()) {
-                if ($criteria->update($this)) {
-                    return json_encode(
-                        [
-                            "message" => "Success!!!",
-                            "type_message" => "INFO"
-                        ]
-                    );
-                } else {
-                    return json_encode(
-                        [
-                            "message" => "Someting wrong happened",
-                            "type_message" => "ERROR"
-                        ]
-                    );
-                }
-            } else {
-                return json_encode(
-                    [
-                        "message" => "Invalid past values",
-                        "type_message" => "ERROR"
-                    ]
-                );
-            }
-
-        } catch (Exception $e) {
-            throw new Exception($e->getMessage());
-        }
-    }
-
-    public function delete()
-    {
-        $phiber = new Phiber();
-        $criteria = $phiber->openPersist($this)
-
-        $criteria->add($criteria->restrictions()->eq("id", $this->id));
-        /*  Here I added a condition "equal" in WHERE of the query.
-            The responsible class that creates the query, will return something like this.
-            Select from user where id = :condition_id;
-            After that, it will be done the binding of values and will be substituted
-            the ":condition_id" by your value.
-            Read the API doc book to know more about restrictions.
-        */
-
-        if ($criteria->delete($this)) {
-            return json_encode(
-                [
-                    "message" => "Success!!!",
-                    "type_message" => "INFO"
-                ]
-            );
-        } else {
-            return json_encode(
-                [
-                    "message" => "Someting wrong happened",
-                    "type_message" => "ERROR"
-                ]
-            );
-        }
-    }
-
-    
-}
-
+$phiber->setTable("user");
+$phiber->setFields(["user.id","user.name","user.email"]);
+$phiber->add($phiber->restrictions->join("user_address", ["pk_user", "fk_user"]));
+$phiber->add($phiber->restrictions->and($phiber->restrictions->equals("user.id","1"), $phiber->restrictions->like("user.name","Marcio") ));
+$phiber->add($phiber->restrictions->limit(15));
+$phiber->add($phiber->restrictions->offset(5));
+$phiber->add($phiber->restrictions->orderBy(['user.id ASC']));
+$phiber->select(); // Execute query
+echo $phiber->show(); // After execute, prints the generated query
+Generate->
+SELECT user.id, user.name, user.email FROM user INNER JOIN user_address ON pk_user = fk_user  WHERE (user.id = :condition_user.id AND user.name LIKE CONCAT('%',:condition_user.name,'%')) ORDER BY user.id ASC LIMIT 15  OFFSET 5;
 ```
 
 ### TODOS:
