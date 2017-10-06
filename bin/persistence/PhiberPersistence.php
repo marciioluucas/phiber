@@ -68,7 +68,19 @@ class PhiberPersistence extends PhiberPersistenceFactory
      */
     private $sql = "";
 
+
+    /**
+     * @var array
+     * Array que vai ter os joins.
+     */
     private $joins = [];
+
+
+    /**
+     * @var \PDOStatement
+     * Variável que instancia PDO
+     */
+    private $PDO = null;
 
 
     /**
@@ -145,6 +157,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
         $this->restrictions = new Restrictions();
         $funcoesReflections = new FuncoesReflections();
         $this->phiberConfig = new Config();
+        $this->PDO = $this->getConnection()->prepare($this->sql);
         if ($obj != "") {
             $this->table = strtolower($funcoesReflections->pegaNomeClasseObjeto($obj));
             $this->fields = $funcoesReflections->pegaAtributosDoObjeto($obj);
@@ -172,14 +185,13 @@ class PhiberPersistence extends PhiberPersistenceFactory
 
         if ($this->phiberConfig->verifyExecuteQueries()) {
 
-            $pdo = $this->getConnection()->prepare($this->sql);
 
             for ($i = 0; $i < count($this->fields); $i++) {
                 if ($this->fieldsValues[$i] != null) {
-                    $pdo->bindValue($this->fields[$i], $this->fieldsValues[$i]);
+                    $this->PDO->bindValue($this->fields[$i], $this->fieldsValues[$i]);
                 }
             }
-            if ($pdo->execute()) {
+            if ($this->PDO->execute()) {
                 return true;
             }
         }
@@ -215,20 +227,20 @@ class PhiberPersistence extends PhiberPersistenceFactory
 
         ]);
         if ($this->phiberConfig->verifyExecuteQueries()) {
-            $pdo = $this->getConnection()->prepare($this->sql);
+
             for ($i = 0; $i < count($this->fields); $i++) {
                 if (!empty($this->fieldsValues[$i])) {
-                    $pdo->bindValue($this->fields[$i], $this->fieldsValues[$i]);
+                    $this->PDO->bindValue($this->fields[$i], $this->fieldsValues[$i]);
                 }
 
             }
 
             while (current($conditions)) {
-                $pdo->bindValue("condition_" . key($conditions), $conditions[key($conditions)]);
+                $this->PDO->bindValue("condition_" . key($conditions), $conditions[key($conditions)]);
                 next($conditions);
             }
 
-            if ($pdo->execute()) {
+            if ($this->PDO->execute()) {
                 return true;
             }
         }
@@ -257,17 +269,16 @@ class PhiberPersistence extends PhiberPersistenceFactory
         ]);
 
         if ($this->phiberConfig->verifyExecuteQueries()) {
-            $pdo = $this->getConnection()->prepare($this->sql);
 
             if (isset($this->infosMergeds['fields_and_values'])) {
                 for ($i = 0; $i < count($this->infosMergeds['fields_and_values']); $i++) {
-                    $pdo->bindValue(
+                    $this->PDO->bindValue(
                         "condition_" . key($this->infosMergeds['fields_and_values']),
                         $this->infosMergeds['fields_and_values'][key($this->infosMergeds['fields_and_values'])]
                     );
                 }
             }
-            if ($pdo->execute()) {
+            if ($this->PDO->execute()) {
                 return true;
             }
         }
@@ -311,22 +322,21 @@ class PhiberPersistence extends PhiberPersistenceFactory
 
         $result = [];
         if ($this->phiberConfig->verifyExecuteQueries()) {
-            $pdo = $this->getConnection()->prepare($this->sql);
             if (isset($this->infosMergeds['fields_and_values'])) {
 
                 while (current($this->infosMergeds['fields_and_values'])) {
-                    $pdo->bindValue(
+                    $this->PDO->bindValue(
                         "condition_" . key($this->infosMergeds['fields_and_values']),
                         $this->infosMergeds['fields_and_values'][key($this->infosMergeds['fields_and_values'])]);
                     next($this->infosMergeds['fields_and_values']);
                 }
             }
-            $pdo->execute();
-            $result = $pdo->fetch(PDO::FETCH_ASSOC);
-            if ($this->returnSelectWithArray && $pdo->rowCount() > 1) {
-                $result = $pdo->fetchAll((PDO::FETCH_ASSOC));
+            $this->PDO->execute();
+            $result = $this->PDO->fetch(PDO::FETCH_ASSOC);
+            if ($this->returnSelectWithArray && $this->PDO->rowCount() > 1) {
+                $result = $this->PDO->fetchAll((PDO::FETCH_ASSOC));
             }
-            $this->rowCount = $pdo->rowCount();
+            $this->rowCount = $this->PDO->rowCount();
         }
 
         return (array)$result;
@@ -358,6 +368,32 @@ class PhiberPersistence extends PhiberPersistenceFactory
     public function show()
     {
         return $this->sql;
+    }
+
+
+    public function writeSQL($sql)
+    {
+        $this->sql = $sql;
+    }
+
+    public function bindValue($parameter, $value, $data_type = PDO::PARAM_STR)
+    {
+        $this->PDO->bindValue($parameter, $value, $data_type);
+    }
+
+    public function execute()
+    {
+        $this->PDO->execute();
+    }
+
+    public function fetchAll($fetch_style = null, $fetch_argument = null, array $ctor_args = array())
+    {
+        return $this->PDO->fetchAll($fetch_style, $fetch_argument, $ctor_args);
+    }
+
+    public function fetch($fetch_style = null, $cursor_orientation = PDO::FETCH_ORI_NEXT, $cursor_offset = 0)
+    {
+        return $this->PDO->fetch($fetch_style, $cursor_orientation, $cursor_offset);
     }
 
 
