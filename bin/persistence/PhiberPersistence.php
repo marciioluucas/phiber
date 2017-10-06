@@ -383,6 +383,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
     public function writeSQL($sql)
     {
         $this->sql = $sql;
+        $this->PDO = $this->PDO->prepare($this->sql);
     }
 
     /**
@@ -392,7 +393,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
      */
     public function bindValue($parameter, $value, $data_type = PDO::PARAM_STR)
     {
-        $this->PDO = $this->PDO->prepare($this->sql);
+
         $this->PDO->bindValue($parameter, $value, $data_type);
     }
 
