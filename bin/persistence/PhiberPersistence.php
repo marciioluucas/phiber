@@ -187,7 +187,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
         ]);
 
         if ($this->phiberConfig->verifyExecuteQueries()) {
-            $this->PDO->prepare($this->sql);
+            $this->PDO = $this->PDO->prepare($this->sql);
 
             for ($i = 0; $i < count($this->fields); $i++) {
                 if ($this->fieldsValues[$i] != null) {
@@ -230,7 +230,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
 
         ]);
         if ($this->phiberConfig->verifyExecuteQueries()) {
-            $this->PDO->prepare($this->sql);
+            $this->PDO = $this->PDO->prepare($this->sql);
             for ($i = 0; $i < count($this->fields); $i++) {
                 if (!empty($this->fieldsValues[$i])) {
                     $this->PDO->bindValue($this->fields[$i], $this->fieldsValues[$i]);
@@ -272,7 +272,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
         ]);
 
         if ($this->phiberConfig->verifyExecuteQueries()) {
-            $this->PDO->prepare($this->sql);
+            $this->PDO = $this->PDO->prepare($this->sql);
             if (isset($this->infosMergeds['fields_and_values'])) {
                 for ($i = 0; $i < count($this->infosMergeds['fields_and_values']); $i++) {
                     $this->PDO->bindValue(
@@ -325,7 +325,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
 
         $result = [];
         if ($this->phiberConfig->verifyExecuteQueries()) {
-            $this->PDO->prepare($this->sql);
+            $this->PDO = $this->PDO->prepare($this->sql);
             if (isset($this->infosMergeds['fields_and_values'])) {
 
                 while (current($this->infosMergeds['fields_and_values'])) {
@@ -393,6 +393,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
      */
     public function bindValue($parameter, $value, $data_type = PDO::PARAM_STR)
     {
+        $this->PDO = $this->PDO->prepare($this->sql);
         $this->PDO->bindValue($parameter, $value, $data_type);
     }
 
