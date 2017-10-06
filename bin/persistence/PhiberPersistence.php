@@ -404,14 +404,12 @@ class PhiberPersistence extends PhiberPersistenceFactory
     }
 
     /**
-     * @param null $fetch_style
-     * @param null $fetch_argument
-     * @param array $ctor_args
+     * @param int $fetch_style
      * @return array
      */
-    public function fetchAll($fetch_style = null, $fetch_argument = null, array $ctor_args = array())
+    public function fetchAll($fetch_style = PDO::FETCH_ASSOC)
     {
-        return $this->PDO->fetchAll($fetch_style, $fetch_argument, $ctor_args);
+        return $this->PDO->fetchAll($fetch_style);
     }
 
     /**
