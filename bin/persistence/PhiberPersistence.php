@@ -160,7 +160,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
         $this->restrictions = new Restrictions();
         $funcoesReflections = new FuncoesReflections();
         $this->phiberConfig = new Config();
-        $this->PDO = $this->getConnection()->prepare($this->sql);
+        $this->PDO = $this->getConnection();
         if ($obj != "") {
             $this->table = strtolower($funcoesReflections->pegaNomeClasseObjeto($obj));
             $this->fields = $funcoesReflections->pegaAtributosDoObjeto($obj);
@@ -187,7 +187,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
         ]);
 
         if ($this->phiberConfig->verifyExecuteQueries()) {
-
+            $this->PDO->prepare($this->sql);
 
             for ($i = 0; $i < count($this->fields); $i++) {
                 if ($this->fieldsValues[$i] != null) {
@@ -230,7 +230,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
 
         ]);
         if ($this->phiberConfig->verifyExecuteQueries()) {
-
+            $this->PDO->prepare($this->sql);
             for ($i = 0; $i < count($this->fields); $i++) {
                 if (!empty($this->fieldsValues[$i])) {
                     $this->PDO->bindValue($this->fields[$i], $this->fieldsValues[$i]);
@@ -272,7 +272,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
         ]);
 
         if ($this->phiberConfig->verifyExecuteQueries()) {
-
+            $this->PDO->prepare($this->sql);
             if (isset($this->infosMergeds['fields_and_values'])) {
                 for ($i = 0; $i < count($this->infosMergeds['fields_and_values']); $i++) {
                     $this->PDO->bindValue(
@@ -325,6 +325,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
 
         $result = [];
         if ($this->phiberConfig->verifyExecuteQueries()) {
+            $this->PDO->prepare($this->sql);
             if (isset($this->infosMergeds['fields_and_values'])) {
 
                 while (current($this->infosMergeds['fields_and_values'])) {
