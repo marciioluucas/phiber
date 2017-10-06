@@ -341,7 +341,6 @@ class PhiberPersistence extends PhiberPersistenceFactory
                 $result = $this->PDO->fetchAll((PDO::FETCH_ASSOC));
             }
             $this->rowCount = $this->PDO->rowCount();
-            $this->PDO->execute();
 
         }
 
