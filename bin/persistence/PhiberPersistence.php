@@ -336,10 +336,10 @@ class PhiberPersistence extends PhiberPersistenceFactory
                 }
             }
             $this->PDO->execute();
-            $result = $this->PDO->fetch(PDO::FETCH_ASSOC);
-            if ($this->returnSelectWithArray && $this->PDO->rowCount() > 1) {
+//            $result = $this->PDO->fetch(PDO::FETCH_ASSOC);
+//            if ($this->returnSelectWithArray && $this->PDO->rowCount() > 1) {
                 $result = $this->PDO->fetchAll((PDO::FETCH_ASSOC));
-            }
+//            }
             $this->rowCount = $this->PDO->rowCount();
 
         }
@@ -411,6 +411,7 @@ class PhiberPersistence extends PhiberPersistenceFactory
      */
     public function fetchAll($fetch_style = PDO::FETCH_ASSOC)
     {
+        $this->rowCount = $this->PDO->rowCount();
         return $this->PDO->fetchAll($fetch_style);
     }
 
