@@ -274,11 +274,12 @@ class PhiberPersistence extends PhiberPersistenceFactory
         if ($this->phiberConfig->verifyExecuteQueries()) {
             $this->PDO = $this->PDO->prepare($this->sql);
             if (isset($this->infosMergeds['fields_and_values'])) {
-                for ($i = 0; $i < count($this->infosMergeds['fields_and_values']); $i++) {
+
+                while (current($this->infosMergeds['fields_and_values'])) {
                     $this->PDO->bindValue(
                         "condition_" . key($this->infosMergeds['fields_and_values']),
-                        $this->infosMergeds['fields_and_values'][key($this->infosMergeds['fields_and_values'])]
-                    );
+                        $this->infosMergeds['fields_and_values'][key($this->infosMergeds['fields_and_values'])]);
+                    next($this->infosMergeds['fields_and_values']);
                 }
             }
             if ($this->PDO->execute()) {
