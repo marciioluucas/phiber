@@ -187,15 +187,15 @@ class PhiberPersistence extends PhiberPersistenceFactory
         ]);
 
         if ($this->phiberConfig->verifyExecuteQueries()) {
-            $this->PDO = $this->PDO->prepare($this->sql);
+            $stmt = $this->PDO->prepare($this->sql);
 
             for ($i = 0; $i < count($this->fields); $i++) {
                 if ($this->fieldsValues[$i] != null) {
-                    $this->PDO->bindValue($this->fields[$i], $this->fieldsValues[$i]);
+                    $stmt->bindValue($this->fields[$i], $this->fieldsValues[$i]);
                 }
             }
-            if ($this->PDO->execute()) {
-                return true;
+            if ($stmt->execute()) {
+                return $this->PDO->lastInsertId();
             }
         }
         return false;
