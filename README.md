@@ -1,3 +1,4 @@
+[![HitCount](http://hits.dwyl.io/marciioluucas/phiber.svg)](http://hits.dwyl.io/marciioluucas/phiber)
 [![Build Status](https://travis-ci.org/marciioluucas/phiber.svg?branch=master)](https://travis-ci.org/marciioluucas/phiber)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/db9f41d9b8144d27ab90a0350cb25a28)](https://www.codacy.com/app/marciioluucas/phiber?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=marciioluucas/phiber&amp;utm_campaign=Badge_Grade)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/marciioluucas/phiber/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/marciioluucas/phiber/?branch=master)
