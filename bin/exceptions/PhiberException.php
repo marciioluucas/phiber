@@ -5,23 +5,25 @@
 
 namespace phiber\bin\exceptions;
 
+use Exception;
 use phiber\util\Internationalization;
-
 
 /**
  * Classe reponsável por fazer as exceções personalizadas.
  * @package bin
  */
-class PhiberException extends \Exception
+class PhiberException extends Exception
 {
     /**
      * Referencia da mensagem a ser traduzida.
+     * 
      * @var string
      */
     private $msgTranslateRef;
 
     /**
      * PhiberException constructor.
+     * 
      * @param string $msgTranslateRef
      */
     public function __construct($msgTranslateRef)
@@ -31,6 +33,7 @@ class PhiberException extends \Exception
 
     /**
      * Retorna a exceção personalizada, sobrescrevendo o metodo __toString
+     * 
      * @return string
      */
     public function __toString()
@@ -39,6 +42,4 @@ class PhiberException extends \Exception
             ": " . new Internationalization('line') . ": " . $this->getLine() . " " .
             new Internationalization('message') . ": " . new Internationalization($this->msgTranslateRef);
     }
-
-
 }
