@@ -1,19 +1,20 @@
 <?php
+
 /**
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
-
 namespace phiber\bin\interfaces;
-
 
 /**
  * Interface IPhiberQueryBuilder
+ * 
  * @package bin
  */
 interface IPhiberQueryBuilder
 {
     /**
      * Cria a sql do INSERT
+     * 
      * @param $infos
      * @return mixed
      */
@@ -21,6 +22,7 @@ interface IPhiberQueryBuilder
 
     /**
      * Cria a sql do UPDATE
+     * 
      * @param $infos
      * @return mixed
      */
@@ -28,6 +30,7 @@ interface IPhiberQueryBuilder
 
     /**
      * Cria a sql do DELETE
+     * 
      * @param $infos
      * @return mixed
      */
@@ -35,6 +38,7 @@ interface IPhiberQueryBuilder
 
     /**
      * Cria a sql do SELECT
+     * 
      * @param $infos
      * @return mixed
      */
