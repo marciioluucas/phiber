@@ -136,7 +136,7 @@ class Restrictions
      */
     public function lessThen($column, $value)
     {
-        self::addFieldsAndValues($column, $calue);
+        self::addFieldsAndValues($column, $value);
 
         return [
             "where" => "{$column} < :condition_{$value}"
