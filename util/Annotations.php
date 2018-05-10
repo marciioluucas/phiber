@@ -1,44 +1,50 @@
 <?php
+
 /**
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
-
 namespace phiber\util;
-
-
-
 
 /**
  * A classe Annotations é responsável por pegar por reflexão os comentários de mapeamento das classes.
+ * 
  * @package util
  */
-class Annotations {
-
+class Annotations 
+{
     /**
      * Recupera os comentários de mapeamentos das classes de modelo.
-     * @param $obj
-     *
+     * 
+     * @param $object
      * Retorna um array de atributos
      * @return array
      */
-    final public static function getAnnotation($obj)
+    final public static function getAnnotation($object)
     {
-
         $funReflec = new FuncoesReflections();
-        $out = array();
+        
+        $output = array();
+        
         $pattern = '/@+_+[A-z]\w+=\w+/';
-        $fullComments = $funReflec->retornaComentariosAtributos($obj);
-        $attributos = $funReflec->pegaAtributosDoObjeto($obj);
-        $ann = [];
-        $tamanho = count($attributos);
-        for ($i = 0; $i < $tamanho; $i++) {
-            preg_match_all($pattern,
-                $fullComments[$attributos[$i]],
-                $out);
-            $ann[$attributos[$i]] = $out[0];
+        
+        $fullComments = $funReflec->retornaComentariosAtributos($object);
+        $attribuites   = $funReflec->pegaAtributosDoObjeto($object);
+        
+        $annotationsList = [];
+        
+        $limit    = count($attribuites);
+        $iterator = 0;
+        for ($iterator; $iterator < $limit; $iterator++) {
+            
+            preg_match_all(
+                $pattern,
+                $fullComments[$attribuites[$iterator]],
+                $output
+            );
 
-
+            $annotationsList[ $attribuites[$iterator] ] = $output[0];
         }
-        return $ann;
+
+        return $annotationsList;
     }
 }
