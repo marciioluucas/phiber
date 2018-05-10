@@ -3,9 +3,9 @@
 /**
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
-namespace phiber\util;
+namespace Phiber\Util;
 
-use phiber\util\Internationalization;
+use Phiber\Util\Internationalization;
 
 /**
  * Classe responsável por medir o tempo de execução das tarefas.

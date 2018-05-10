@@ -3,7 +3,9 @@
 /**
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
-namespace phiber\util;
+namespace Phiber\Util;
+
+use Phiber\Util\FuncoesReflections;
 
 /**
  * A classe Annotations é responsável por pegar por reflexão os comentários de mapeamento das classes.

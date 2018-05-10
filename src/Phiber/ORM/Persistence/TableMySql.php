@@ -3,13 +3,13 @@
 /**
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
-namespace phiber\bin\persistence;
+namespace Phiber\ORM\Persistence;
 
-use bin\factories\TableFactory;
-use util\Annotations;
-use util\FuncoesReflections;
-use util\FuncoesString;
-use util\JsonReader;
+use Phiber\ORM\factories\TableFactory;
+use Phiber\Util\Annotations;
+use Phiber\Util\FuncoesReflections;
+use Phiber\Util\FuncoesString;
+use Phiber\Util\JsonReader;
 
 /**
  * Classe responsável por criar as tabelas do banco

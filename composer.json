@@ -23,9 +23,7 @@
   },
   "autoload": {
     "psr-4": {
-      "phiber\\": "/",
-      "phiber\\bin\\": "bin/",
-      "phiber\\util\\": "util/"
+      "Phiber\\": "/src/Phiber"
     }
   },
   "require-dev": {

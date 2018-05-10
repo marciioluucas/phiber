@@ -3,10 +3,10 @@
 /**
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
-namespace phiber\bin\factories;
+namespace Phiber\ORM\Factories;
 
 use PDO;
-use phiber\bin\Link;
+use Phiber\Link;
 
 /**
  * Interface IPhiberPersistence

@@ -1,21 +1,14 @@
 <?php
-/**
- * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
- */
 
-/**
- * Classe criada por Márcio Lucas R de Oliveira (lukee)
- * Data: 16/03/17
- * Hora: 19:07
- */
-namespace phiber;
-use phiber\bin\persistence\PhiberPersistence;
+namespace Phiber;
+
+use Phiber\ORM\Persistence\PhiberPersistence;
+use StdClass;
 
 /**
  *Constante que define a base de onde está localizado o projeto
  */
 define("BASE_DIR",str_replace('\\', '/', dirname(__FILE__)));
-
 
 /**
  * A classe Phiber é a responsável por ser a classe módulo entre as funcionalidades do
@@ -27,18 +20,19 @@ class Phiber extends PhiberPersistence
 {
     /**
      * Phiber constructor.
-     * @param string|\stdClass $object
+     * 
+     * @param string|StdClass $object
      */
     public function __construct($object = "")
     {
         parent::__construct($object);
     }
 
-
     /**
-     * @deprecated
      * Método opcional responsável por retornar uma instância da classe PhiberPersistence,
      * que é responsável pela persistencia dos dados. (CREATE, RETREAVE, UPDATE, DELETE)
+     * 
+     * @deprecated
      * @param string|\stdClass $object
      * @return PhiberPersistence
      */
@@ -46,5 +40,4 @@ class Phiber extends PhiberPersistence
     {
         return new PhiberPersistence($object);
     }
-
 }

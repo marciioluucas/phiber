@@ -3,15 +3,13 @@
 /**
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
-namespace phiber\bin\logger;
+namespace Phiber\ORM\Logger;
 
-use phiber\util\Internationalization;
-use phiber\util\JsonReader;
+use Phiber\Util\Internationalization;
+use Phiber\Util\JsonReader;
 
 /**
  * Classe responsável por criar o log do Phiber
- * 
- * @package bin
  */
 class PhiberLogger
 {

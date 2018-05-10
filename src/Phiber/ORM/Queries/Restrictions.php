@@ -3,11 +3,9 @@
 /**
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
-namespace phiber\bin\queries;
+namespace Phiber\ORM\Queries;
 
-use phiber\bin\exceptions\{
-    PhiberException
-};
+use Phiber\ORM\Exceptions\PhiberException;
 
 /**
  * Classe responsável por fazer as restrições das operações do banco

@@ -3,16 +3,16 @@
 /**
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
-namespace phiber\bin\persistence;
+namespace Phiber\ORM\Persistence;
 
 use PDO;
 use PDOStatement;
-use phiber\bin\Config;
-use phiber\bin\factories\PhiberPersistenceFactory;
-use phiber\bin\queries\PhiberQueryWriter;
-use phiber\bin\queries\Restrictions;
-use phiber\util\FuncoesReflections;
-use phiber\util\JsonReader;
+use Phiber\ORM\Config;
+use Phiber\ORM\factories\PhiberPersistenceFactory;
+use Phiber\ORM\Queries\PhiberQueryWriter;
+use Phiber\ORM\Queries\Restrictions;
+use Phiber\Util\FuncoesReflections;
+use Phiber\Util\JsonReader;
 
 /**
  * Classe responsável por persistir os objetos no banco

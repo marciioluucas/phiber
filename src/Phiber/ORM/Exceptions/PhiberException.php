@@ -3,10 +3,10 @@
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
 
-namespace phiber\bin\exceptions;
+namespace Phiber\ORM\Exceptions;
 
 use Exception;
-use phiber\util\Internationalization;
+use Phiber\Util\Internationalization;
 
 /**
  * Classe reponsável por fazer as exceções personalizadas.
