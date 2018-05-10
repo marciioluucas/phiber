@@ -1,11 +1,12 @@
 <?php
+
 /**
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
-
 namespace phiber\util;
 
 use Exception;
+use phiber\bin\exceptions\NotImplementedException;
 use ReflectionClass;
 use ReflectionProperty;
 
@@ -16,192 +17,202 @@ use ReflectionProperty;
  */
 class FuncoesReflections
 {
-
-
-//    /**
-//     * Construtor da classe FuncoesReflections
-//     */
-//    public function __construct($method, $obj)
-//    {
-//        $reflectionMethod = new ReflectionMethod(get_class($this), $method);
-//        $reflectionMethod->invoke($this, $obj);
-//    }
-
-
-//    public function pegaAtributoDoObjeto($obj)
-//    {
-//        $reflectionClass = new ReflectionClass($obj);
-//        $propriedades = $reflectionClass->getProperties(ReflectionProperty::IS_PUBLIC |
-//            ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PRIVATE);
-//
-//        for ($i = 0; $i < count($propriedades); $i++) {
-//            self::$p[$i] = $propriedades[$i]->name;
-//        }
-//        if ($reflectionClass->getParentClass() != null) {
-//            self::pegaAtributoDoObjeto($reflectionClass->getParentClass());
-//        }
-//        return self::$p;
-//    }
-
     /**
      * Função responsável por pegar o nome dos métodos do objeto retornando um array dos mesmos
-     * @param $obj
+     * 
+     * @param  $object
      * @return array
      */
-    public function pegaNomesMetodosClasse($obj)
+    public function pegaNomesMetodosClasse($object)
     {
-        return get_class_methods($obj);
+        return get_class_methods($object);
     }
 
     /**
      * Função responsável por pegar o nome de um atributo espefífico.
      * Caso o atributo pesquisado não exista, a função retornará falso.
-     * @param $obj
-     * @param $nomeAtributo
+     * 
+     * @param  $object
+     * @param  $nomeAtributo
      * @return bool|string
      * @throws Exception
      */
-    public function pegaNomeAtributoEspecifico($obj, $nomeAtributo)
+    public function pegaNomeAtributoEspecifico($object, $nomeAtributo)
     {
         try {
-            $arrayAtributosObjeto = self::pegaAtributosDoObjeto($obj);
-            for ($i = 0; $i < count($arrayAtributosObjeto); $i++) {
-                $atributoEspecifico = strstr($arrayAtributosObjeto[$i], $nomeAtributo);
+            $arrayAtributosObjeto = self::pegaAtributosDoObjeto($object);
+            
+            $iterator = 0;
+            $limit    = count($arrayAtributosObjeto);
+            for ($iterator; $iterator < $limit; $iterator++) {
+                
+                $atributoEspecifico = strstr(
+                    $arrayAtributosObjeto[$iterator], 
+                    $nomeAtributo
+                );
+                
                 return $atributoEspecifico;
             }
+
         } catch (Exception $e) {
             throw new Exception("Falha ao pegar nome do atributo específico", 3, $e);
         }
+
         return false;
     }
 
     /**
      * Função responsável por pegar os nomes dos atributos do objeto, retornando um array dos mesmos.
+     * 
      * @param $obj
      * @return array
      */
     public function pegaAtributosDoObjeto($obj)
     {
-        $properties = [];
+        $properties      = [];
         $reflectionClass = new ReflectionClass($obj);
-        $propriedades = $reflectionClass->getProperties(ReflectionProperty::IS_PUBLIC |
-            ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PRIVATE);
-        $tamanho = count($propriedades);
-        for ($i = 0; $i < $tamanho; $i++) {
-            $properties[$i] = $propriedades[$i]->name;
+        $propriedades    = $reflectionClass->getProperties(
+            ReflectionProperty::IS_PUBLIC |
+            ReflectionProperty::IS_PROTECTED | 
+            ReflectionProperty::IS_PRIVATE
+        );
+     
+        $iterator = 0;
+        $limit    = count($propriedades);
+        for ($iterator = 0; $iterator < $limit; $iterator++) {
+            $properties[$iterator] = $propriedades[$iterator]->name;
         }
-//        if ($reflectionClass->getParentClass() != null) {
-//            self::pegaAtributoDoObjeto($reflectionClass->getParentClass());
-//        }
+
         return $properties;
     }
 
-
     /**
      * Função responsável por pegar o nome da classe do objeto em questão.
-     * @param $obj
+     * 
+     * @param  $object
      * @return string
      */
-    public function pegaNomeClasseObjeto($obj)
+    public function pegaNomeClasseObjeto($object)
     {
-        $reflectionClass = new ReflectionClass($obj);
+        $reflectionClass = new ReflectionClass($object);
+
         return $reflectionClass->getShortName();
     }
 
     /**
      * Função responsável por retornar os valores dos atributos das classes mães,
-     * se as mesmas existirem, se caso a classe em questão não for uma classe filha, a função retornará
-     * false.
-     * @param $obj
+     * se as mesmas existirem, se caso a classe em questão não for uma classe filha, 
+     * a função retornará false.
+     * 
+     * @param  $object
      * @return bool|array
      */
-    public function retornaValoresAtributosClassesMaes($obj)
+    public function retornaValoresAtributosClassesMaes($object)
     {
-        if (self::verificaSeEClasseFilha($obj)) {
-            $nomeClassesMae = self::retornaClassesMaes($obj);
-            $valores = [];
-            $tamanho = count($nomeClassesMae);
-            for ($i = 0; $i < $tamanho; $i++) {
-                $valores[$i] = self::pegaValoresAtributoDoObjeto($nomeClassesMae[$i]);
+        if (self::verificaSeEClasseFilha($object)) {
+            
+            $nomeClassesMae = self::retornaClassesMaes($object);
+            
+            $valores  = [];
+            $iterator = 0;
+            $limit    = count($nomeClassesMae);
+            for ($iterator; $iterator < $limit; $iterator++) {
+                $valores[$iterator] = self::pegaValoresAtributoDoObjeto(
+                    $nomeClassesMae[$iterator]
+                );
             }
+
             return $valores;
         }
+
         return false;
     }
 
     /**
      * Função responsável por verifidar se a classe é filha de alguma outra classe,
      * se caso não for. A função retornará falso.
-     * @param \Object $obj
+     * 
+     * @param  Object $object
      * @return bool
      */
-    public function verificaSeEClasseFilha($obj)
+    public function verificaSeEClasseFilha($object)
     {
-        $class = new ReflectionClass($obj);
+        $class = new ReflectionClass($object);
+
         if ($class->getParentClass()) {
             return true;
         }
+        
         return false;
-
     }
 
     /**
      * Retorna o nome das classes mães, se caso o objeto em questão não ter uma classe mãe,
      * a função retornará false.
-     * @param $obj
+     * 
+     * @param  $object
      * @return array|bool
      */
-    public function retornaClassesMaes($obj)
+    public function retornaClassesMaes($object)
     {
-        $class = new ReflectionClass($obj);
+        $class = new ReflectionClass($object);
 
         $parents = [];
-        $parent = "";
-        if (self::verificaSeEClasseFilha($obj)) {
+        $parent  = "";
+        if ( self::verificaSeEClasseFilha($object) ) {
             while ($class->getParentClass()) {
                 $parents[] = $class->getParentClass()->getName();
-                $class = $parent;
+                $class     = $parent;
             }
+
             return $parents;
         }
+
         return false;
     }
 
     /**
      * Função responsável por retornar um array de todos os valores dos atributos de um objeto
-     * @param $obj
+     * 
+     * @param $object
      * @return array
      */
-    public function pegaValoresAtributoDoObjeto($obj)
+    public function pegaValoresAtributoDoObjeto($object)
     {
-        $nomeAtributos = self::pegaAtributosDoObjeto($obj);
-        $valAtrFinal = [];
-        $reflectionClass = new ReflectionClass($obj);
-        $tamanho = count($nomeAtributos);
-        for ($i = 0; $i < $tamanho; $i++) {
-            $reflectionProperty = $reflectionClass->getProperty($nomeAtributos[$i]);
+        $nomeAtributos   = self::pegaAtributosDoObjeto($object);
+        $valAtrFinal     = [];
+        $reflectionClass = new ReflectionClass($object);
+        
+        $iterator = 0;
+        $limit    = count($nomeAtributos);
+        for ($iterator; $iterator < $limit; $iterator++) {
+            $reflectionProperty = $reflectionClass->getProperty($nomeAtributos[$iterator]);
             $reflectionProperty->setAccessible(true);
-            $valAtrFinal[$i] = $reflectionProperty->getValue($obj);
+            $valAtrFinal[$iterator] = $reflectionProperty->getValue($object);
         }
+
         return $valAtrFinal;
     }
 
 
     /**
      * Função responsável por retornar um array com todos os atributos das classes da hierarquia
-     * @todos Fazer funcionar isso aqui
+     * 
+     * @todos Pendente de implementação
+     * 
      * @param $obj
      * @return array
      */
     public function retornaNomeAtributosClassesMaes($obj)
     {
+        throw new NotImplementedException();
+
         $atributos = [];
-        $tamanho = count(self::retornaClassesMaes($obj));
-        for ($i = 0;
-             $i < $tamanho;
-             $i++) {
-            $atributos[$i] = array(self::retornaClassesMaes($obj)[$i] =>
-                self::pegaAtributosDoObjeto(self::retornaClassesMaes($obj)[$i]));
+        $iterator  = 0;
+        $limit     = count(self::retornaClassesMaes($obj));
+        for ($iterator; $iterator < $limit; $iterator++) {
+            $atributos[$iterator] = array(self::retornaClassesMaes($obj)[$iterator] =>
+                self::pegaAtributosDoObjeto(self::retornaClassesMaes($obj)[$iterator]));
         }
 
         return $atributos;
@@ -209,24 +220,27 @@ class FuncoesReflections
 
     /**
      * Função responsável por retornar os comentários dos atributos do objeto em questão.
-     * @param $obj
+     * 
+     * @param  $object
      * @return array
      */
-    public function retornaComentariosAtributos($obj)
+    public function retornaComentariosAtributos($object)
     {
-        $arrAttrNames = self::pegaAtributosDoObjeto($obj);
-        $arrAttrComm = array();
-        $tamanho = count($arrAttrNames);
-        for ($i = 0; $i < $tamanho; $i++) {
+        $arrAttrNames = self::pegaAtributosDoObjeto($object);
+        $arrAttrComm  = array();
+        
+        $iterator = 0;
+        $limit    = count($arrAttrNames);
+        for ($iterator; $iterator < $limit; $iterator++) {
 
-            $reflectionAttr = new ReflectionProperty($obj, $arrAttrNames[$i]);
+            $reflectionAttr = new ReflectionProperty($object, $arrAttrNames[$iterator]);
 
-            $arrAttrComm[$arrAttrNames[$i]] = $reflectionAttr->getDocComment();
+            $arrAttrComm[$arrAttrNames[$iterator]] = $reflectionAttr->getDocComment();
         }
 
-        //TODO: FAZER O FOR PARA PEGAR TODOS ATRIBUTOS, PASSAR NO SEGUNDO PARAMETRO;
+        /**
+         * @todo FAZER O FOR PARA PEGAR TODOS ATRIBUTOS, PASSAR NO SEGUNDO PARAMETRO;
+         */
         return $arrAttrComm;
     }
-
-
 }
