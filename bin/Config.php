@@ -12,16 +12,15 @@
 
 namespace phiber\bin;
 
-
 use phiber\util\JsonReader;
 
 /**
  * Classe responsável por recuperar as informações de configuração do Phiber
+ * 
  * @package bin
  */
 class Config
 {
-
     /**
      * @var JsonReader
      */
@@ -41,6 +40,7 @@ class Config
 
     /**
      * Retorna se é para executar as queries ou não.
+     * 
      * @return bool
      */
     public function verifyExecuteQueries()

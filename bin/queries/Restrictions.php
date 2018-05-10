@@ -1,17 +1,17 @@
 <?php
+
 /**
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
-
 namespace phiber\bin\queries;
 
 use phiber\bin\exceptions\{
     PhiberException
 };
 
-
 /**
  * Classe responsável por fazer as restrições das operações do banco
+ * 
  * @package bin
  */
 class Restrictions
@@ -37,128 +37,137 @@ class Restrictions
         return self::$fieldsAndValues;
     }
 
-
     /**
      * Faz a query de comparação IGUAL
-     * Exemplo:
+     * 
+     * @example Exemplo:
      *  equals("idade",15);
      *  Criará um pedaço da query do banco assim -> idade = :condition_idade
      *  OBS: O ":condition_idade" é o responsável por depois fazer o binding do valor para
      *  evitar SQL Injection.
-     * @param $param1
-     * @param $param2
+     * 
+     * @param  string $column
+     * @param  string $value
      * @return array
      */
-    public function equals($param1, $param2)
+    public function equals($column, $value)
     {
-        self::addFieldsAndValues($param1, $param2);
-        return
-            [
-                "where" => $param1 . " = :condition_" . $param1
-            ];
-
+        self::addFieldsAndValues($column, $value);
+        
+        return [
+            "where" => "{$column} = :condition_{$value}"
+        ];
     }
 
     /**
      * Faz a query de comparação DIFERENTE
-     * Exemplo:
+     * 
+     * @example Exemplo:
      *  different("idade",15);
      *  Criará um pedaço da query do banco assim -> idade != :condition_idade
      *  OBS: O ":condition_idade" é o responsável por depois fazer o binding do valor para
      *  evitar SQL Injection.
-     * @param $param1
-     * @param $param2
+     * @param  string $column
+     * @param  string $value
      * @return array
      */
-    public function different($param1, $param2)
+    public function different($column, $value)
     {
-        self::addFieldsAndValues($param1, $param2);
-        return
-            [
-                "where" => $param1 . " != :condition_" . $param1
-            ];
+        self::addFieldsAndValues($column, $value);
 
+        return [
+            "where" => "{$column} != :condition_$value"
+        ];
     }
 
     /**
      * Faz a query de comparação MAIOR QUE
-     * Exemplo:
+     * 
+     * @example Exemplo:
      *  biggerThen("idade",15);
      *  Criará um pedaço da query do banco assim -> idade > :condition_idade
      *  OBS: O ":condition_idade" é o responsável por depois fazer o binding do valor para
      *  evitar SQL Injection.
-     * @param $param1
-     * @param $param2
+     * @param  string $column
+     * @param  string $value
      * @return array
      */
-    public function biggerThen($param1, $param2)
+    public function biggerThen($column, $value)
     {
-        self::addFieldsAndValues($param1, $param2);
+        self::addFieldsAndValues($column, $value);
+
         return [
-            "where" => $param1 . " > :condition_" . $param1
+            "where" => "{$column} > :condition_{$value}"
         ];
     }
 
     /**
      * Faz a query de comparação MAIOR OU IGUAL A
-     * Exemplo:
+     * 
+     * @example Exemplo:
      *  greaterThan("idade",15);
      *  Criará um pedaço da query do banco assim -> idade >= :condition_idade
      *  OBS: O ":condition_idade" é o responsável por depois fazer o binding do valor para
      *  evitar SQL Injection.
-     * @param $param1
-     * @param $param2
+     * @param  string $column
+     * @param  string $value
      * @return array
      */
-    public function greaterThan($param1, $param2)
+    public function greaterThan($column, $value)
     {
-        self::addFieldsAndValues($param1, $param2);
+        self::addFieldsAndValues($column, $value);
+
         return [
-            "where" => $param1 . " >= :condition_" . $param1,
+            "where" => "{$column} >= :condition_{$value}"
         ];
     }
 
     /**
      * Faz a query de comparação MENOR QUE
-     * Exemplo:
+     * 
+     * @example Exemplo:
      *  lessThen("idade",15);
      *  Criará um pedaço da query do banco assim -> idade < :condition_idade
      *  OBS: O ":condition_idade" é o responsável por depois fazer o binding do valor para
      *  evitar SQL Injection.
-     * @param $param1
-     * @param $param2
+     * @param  string $column
+     * @param  string $param2
      * @return array
      */
-    public function lessThen($param1, $param2)
+    public function lessThen($column, $value)
     {
-        self::addFieldsAndValues($param1, $param2);
+        self::addFieldsAndValues($column, $calue);
+
         return [
-            "where" => $param1 . " < :condition_" . $param1,
+            "where" => "{$column} < :condition_{$value}"
         ];
     }
 
     /**
      * Faz a query de comparação MENOR OU IGUAL A
-     * Exemplo:
+     * 
+     * @example Exemplo:
      *  lessLike("idade",15);
      *  Criará um pedaço da query do banco assim -> idade <= :condition_idade
      *  OBS: O ":condition_idade" é o responsável por depois fazer o binding do valor para
      *  evitar SQL Injection.
-     * @param $param1
-     * @param $param2
+     * @param  string $column
+     * @param  string $value
      * @return array
      */
-    public function lessLike($param1, $param2)
+    public function lessLike($column, $value)
     {
-        self::addFieldsAndValues($param1, $param2);
+        self::addFieldsAndValues($column, $value);
+
         return [
-            "where" => $param1 . " <= :condition_" . $param1,
+            "where" => "{$column} <= :condition_{$value}"
         ];
     }
 
     /**
      * Faz a query de comparação LIKE
-     * Exemplo:
+     * 
+     * @example Exemplo:
      *  like("nome","Jhon Snow");
      *  Criará um pedaço da query do banco assim -> idade LIKE %:condition_nome%
      *  OBS: O ":condition_nome" é o responsável por depois fazer o binding do valor para
@@ -224,35 +233,38 @@ class Restrictions
 
     /**
      * Faz a query de limite.
-     * Exemplo:
+     * 
+     * @example Exemplo:
      * Retornar os primeiros registros com o limite 15
      * LIMIT 15
-     * @param $limit
+     * @param  int $limit
      * @return array
      */
     public function limit($limit)
     {
         return [
-            "limit" => $limit . " "
+            "limit" => (int)$limit . " "
         ];
     }
 
     /**
      * Faz a query de offset (a partir de )
-     * Exemplo:
+     * 
+     * @example Exemplo:
      * Retorne os x resultados a partir de 15
      * OFFSET 15
-     * @param $offset
+     * @param  $offset
      * @return array
      */
     public function offset($offset)
     {
-        return ["offset" => $offset];
+        return [ "offset" => $offset ];
     }
 
     /**
      * Faz a query de OrderBy
-     * EXEMPLO:
+     * 
+     * @example EXEMPLO:
      * Passará um array com os orderBys e se quer desc ou asc.
      * Se caso quiser tudo desc ou tudo asc, colocar DESC|ASC somente no ultimo.
      * orderBy(["nome asc","id desc"])
@@ -266,12 +278,20 @@ class Restrictions
         ];
     }
 
+    /**
+     * Responsável por montar instruções JOIN.
+     *
+     * @param  string $table
+     * @param  array $on
+     * @param  string $type
+     * @return void
+     */
     public function join(string $table, array $on, string $type = "INNER")
     {
-
         if (count($on) > 2) {
             throw new PhiberException("error_on_join");
         }
+
         try {
             switch (strtoupper($type)) {
                 case "INNER":
@@ -299,33 +319,33 @@ class Restrictions
         }
     }
 
-
     /**
-     * Função para determinar os campos que quer buscar no SELECT
-     * Exemplo: fields("nome, id");
+     * Função para determinar os campos que quer buscar no SELECT.
+     * 
+     * @example Exemplo: fields("nome, id");
      * Gerará: Select nome, id from ...
      * Caso não informar campos, retornará todos.
-     * @param $fields
+     * @param  array $fields
      * @return array
      */
-    public function fields($fields)
+    public function fields(array $fields)
     {
         if (!empty($fields)) {
             return ["fields" => $fields];
         }
+
         return ["fields" => ["*"]];
     }
 
     /**
      * Adiciona os campos e os valores.
+     * 
      * @ignore
-     * @param $field
-     * @param $value
+     * @param string $field
+     * @param mixed $value
      */
     private function addFieldsAndValues($field, $value)
     {
         self::$fieldsAndValues['fields_and_values'][$field] = $value;
     }
-
-
 }
