@@ -1,26 +1,27 @@
 <?php
+
 /**
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
-
 namespace phiber\bin\logger;
+
 use phiber\util\Internationalization;
 use phiber\util\JsonReader;
 
-
 /**
  * Classe responsável por criar o log do Phiber
+ * 
  * @package bin
  */
 class PhiberLogger
 {
-
     /**
      * Cria o log.
-     * @param $languageReference
+     * 
+     * @param        $languageReference
      * @param string $level
      * @param string $objectName
-     * @param null $execTime
+     * @param null   $execTime
      */
     public static function create($languageReference, $level = 'info', $objectName = '', $execTime = null)
     {
