@@ -1,20 +1,22 @@
 <?php
+
 /**
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
-
-namespace phiber\util;
+namespace Phiber\Util;
 
 /**
  *
  * Classe responsável por manipular strings.
+ * 
  * @package util
  */
 class FuncoesString
 {
     /**
      * Passa para caixa alta
-     * @param $string
+     * 
+     * @param  string $string
      * @return string
      */
     public function paraCaixaAlta($string)
@@ -24,7 +26,8 @@ class FuncoesString
 
     /**
      * Passa para caixa baixa
-     * @param $string
+     * 
+     * @param  string $string
      * @return string
      */
     public function paraCaixaBaixa($string)
@@ -34,8 +37,9 @@ class FuncoesString
 
     /**
      * Verifica se a string é existente, se caso não for, retornará false.
-     * @param $string
-     * @param $stringBuscada
+     * 
+     * @param  string $string
+     * @param  string $stringBuscada
      * @return bool
      */
     public function verificaStringExistente($string, $stringBuscada)
@@ -43,11 +47,14 @@ class FuncoesString
         if (strpos($string, $stringBuscada) !== false) {
             return true;
         }
+
         return false;
     }
 
     /**
-     * @param $string
+     * Passa a primeira letra da string para caixa alta.
+     * 
+     * @param  string $string
      * @return string
      */
     public function passarPrimeiraLetraParaCaixaAlta($string)
@@ -57,43 +64,46 @@ class FuncoesString
 
     /**
      * Separa uma string.
-     * @param $string
-     * @param $posInicial
-     * @param null $posFinal
+     * 
+     * @param  string $string
+     * @param  int    $posicaoInicial
+     * @param  int    $posicaoFinal   default null
      * @return string
      */
-    public function separaString($string, $posInicial, $posFinal = null)
+    public function separaString($string, $posicaoInicial, $posicaoFinal = null)
     {
-        if ($posFinal == null) {
-            return substr($string, $posInicial - 1);
+        if ($posicaoFinal == null) {
+            return substr($string, $posicaoInicial - 1);
         }
-        return substr($string, $posInicial - 1, ($posFinal - 1) * (-1));
 
+        return substr($string, $posicaoInicial - 1, ($posicaoFinal - 1) * (-1));
     }
 
 
     /**
      * Retorna a posição da ocorrencia, se caso não existir, a função retornará false.
-     * @param $string
-     * @param $strBusca
+     * 
+     * @param  string $string
+     * @param  string $stringBusca
      * @return int
      */
-    public function pegaPosStringDeterminada($string, $strBusca)
+    public function pegaPosStringDeterminada($string, $stringBusca)
     {
-        $tamanhoStrBusca = strlen($strBusca);
-        return stripos($string, $strBusca) + $tamanhoStrBusca + 1;
+        $tamanhoStrBusca = strlen($stringBusca);
+     
+        return stripos($string, $stringBusca) + $tamanhoStrBusca + 1;
     }
 
     /**
      * Substitui ocorrencias de uma string. Se caso a ocorrencia não existir, a função retornará false.
-     * @param $string
-     * @param $strBusca
-     * @param $substituicao
+     * 
+     * @param  string $string
+     * @param  string $stringBusca
+     * @param  string $substituicao
      * @return mixed
      */
-    public function substituiOcorrenciasDeUmaString($string, $strBusca, $substituicao)
+    public function substituiOcorrenciasDeUmaString($string, $stringBusca, $substituicao)
     {
-        return str_replace($strBusca, $substituicao, $string);
+        return str_replace($stringBusca, $substituicao, $string);
     }
-
 }

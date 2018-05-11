@@ -1,20 +1,22 @@
 <?php
+
 /**
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
+namespace Phiber\ORM\Factories;
 
-namespace phiber\bin\factories;
-
-use phiber\bin\Link;
+use Phiber\Link;
 
 /**
  * Classe responsável por ser a fábrica de tabelas
+ * 
  * @package bin
  */
 abstract class TableFactory
 {
     /**
      * Dá o create na tabela
+     * 
      * @param $obj
      * @return mixed
      */
@@ -22,6 +24,7 @@ abstract class TableFactory
 
     /**
      * Dá o alter na tabela
+     * 
      * @param $obj
      * @return mixed
      */
@@ -29,14 +32,15 @@ abstract class TableFactory
 
     /**
      * Exclui a tabela
+     * 
      * @param $obj
      * @return mixed
      */
     abstract static function drop($obj);
 
-
     /**
      * Sincroniza a tabela com o código
+     * 
      * @param $obj
      * @return mixed
      */
@@ -44,10 +48,13 @@ abstract class TableFactory
 
     /**
      * Pega a conexão com o banco
+     * 
      * @return \PDO
      */
-    public function getConnection(){
+    public function getConnection()
+    {
         $pdo = new Link();
+       
         return $pdo->getConnection();
     }
 }

@@ -1,18 +1,11 @@
 <?php
+
 /**
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
+namespace Phiber\ORM;
 
-/**
- * Created by PhpStorm.
- * User: marci
- * Date: 24/04/2017
- * Time: 13:34
- */
-
-namespace phiber\bin;
-
-use phiber\util\JsonReader;
+use Phiber\Util\JsonReader;
 
 /**
  * Classe responsável por recuperar as informações de configuração do Phiber

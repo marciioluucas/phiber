@@ -3,12 +3,10 @@
 /**
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
-namespace phiber\bin;
+namespace Phiber\ORM;
 
-use phiber\bin\exceptions\NotImplementedException;
-use phiber\bin\interfaces\{
-    ICrypt
-};
+use Phiber\ORM\Exceptions\NotImplementedException;
+use Phiber\ORM\Interfaces\ICrypt;
 
 /**
  * Classe responsável por administrar a encriptação/decriptação de dados.

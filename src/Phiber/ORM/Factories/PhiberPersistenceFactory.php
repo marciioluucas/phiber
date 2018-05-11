@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
+namespace Phiber\ORM\Factories;
 
-namespace phiber\bin\factories;
-use phiber\bin\Link;
+use PDO;
+use Phiber\Link;
 
 /**
  * Interface IPhiberPersistence
@@ -12,27 +14,29 @@ use phiber\bin\Link;
  */
 abstract class PhiberPersistenceFactory
 {
-
     /**
      * Pega a conexão com o banco
-     * @return \PDO
+     * 
+     * @return PDO
      */
-    public function getConnection(){
+    public function getConnection()
+    {
         $pdo = new Link();
+    
         return $pdo->getConnection();
-
     }
-
 
     /**
      * Faz a criação do objeto no banco
+     * 
      * @return mixed
      */
     public abstract function create();
 
     /**
      * Faz a alteração do objeto no banco
-     * @param $infos
+     * 
+     * @param  $infos
      * @return mixed
      * @internal param $id
      */
@@ -40,6 +44,7 @@ abstract class PhiberPersistenceFactory
 
     /**
      * Faz a exclusão do objeto no banco
+     * 
      * @param $infos
      * @return mixed
      */
@@ -47,6 +52,7 @@ abstract class PhiberPersistenceFactory
 
     /**
      * Faz a contagem de quantos objetos está no banco
+     * 
      * @param $infos
      * @return mixed
      * @internal param array $condicoes
@@ -56,16 +62,9 @@ abstract class PhiberPersistenceFactory
 
     /**
      * Faz a seleção dos objetos no banco
+     * 
      * @param $infos
      * @return mixed
      */
     public abstract function select();
-
-//
-//    /**
-//     * Usuário pode criar uma query a partir dessa função
-//     * @param $query
-//     * @return mixed
-//     */
-//    public abstract function createQuery($query);
 }

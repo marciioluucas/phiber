@@ -1,6 +1,6 @@
 <?php 
 
-namespace phiber\bin\exceptions;
+namespace Phiber\ORM\Exceptions;
 
 use Exception;
 

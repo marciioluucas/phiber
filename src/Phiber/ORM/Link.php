@@ -1,21 +1,20 @@
 <?php
+
 /**
  * Classe criada por Márcio Lucas R de Oliveira (lukee)
  * E-mail: marciioluucas@gmail.com
  * Date: 19/10/2016
  * Time: 18:50
  */
-namespace phiber\bin;
+namespace Phiber\ORM;
 
-use phiber\bin\exceptions\PhiberException;
 use PDO;
-use phiber\util\Internationalization;
-use phiber\util\JsonReader;
+use Phiber\ORM\Exceptions\PhiberException;
+use Phiber\Util\Internationalization;
+use Phiber\Util\JsonReader;
 
 /**
  * Classe responsável por criar a conexão do banco.
- * 
- * @package bin
  */
 class Link
 {

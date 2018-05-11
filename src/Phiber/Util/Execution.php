@@ -1,19 +1,20 @@
 <?php
+
 /**
  * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
  */
+namespace Phiber\Util;
 
-namespace phiber\util;
+use Phiber\Util\Internationalization;
 
 /**
  * Classe responsável por medir o tempo de execução das tarefas.
+ * 
  * @package util
  */
 class Execution
 {
-
     /**
-     * @var
      * Define o tempo de inciação de execução nesta variável
      */
     private static $time;
@@ -31,20 +32,21 @@ class Execution
      */
     final public function getTime()
     {
-        return microtime(TRUE);
+        return microtime(true);
     }
 
     /**
      * Calcula a variação do tempo (Tempo final - Tempo inical) da execução e em seguida
      * formata o número para 6 digitos após a vírgula.
+     * 
      * @return string
      */
     final public static function end()
     {
-        $finalTime = self::getTime();
-        $execTime = $finalTime - self::$time;
+        $finalTime     = self::getTime();
+        $execTime      = $finalTime - self::$time;
         $msgTranslated = new Internationalization("seconds");
+        
         return number_format($execTime, 6) . " " . $msgTranslated;
     }
 }
-
