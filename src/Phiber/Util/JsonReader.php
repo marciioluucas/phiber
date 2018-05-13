@@ -1,13 +1,10 @@
 <?php
 
-/**
- * Copyright (c) 2017. Este código foi feito por @marciioluucas, sob licença MIT
- */
 namespace Phiber\Util;
 
 /**
  * Classe responsável por ler o arquivo de json especificado.
- * 
+ *
  * @package util
  */
 class JsonReader
@@ -21,7 +18,7 @@ class JsonReader
 
     /**
      * JsonReader constructor.
-     * 
+     *
      * @param string $file
      */
     public function __construct($file)
@@ -32,14 +29,15 @@ class JsonReader
     /**
      * Responsável por retornar o conteúdo do arquivo.
      *
-     * @return array
+     * @return array|boolean
      */
-    public function read() 
+    public function read()
     {
-        $content  = file_get_contents($this->file);
-        
-        $read = json_decode($content);
-        
-        return $read;
+
+        if ($content = file_get_contents($this->file)) {
+            $read = json_decode($content);
+            return $read;
+        };
+        return false;
     }
 }

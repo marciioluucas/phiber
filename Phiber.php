@@ -27,17 +27,4 @@ class Phiber extends PhiberPersistence
     {
         parent::__construct($object);
     }
-
-    /**
-     * Método opcional responsável por retornar uma instância da classe PhiberPersistence,
-     * que é responsável pela persistencia dos dados. (CREATE, RETREAVE, UPDATE, DELETE)
-     * 
-     * @deprecated
-     * @param string|\stdClass $object
-     * @return PhiberPersistence
-     */
-    public function openPersist($object = "")
-    {
-        return new PhiberPersistence($object);
-    }
 }

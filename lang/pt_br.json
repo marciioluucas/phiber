@@ -8,13 +8,14 @@
     "log_info": "INFO",
     "log_warning": "AVISO",
     "log_error": "ERRO",
-    "seconds": "segundos",
-    "execution_query_success": "Query executada com sucesso",
-    "execution_query_failure": "Erro ao executar a query",
-    "object": "Objeto",
-    "reference": "Referência",
+    "seconds": "segundos.",
+    "execution_query_success": "Query executada com sucesso.",
+    "execution_query_failure": "Erro ao executar a query.",
+    "object": "Objeto.",
+    "reference": "Referência.",
     "conditions_greater_than_conjunctions": "Condições maiores que conjunções.",
-    "error_on_join": "Parametro on pode ser um array somente de 2 posições",
-    "join_no_exists": "Este tipo de JOIN não existe."
+    "error_on_join": "Parametro on pode ser um array somente de 2 posições.",
+    "join_no_exists": "Este tipo de JOIN não existe.",
+    "not_implemented_exception_default_message": "Esta feature ainda não foi implementada."
   }
 }
