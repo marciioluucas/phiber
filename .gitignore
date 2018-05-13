@@ -7,13 +7,7 @@
 *.iml
 out
 gen
-.gitignore
-.idea/blade.xml
-.idea/copyright/Marcio.xml
-.idea/dataSources.local.xml
-.idea/dataSources/
 .idea/inspectionProfiles/
-.idea/phing.xml
 .idea/workspace.xml
 composer.lock
 vendor/
